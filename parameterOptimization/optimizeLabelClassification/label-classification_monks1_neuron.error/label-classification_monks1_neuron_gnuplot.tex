@@ -1,0 +1,108 @@
+% GNUPLOT: LaTeX picture with Postscript
+\begingroup
+  \makeatletter
+  \providecommand\color[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package color not loaded in conjunction with
+      terminal option `colourtext'%
+    }{See the gnuplot documentation for explanation.%
+    }{Either use 'blacktext' in gnuplot or load the package
+      color.sty in LaTeX.}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\includegraphics[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package graphicx or graphics not loaded%
+    }{See the gnuplot documentation for explanation.%
+    }{The gnuplot epslatex terminal needs graphicx.sty or graphics.sty.}%
+    \renewcommand\includegraphics[2][]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \@ifundefined{ifGPcolor}{%
+    \newif\ifGPcolor
+    \GPcolorfalse
+  }{}%
+  \@ifundefined{ifGPblacktext}{%
+    \newif\ifGPblacktext
+    \GPblacktexttrue
+  }{}%
+  % define a \g@addto@macro without @ in the name:
+  \let\gplgaddtomacro\g@addto@macro
+  % define empty templates for all commands taking text:
+  \gdef\gplbacktext{}%
+  \gdef\gplfronttext{}%
+  \makeatother
+  \ifGPblacktext
+    % no textcolor at all
+    \def\colorrgb#1{}%
+    \def\colorgray#1{}%
+  \else
+    % gray or color?
+    \ifGPcolor
+      \def\colorrgb#1{\color[rgb]{#1}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color[rgb]{1,0,0}}%
+      \expandafter\def\csname LT1\endcsname{\color[rgb]{0,1,0}}%
+      \expandafter\def\csname LT2\endcsname{\color[rgb]{0,0,1}}%
+      \expandafter\def\csname LT3\endcsname{\color[rgb]{1,0,1}}%
+      \expandafter\def\csname LT4\endcsname{\color[rgb]{0,1,1}}%
+      \expandafter\def\csname LT5\endcsname{\color[rgb]{1,1,0}}%
+      \expandafter\def\csname LT6\endcsname{\color[rgb]{0,0,0}}%
+      \expandafter\def\csname LT7\endcsname{\color[rgb]{1,0.3,0}}%
+      \expandafter\def\csname LT8\endcsname{\color[rgb]{0.5,0.5,0.5}}%
+    \else
+      % gray
+      \def\colorrgb#1{\color{black}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color{black}}%
+      \expandafter\def\csname LT1\endcsname{\color{black}}%
+      \expandafter\def\csname LT2\endcsname{\color{black}}%
+      \expandafter\def\csname LT3\endcsname{\color{black}}%
+      \expandafter\def\csname LT4\endcsname{\color{black}}%
+      \expandafter\def\csname LT5\endcsname{\color{black}}%
+      \expandafter\def\csname LT6\endcsname{\color{black}}%
+      \expandafter\def\csname LT7\endcsname{\color{black}}%
+      \expandafter\def\csname LT8\endcsname{\color{black}}%
+    \fi
+  \fi
+  \setlength{\unitlength}{0.0500bp}%
+  \begin{picture}(7200.00,5040.00)%
+    \gplgaddtomacro\gplbacktext{%
+    }%
+    \gplgaddtomacro\gplfronttext{%
+      \csname LTb\endcsname%
+      \put(0,-124){\makebox(0,0){\centering\scriptsize$\mathsf{2}$}}%
+      \put(1440,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.000}$}}%
+      \put(2880,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.000}$}}%
+      \put(4319,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.000}$}}%
+      \put(5759,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.000}$}}%
+      \put(7199,-124){\makebox(0,0){\centering\scriptsize$\mathsf{20.000}$}}%
+      \put(0,5165){\makebox(0,0){\centering\scriptsize$\mathsf{20}$}}%
+      \put(1440,5165){\makebox(0,0){\centering\scriptsize$\mathsf{10.000}$}}%
+      \put(2880,5165){\makebox(0,0){\centering\scriptsize$\mathsf{1\,500.000}$}}%
+      \put(4319,5165){\makebox(0,0){\centering\scriptsize$\mathsf{20.000}$}}%
+      \put(5759,5165){\makebox(0,0){\centering\scriptsize$\mathsf{100.000}$}}%
+      \put(7199,5165){\makebox(0,0){\centering\scriptsize$\mathsf{79.286}$}}%
+      \put(0,5442){\makebox(0,0){\centering\small $K$ \textsf{and} $J$}}%
+      \put(1440,5442){\makebox(0,0){\centering\small $\eta(0)$}}%
+      \put(2880,5442){\makebox(0,0){\centering\small $\tau_{1}$}}%
+      \put(4319,5442){\makebox(0,0){\centering\small $\sigma(0)$}}%
+      \put(5759,5442){\makebox(0,0){\centering\small $\tau_{2}$}}%
+      \put(7199,5442){\makebox(0,0){\centering\small ${\cal E}_{G}$}}%
+      \put(-355,3359){\makebox(0,0){\scriptsize$\mathsf{\phantom{0\,0000.}14}$}}%
+      \put(1083,2975){\makebox(0,0){\scriptsize$\mathsf{\phantom{0\,00}6.055}$}}%
+      \put(2523,2779){\makebox(0,0){\scriptsize$\mathsf{\phantom{0\,}849.609}$}}%
+      \put(3962,2556){\makebox(0,0){\scriptsize$\mathsf{\phantom{0\,0}10.445}$}}%
+      \put(5402,492){\makebox(0,0){\scriptsize$\mathsf{\phantom{0\,00}9.766}$}}%
+    }%
+    \gplbacktext
+    \put(0,0){\includegraphics{label-classification_monks1_neuron_gnuplot}}%
+    \gplfronttext
+  \end{picture}%
+\endgroup

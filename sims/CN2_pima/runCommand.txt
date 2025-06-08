@@ -1,0 +1,1 @@
+./crossValidateCN2.sh pima >> cn2_pima.runOutput 2>> cn2_pima.runOutput

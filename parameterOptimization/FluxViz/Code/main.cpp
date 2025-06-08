@@ -1,0 +1,2554 @@
+/*
+	FluxViz v1.1 - A flexible parallel coordinates visualization tool.
+    Copyright (C) 2008 Nelis Franken
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// This include statement needs to appear before the GLUT include statement in order to avoid
+// some MS Visual Studio 2003/2005 compiler errors regarding the possible re-definition of 'exit()'.
+// The alternative would be to edit glut.h manually, but this is definitely the easier option.
+#include <cstdlib>
+
+// Some checks to make sure that the code compiles in Windows/Linux and Mac OS X environments
+#ifdef __APPLE__
+#include <GLUT/freeglut.h>
+#else
+#include <GL/freeglut.h>
+#endif
+
+// Standard library includes
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+// Some versioning information
+#define FLUXVIZ_VERSION			"FluxViz (v1.1)"
+#define FLUXVIZ_COPYRIGHT_YEAR	"2008"
+#define FLUXVIZ_CREATOR			"Nelis Franken"
+
+// Some numeric constants
+#define ESCAPE					27										// Define ASCII value for special keystroke
+#define MAX_DOUBLE				numeric_limits<double>::max()			// Largest possible double value
+#define MAX_INT					numeric_limits<int>::max()				// Largest possible integer value
+#define MIN_POSITIVE_DOUBLE		numeric_limits<double>::denorm_min()	// Smallest possible positive double value
+
+// ----------------- STRUCT DEFINITIONS ----------------
+// All of these structs can probably be refactored into classes (and seperate files) with proper object oriented get/set functionality.
+// Since this is simply a prototype, the design favours easy access across the various parts of the system (and unfortunately quite a collection of global variables).
+
+// A simple structure to manage drawing planes and their depths
+struct DrawingPlane {
+	DrawingPlane() {
+		depth = 0.0;
+		opacity = 0.0;
+	}
+
+	DrawingPlane(GLfloat newDepth, GLfloat newOpacity) {
+		depth = newDepth;
+		opacity = newOpacity;
+	}
+
+	GLfloat depth;
+	GLfloat opacity;
+};
+
+// A datastructure to manage the display dimensions, layout, rendering mode, label organization and headings
+struct DisplayProperties {
+
+	DisplayProperties() {
+
+		// Viewing plane size (in world coordinates)
+		screenWidth = 4.5;
+		screenHeight = 4.5;
+
+		// Padding of rendering area (in world coordinates)
+		leftPadding = 0.35;
+		rightPadding = 0.35;
+		topPadding = 0.15; //0.15;
+		bottomPadding = 0.15; //0.15;
+
+		// Active rendering area taking into account padding (in world coordinates)
+		activeWidth = screenWidth - leftPadding - rightPadding;
+		activeHeight = screenHeight - topPadding - bottomPadding;
+
+		// Character (text) related parameters
+		characterLeading = 0.019;	// (in world coordinates)
+		characterSpacing = 0.035;	// (in world coordinates)
+		characterScale = 0.00045;	// A constant scaling factor
+
+		// Label (number) related parameters
+		decimalLimit = 3;						// A user-configurable constant for the number of trailing decimals
+		maxLabelCount = 70;						// Have found it possible to only meaningfully place 70 values below each other for the current stroke font.
+		labelResolutionStepSize = 5;			// This is an arbitrary value, can be changed later (at the moment it effectively allows 14 (70/5) resolutions of label densities)
+		currentLabelRenderingMode = 0;			// Set to default (baselabels)
+		currentLabelRenderingResolution = 1;	// Step through the various pre-computed label subdivision resolutions (number of labels, not screen resolution).
+
+		// Different drawing planes
+		// Measured in world coordinates (positive values are closer to the camera, and planes will appear "on top of" lower-valued planes)
+		// Changing the magnitude values to overlap differently may cause the rendering code to give inaccurate results, because
+		// semi-transparent polygons need to be rendered in a back-to-front fashion.
+		basePlane = DrawingPlane();
+		floatingPlane = DrawingPlane(0.1, 0.0);
+		extentsPlane = DrawingPlane(0.2, 0.15);
+		axisPlane = DrawingPlane(0.3, 0.25);
+		topMostPlane = DrawingPlane(1.0, 0.95);
+
+		// Actual pixel size of window
+		windowWidth = 800;
+		windowHeight = 600;
+
+		// Flags to determine the current rendering mode
+		grayscaleOnly = false;
+		logLastDimension = false;
+		captureFriendly = false;
+		antiAliasedRendering = false;
+		runFullScreen = false;
+		showValueExtents = false;
+		pureColorRender = false;
+		fadedLayerRender = false;
+		standardRender = true;
+		showHelpOverlay = false;
+		showCurves = false;
+
+		// Headings (displayed in title-bar when in windowed-mode)
+		title = FLUXVIZ_VERSION;
+		heading = " ";
+		logApplied = "Log transform applied to last dimension";
+		logNotApplied = "No transformation applied to last dimension";
+
+		// Interpolation/scaling factor for curve rendering (number of subdivisions per curve between two axes)
+		scalingFactor = 15;
+
+		// Dynamic storage for curve rendering (pull this out to its own data structure in later versions)
+		xCurveControlPoints = 0;
+		interpolatedXPoints = 0;
+		yCurveControlPoints = 0;
+		interpolatedYPoints = 0;
+		
+		// Zoom (Vertical Scale Factor)
+		zoom = 1.0;
+		
+		// Colouring variables
+		currentSortKey = 0;
+		pureColourSortingDirection = 1.0;
+		
+		colourShift = 0.0;
+
+	}
+
+	GLfloat screenWidth;
+	GLfloat screenHeight;
+	GLfloat leftPadding;
+	GLfloat rightPadding;
+	GLfloat topPadding;
+	GLfloat bottomPadding;
+	GLfloat characterLeading;
+	GLfloat characterSpacing;
+	GLfloat characterScale;
+	GLfloat activeWidth;
+	GLfloat activeHeight;
+	GLfloat zoom;
+	GLfloat pureColourSortingDirection;
+	GLfloat colourShift;
+
+	DrawingPlane basePlane;
+	DrawingPlane floatingPlane;
+	DrawingPlane extentsPlane;
+	DrawingPlane axisPlane;
+	DrawingPlane topMostPlane;
+
+	int windowWidth;
+	int windowHeight;
+	int decimalLimit;
+	int maxLabelCount;
+	int labelResolutionStepSize;
+	int currentLabelRenderingMode;
+	int currentLabelRenderingResolution;
+	int currentSortKey;
+	int scalingFactor;
+	
+	bool grayscaleOnly;
+	bool logLastDimension;
+	bool captureFriendly;
+	bool antiAliasedRendering;
+	bool runFullScreen;
+	bool showValueExtents;
+	bool pureColorRender;
+	bool fadedLayerRender;
+	bool standardRender;
+	bool showHelpOverlay;
+	bool showCurves;
+
+	string title;
+	string heading;
+	string logApplied;
+	string logNotApplied;
+
+	double *xCurveControlPoints;
+	double *interpolatedXPoints;
+	double **yCurveControlPoints;
+	double **interpolatedYPoints;
+};
+
+// A simple structure to manage RGBA colours
+struct RGBAColour {
+	RGBAColour() {
+		rgba[0] = 1.0; // Red	}
+		rgba[1] = 1.0; // Green	} default to solid white RGB(1.0, 1.0, 1.0, 1.0)
+		rgba[2] = 1.0; // Blue	}
+		rgba[3] = 1.0; // Alpha }
+	}
+
+	RGBAColour(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+		rgba[0] = red;
+		rgba[1] = green;
+		rgba[2] = blue;
+		rgba[3] = alpha;
+	}
+
+	GLfloat rgba[4];
+};
+
+// A structure that manages a single input pattern (row/line of a file to be visualized)
+// The pattern[n-1] variable is the default dependent variable (used for sorting etc).
+struct InputPattern {
+
+	InputPattern() {
+		id = 0;
+		rank = 0;
+		width = 1.0;
+		colour = RGBAColour(1.0, 0.0, 0.0, 1.0);
+		pattern.clear();
+	}
+
+	InputPattern(int size) {
+		id = 0;
+		rank = 0;
+		width = 1.0;
+		colour = RGBAColour(1.0, 0.0, 0.0, 1.0);
+
+		pattern.clear();
+		pattern.reserve(size);
+		for (int i=0; i < size; i++) {
+			pattern.push_back(0.0);
+		}
+	}
+
+	int id;
+	int rank;
+	GLfloat width;
+	RGBAColour colour;
+	vector<double> pattern;
+};
+
+// A structure that manages a whole collection of input patterns/rows/lines to be visualized.
+struct InputTable {
+	InputTable() {
+		rows = 0;
+		cols = 0;
+	}
+
+	InputTable(int newRows, int newCols) {
+
+		rows = newRows;
+		cols = newCols;
+
+		InputPattern tempPattern(cols);
+
+		table.clear();
+		table.reserve(rows);
+
+		for (int i=0; i < newRows; i++) {
+			table.push_back(tempPattern);
+		}
+	}
+
+	// Ascending (1.0) or descending (-1.0) sort on a specific key index.
+	// This could probably be re-written to use a merge-quicksort variant or something, but for small enough input sets this shouldn't be a problem.
+	// Definitely a todo...
+	void sort(double sortDirection, int key) {
+
+		if (key < cols) {
+			if ((sortDirection == 1.0) || (sortDirection == -1.0)) {
+
+				for (int i=0; i < rows-1; i++) {
+					for (int j=i+1; j < rows; j++) {
+
+						if (sortDirection*table[i].pattern[key] > sortDirection*table[j].pattern[key]) {
+							InputPattern tempPattern = table[i];
+							table[i] = table[j];
+							table[j] = tempPattern;
+						}
+					}
+				}
+
+			} else {
+				cerr << "Sorting accepts either a '1.0' (ascending) or a '-1.0' (descending) direction. No sorting performed." << endl;
+			}
+		} else {
+			cerr << "Attempting to sort the results on a key outside the input pattern dimension/boundaries. No sorting performed." << endl;
+		}
+	}
+
+	vector<InputPattern> table;
+	int rows;
+	int cols;
+};
+
+// A simple structure to manage points in 2D space
+struct Point2D {
+	Point2D() {
+		xy[0] = 0.0;
+		xy[1] = 1.0;
+	}
+
+	Point2D(GLfloat newX, GLfloat newY) {
+		xy[0] = newX;
+		xy[1] = newY;
+	}
+
+	GLfloat xy[2];
+};
+
+// A data structure to manage a single axis to be used in the visualization
+struct VerticalAxis {
+	VerticalAxis() {
+		height = 0;
+		xOffset = 0.0;
+		maxLabelCount = 0;
+		labelResolutionStepSize = 0;
+		numberOfLabelResolutions = 0;
+		labelIntervals.clear();
+		numericLabelValues.clear();
+	}
+
+	VerticalAxis(GLfloat newXOffset, DisplayProperties currentDisplayProperties) {
+		xOffset = newXOffset;
+		height = currentDisplayProperties.activeHeight;
+		top = Point2D(xOffset, currentDisplayProperties.topPadding);
+		bottom = Point2D(xOffset, currentDisplayProperties.topPadding + currentDisplayProperties.activeHeight);
+
+		maxLabelCount = 70;				// Have found it possible to only meaningfully place 70 values below each other for the current stroke font.
+		labelResolutionStepSize = 5;	// This is an arbitrary value, can be changed later (at the moment it effectively allows 14 (70/5) resolutions of label densities)
+		numberOfLabelResolutions = maxLabelCount / labelResolutionStepSize;
+
+		labelIntervals.clear();
+		labelIntervals.reserve(numberOfLabelResolutions);
+
+		numericLabelValues.clear();
+		numericLabelValues.reserve(numberOfLabelResolutions);
+
+		for (int i=0; i < numberOfLabelResolutions; i++) {
+
+			vector<double> tempResolution;
+			tempResolution.clear();
+			tempResolution.reserve(i*labelResolutionStepSize + 2);		// Compensate for min and max values (non-intervals - i.e. the boundaries)
+
+			labelIntervals.push_back(i*labelResolutionStepSize + 2);	// Keep track of number of intervals per resolution
+
+			// Initialise the space (for interval value(s), min value, and max value)
+			for (int j=0; j < i*labelResolutionStepSize + 2; j++) {
+				tempResolution.push_back(0.0);
+			}
+
+			numericLabelValues.push_back(tempResolution);
+		}
+	}
+
+	// Compute the various resolutions of labels for the current axis
+	void setMinMaxLabels(GLfloat newMin, GLfloat newMax) {
+
+		GLint numberOfIntervalsPerResolution = 0;
+
+		// For each "resolution snapshot" of labels
+		for (int i=0; i < numberOfLabelResolutions; i++) {
+
+			numberOfIntervalsPerResolution = i*labelResolutionStepSize;
+
+			// Add the minimum value
+			numericLabelValues[i][0] = newMin;
+
+			GLfloat intervalStep = fabs(newMax - newMin) / (double(numberOfIntervalsPerResolution));
+
+			for (int j=1; j <= numberOfIntervalsPerResolution; j++) {
+				numericLabelValues[i][j] = numericLabelValues[i][j-1] + intervalStep;
+			}
+
+			// Add the maximum value
+			numericLabelValues[i][numberOfIntervalsPerResolution+1] = newMax;
+		}
+	}
+
+	GLfloat height;
+	GLfloat xOffset;
+	int maxLabelCount;
+	int labelResolutionStepSize;
+	int numberOfLabelResolutions;
+	vector<int> labelIntervals;					// This can later be extended to a matrix of resolutions, allowing each axis to have its own resolution of labels.
+	vector<vector<double> > numericLabelValues; // Varying resolutions of label detail
+	Point2D top;
+	Point2D bottom;
+};
+
+// A simple structure to manage the colour scheme
+struct ColourScheme {
+	ColourScheme() {
+
+	}
+	
+	RGBAColour getBinaryRampColour(DisplayProperties &currentDisplay, int index, double rampSize) {
+	
+		RGBAColour temp;
+	
+		temp.rgba[0] = 1.0 - 1.0 / exp(double(index)/rampSize);
+		temp.rgba[1] = 1.0 - 1.0 / exp(double(index)/rampSize);//(double(index) / rampSize) * (double(index) / rampSize);//sqrt(double(index) / rampSize);
+		temp.rgba[2] = 1.0 - 0.3 / exp(double(index)/rampSize);
+		
+		return temp;
+	}
+	
+	RGBAColour getABinaryRampColour(DisplayProperties &currentDisplay, int index, double rampSize) {
+	
+		RGBAColour temp;
+	
+		//temp.rgba[0] = 0.6 - 0.25 / exp(double(index)/rampSize);
+		//temp.rgba[1] = 0.6 - 0.25 / exp(double(index)/rampSize);//(double(index) / rampSize) * (double(index) / rampSize);//sqrt(double(index) / rampSize);
+		//temp.rgba[2] = 1.0 / exp(double(index)/rampSize);
+		
+		
+		temp.rgba[0] = 1.0 - background.rgba[0] / exp(double(index)/rampSize);
+		temp.rgba[1] = 1.0 - background.rgba[1] / exp(double(index)/rampSize);//(double(index) / rampSize) * (double(index) / rampSize);//sqrt(double(index) / rampSize);
+		temp.rgba[2] = background.rgba[2] / sqrt(double(index) / rampSize);
+		
+		return temp;
+	}
+	
+	
+	RGBAColour getEBinaryRampColour(DisplayProperties &currentDisplay, int index, double rampSize) {
+	
+		RGBAColour temp;
+	
+		/*temp.rgba[0] = 0.6 - 0.25 / exp(double(index)/rampSize);
+		temp.rgba[1] = 0.6 - 0.25 / exp(double(index)/rampSize);//(double(index) / rampSize) * (double(index) / rampSize);//sqrt(double(index) / rampSize);
+		temp.rgba[2] = 1.0 / exp(double(index)/rampSize);
+		*/
+		
+		index = index + ((currentDisplay.colourShift)*rampSize);
+		
+		temp.rgba[0] = 1.0 - 1.0 / exp(double(index)/rampSize);
+		temp.rgba[1] = 1.0 - 1.0 / exp(double(index)/rampSize);//(double(index) / rampSize) * (double(index) / rampSize);//sqrt(double(index) / rampSize);
+		temp.rgba[2] = sqrt(double(index) / rampSize);
+		
+		return temp;
+	}
+	
+	RGBAColour getCBinaryRampColour(DisplayProperties &currentDisplay, int index, double rampSize) {
+		RGBAColour temp;
+
+		index = index + ((1.0 - currentDisplay.colourShift)*rampSize);
+		
+		if (index < (0.25 * rampSize)) {
+			temp.rgba[0] = 0.0;
+			temp.rgba[1] = 4.0 * (index) / rampSize;
+			temp.rgba[2] = 1.0;
+
+		} else if (index < (0.5 * rampSize)) {
+			temp.rgba[0] = 0.0;
+			temp.rgba[1] = 1.0;
+			temp.rgba[2] = 1.0 + 4.0 * (0.25 * rampSize - index) / rampSize;
+
+		} else if (index < (0.75 * rampSize)) {
+			temp.rgba[0] = 4.0 * (index - 0.5 * rampSize) / rampSize;
+			temp.rgba[1] = 1.0;
+			temp.rgba[2] = 0.0;
+
+		} else {
+			temp.rgba[0] = 1.0;
+			temp.rgba[1] = 1.0 + 4.0 * (0.75 * rampSize - index) / rampSize;
+			temp.rgba[2] = 0.0;
+		}
+		
+		return temp;
+	}
+
+	// This can be extended in later (more object oriented) designs to allow different ramp functions.
+	// The current ramp has blue for small values, green for mid-range, and red for large values.
+	// The ramp also automatically adjust in size via the rampSize parameter, guaranteeing that you always get a clear
+	// differentiation in colours, even if you only need a ramp of two colours.
+	// Inverting the sorting direction in pure-colour rendering mode may invert the colouring (blue may then correspond to big values)
+	RGBAColour getRampColour(DisplayProperties &currentDisplay, int index, double rampSize) {
+		RGBAColour temp;
+
+		/*
+		if (index < (0.25 * rampSize)) {
+			temp.rgba[0] = 0.75*double(index) / (0.25*rampSize);
+			temp.rgba[1] = 0.75*double(index) / (0.25*rampSize);
+			temp.rgba[2] = sqrt(double(index) / (0.25*rampSize) + ((0.25*rampSize - double(index)) / (0.25*rampSize)));
+
+		} else if (index < (0.75 * rampSize)) {
+			temp.rgba[0] = 0.75;
+			temp.rgba[1] = 0.75; 
+			temp.rgba[2] = 0.75;
+
+		} else {
+			temp.rgba[0] = sqrt((rampSize - double(index)) / (0.25*rampSize) + ((rampSize*0.25 - (rampSize - double(index))) / (rampSize*0.25)));
+			temp.rgba[1] = 0.75*(rampSize - double(index)) / (0.25*rampSize);
+			temp.rgba[2] = 0.75*(rampSize - double(index)) / (0.25*rampSize);
+		}
+		*/
+
+		
+		//index = index + ((1.0 - currentDisplay.colourShift)*rampSize);
+		
+		if (index < (0.25 * rampSize)) {
+			temp.rgba[0] = 0.0;
+			temp.rgba[1] = 4.0 * (index) / rampSize;
+			temp.rgba[2] = 1.0;
+
+		} else if (index < (0.5 * rampSize)) {
+			temp.rgba[0] = 0.0;
+			temp.rgba[1] = 1.0;
+			temp.rgba[2] = 1.0 + 4.0 * (0.25 * rampSize - index) / rampSize;
+
+		} else if (index < (0.75 * rampSize)) {
+			temp.rgba[0] = 4.0 * (index - 0.5 * rampSize) / rampSize;
+			temp.rgba[1] = 1.0;
+			temp.rgba[2] = 0.0;
+
+		} else {
+			temp.rgba[0] = 1.0;
+			temp.rgba[1] = 1.0 + 4.0 * (0.75 * rampSize - index) / rampSize;
+			temp.rgba[2] = 0.0;
+		}
+		
+		
+		return temp;
+	}
+
+	RGBAColour background;
+	RGBAColour axis;
+	RGBAColour numericLabels;
+	RGBAColour standardLine;
+	RGBAColour fadedLine;
+	RGBAColour prominentLine;
+	RGBAColour floatingPlane;
+	RGBAColour extentsPlane;
+	RGBAColour topMostPlane;
+};
+
+// A structure to manage the extents (min/max) for a particular view of the data
+struct AxisExtents {
+
+	AxisExtents() {
+		minID = 0;
+		maxID = 0;
+		minDisplayValue = 0.0;
+		maxDisplayValue = 0.0;
+		minNormalisedValue = 0.0;
+		maxNormalisedValue = 0.0;
+	}
+
+	int minID;
+	int maxID;
+	double minDisplayValue;
+	double minNormalisedValue;
+	double maxDisplayValue;
+	double maxNormalisedValue;
+};
+
+// A structure that manages simple bitmap image file contents
+struct Image {
+    unsigned long sizeX;	// Number of horisontal pixels
+    unsigned long sizeY;	// Number of vertical pixels
+    char *data;				// Actual pixel data
+
+	Image() {
+		sizeX = 0;
+		sizeY = 0;
+		data = 0;
+	}
+};
+
+// ----------------- VARIABLE DEFINITIONS ----------------
+
+// The core data structures, managing the display properties and the input data
+DisplayProperties currentDisplay;
+InputTable finalResultsTable;
+
+// A counter to keep track of the output file sequences
+int captureID = 0;
+
+// A single texture to hold the help information
+GLuint theHelpTexture;
+
+// Data structures related to the axes, and how they are rendered
+// These could probably be refactored into fewer/nested structures.
+vector<VerticalAxis> coordAxis;
+vector<int> uniqueIDs;
+vector<int> reversedUniqueIDs;
+vector<int> *currentUniqueIDs;
+vector<AxisExtents> topTwentyPercent;
+vector<AxisExtents> bottomTwentyPercent;
+vector<AxisExtents> *currentExtentsScheme;
+
+// A table of constants used for anti-aliasing (from the official OpenGL Red Book)
+vector<Point2D> jitterTable8;
+
+// Colour schemes
+ColourScheme screenFriendlyScheme;
+ColourScheme captureFriendlyScheme;
+ColourScheme *currentScheme;
+
+// GLUT Fonts
+void* smallBitmapFont=GLUT_BITMAP_8_BY_13;
+void* mediumBitmapFont=GLUT_BITMAP_HELVETICA_12;
+void* largeBitmapFont=GLUT_BITMAP_HELVETICA_18;
+void* strokeFont=GLUT_STROKE_ROMAN;
+void* monoSpacedStrokeFont=GLUT_STROKE_MONO_ROMAN;
+
+// An enumerator to allow easy switching between label rendering modes
+enum labelRenderingMode {
+	baseLabels, extentsLabels, detailLabels
+};
+
+
+// ----------------- IMPLEMENTATION STARTS ----------------
+
+/* The code is laid out as follows (parameters are omitted for conciseness):
+
+ Rendering functions:
+ --------------------------------------------------------------------------------------
+ -> String rendering:
+	- void renderBitmapString()			: Render string using bitmap font
+	- void renderStrokeString()			: Render string using stroke (geometry-based) font
+
+ -> Geometry rendering:
+	- void renderProminentLine()		: Render (best/worst) data patterns as stippled line(s)
+	- void renderRemainingLines()		: Render interior lines
+	- void renderProminentCurves()		: Render (best/worst) data patterns as stippled curve(s)
+	- void renderRemainingCurves()		: Render interior curves
+	
+ -> Plane rendering:
+	- void renderDividingPlane()		: Semi-transparent plane to adjust brightness
+	- void renderExtentsPlane()			: Semi-transparent polygon extents indicator
+	- void renderAxes()					: Render vertical axis lines
+
+ -> Label rendering:
+	- void renderMiniHorizontalTick()	: Render label glyph
+	- void renderDetailedLabels()		: Render labels at some resolution of subdivision
+	- void renderExtentsLabelsOnly()	: Render the extents labels only (min/max for best/worst)
+	- void renderBaseLabelsOnly()		: Render the overall axis min/max labels only
+	- void renderLabels()				: Render labels in one of three different modes
+
+ -> Final output rendering:
+	- void renderAllElements()			: Calls the various component rendering functions (used by the two functions below)
+	- void renderAntiAliasedElements()	: Uses jittering (multiple passes) to produce a better-looking result (not guaranteed to work on all platforms)
+	- void renderStandardElements()		: Renders the output in a single pass (no anti-aliasing, better compatibility)
+
+
+ Windowing / display functions:
+ --------------------------------------------------------------------------------------
+ - void changeParentWindow()			: Handles window reshape events
+ - void changeTitleString()				: Changes window title
+ - void display()						: Main display loop
+
+
+ Data pre-and-post-processing functions:
+ --------------------------------------------------------------------------------------
+ - void switchToPureColorMode()				: Colours all lines in full-colour
+ - void switchToTraditionalMode()			: Colours all lines in monotone
+ - void switchToGrayScaleMode()				: Use dark/light gray to distinguish 20% / 80% split
+ - void switchToConditionalColouringMode()	: Use selective colouring to distinguish top/bottom 5%
+ - void destroyCurveStorage()				: Clear data structure storage for curve interpolation points
+ - double computeNeville()					: Use Neville's algorithm to find interpolation points
+ - void computeCurveData()					: Compute Lagrange polynomial interpolation points (calls Neville's algorithm)
+ - void scaleDataTable()					: Perform a variety of pre-processing of the data
+ - void configureDataTable()				: Sets up the necessary data structures to handle structured input
+ - void readInputFile()						: Reads the input file from disk
+
+
+ Input / interaction functions:
+ --------------------------------------------------------------------------------------
+ - void keys()							: Handles keyboard input
+ - void mousePopupMenu()				: Handles mouse input
+
+
+ TGA screen capturing functions:
+ --------------------------------------------------------------------------------------
+ - captureTGAScreen()					: Captures the contents of the frame buffer and save as TGA file to disk
+
+
+ Texture loading functions:
+ --------------------------------------------------------------------------------------
+ - int loadBitmap()						: Loads a 24-bit bitmap (*.bmp) file from disk
+ - void compileGLTextureData()			: Performs the necessary OpenGL operations to load the texture
+ - void loadTextureFiles()				: Texture managing routine
+
+
+ Main initialisation/operation functions:
+ --------------------------------------------------------------------------------------
+ - void initGLSettings()				: Initialise some OpenGL settings
+ - void initGlobals()					: Initialise some global settings (colour schemes etc.)
+ - void initMenu()						: Constructs the menu hierarchy
+ - void showDisclaimer()				: Prints a short disclaimer and copyright notice to screen.
+ - void showUsage()						: Prints a short usage string to screen
+ - bool parseCommandLine()				: Parse command-line input
+ - int main()							: The main function
+
+*/
+
+// ----------------- RENDERING FUNCTIONS ----------------
+
+// Draws a text string on screen using a bitmap font.
+// Bitmap fonts do not scale well (it struggles to maintain proportionate positions), but appears "clearer" on screen.
+// This function is provided as an alternative to the (default) stroke font rendering, but is not currently used anywhere.
+inline void renderBitmapString(float x, float y, void *currentFont, const char* c) {
+
+	glRasterPos3f(x, y + currentDisplay.characterLeading, currentDisplay.axisPlane.depth);
+	for (c; *c != '\0'; c++) glutBitmapCharacter(currentFont, *c);
+}
+
+
+// Draws a text string on screen using a stroke (geometry-based) font. They are more clearly visible when anti-aliasing is turned on.
+inline void renderStrokeString(float x, float y, void *currentFont, const char* c) {
+
+	// Need to flip characters around again (since originally flipped axes to have (0,0) at the top left),
+	// and really scale them down to be visible. Benefit of stroke font is that it scales properly and retains dimensions.
+	glPushMatrix();
+		glTranslatef(x, y + currentDisplay.characterLeading, currentDisplay.axisPlane.depth);
+		glScalef(currentDisplay.characterScale, -currentDisplay.characterScale, 1.0);
+		for (c; *c != '\0'; c++) glutStrokeCharacter(currentFont, *c);
+	glPopMatrix();
+}
+
+
+// Renders the prominent (best/worst) line to screen using a constant colour and stippled line effect (if the display mode allows this)
+void renderProminentLine() {
+
+	// Temporary rendering offset variables
+	GLfloat yStart = 0.0;
+	GLfloat yEnd = 0.0;
+	GLfloat xStart = 0.0;
+	GLfloat xEnd = 0.0;
+	int currentPattern = 0;
+
+	// Do not render stippled line when in full-colour "rainbow" rendering mode (only useful to identify classes in datasets)
+	// Otherwise the stippled line identifies the best/worst data pattern depending on the current rendering mode.
+	// When you simply want to view classes, there is no concept of best/worst data pattern.
+	// This also applies to rendering in "traditional" (standard) parallel coordinates mode.
+	if ((currentDisplay.pureColorRender == false) & (currentDisplay.standardRender == false)) {
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_LINE_STIPPLE);
+	}
+
+	// Draw first vector (most important display vector, and any other patterns that resulted in the same value)
+	for (int i=0; i < (*currentUniqueIDs)[0];i++) {
+
+		currentPattern = finalResultsTable.table[i].id;
+
+		// Can't set the line width inside a glBegin() and glEnd() block
+		glLineWidth(finalResultsTable.table[i].width);
+
+		glBegin(GL_LINES);
+
+		for (int k=0, m = finalResultsTable.cols; k < m - 1; k++) {
+
+			yStart = currentDisplay.yCurveControlPoints[currentPattern][k];
+			yEnd = currentDisplay.yCurveControlPoints[currentPattern][k+1];
+			xStart = currentDisplay.xCurveControlPoints[k];
+			xEnd = currentDisplay.xCurveControlPoints[k+1];
+
+			glColor4fv(finalResultsTable.table[i].colour.rgba);
+			glVertex3f(xStart, yStart, currentDisplay.basePlane.depth);
+			if (currentDisplay.fadedLayerRender == true) glColor4fv(currentScheme->fadedLine.rgba);
+			glVertex3f(xEnd, yEnd, currentDisplay.basePlane.depth);
+		}
+
+		glEnd();
+	}
+
+	if ((currentDisplay.pureColorRender == false) & (currentDisplay.standardRender == false)) {
+		glDisable(GL_LINE_STIPPLE);
+		glDisable(GL_LINE_SMOOTH);
+	}
+}
+
+
+// Renders the interior (non-best/worst) lines
+void renderRemainingLines() {
+
+	// Temporary rendering offset variables
+	GLfloat yStart = 0.0;
+	GLfloat yEnd = 0.0;
+	GLfloat xStart = 0.0;
+	GLfloat xEnd = 0.0;
+	int currentPattern = 0;
+
+	// For every line not having the same dependent variable value as the best (or worst, depending on the rendering mode) pattern
+	for (int i=(*currentUniqueIDs)[0], j = finalResultsTable.rows; i < j; i++) {
+
+		currentPattern = finalResultsTable.table[i].id;
+
+		// Can't set the line width inside a glBegin() and glEnd() block
+		glLineWidth(finalResultsTable.table[i].width);
+
+		glBegin(GL_LINES);
+
+		for (int k=0, m = (int)finalResultsTable.table[i].pattern.size(); k < m - 1; k++) {
+
+			yStart = currentDisplay.yCurveControlPoints[currentPattern][k];
+			yEnd = currentDisplay.yCurveControlPoints[currentPattern][k+1];
+			xStart = currentDisplay.xCurveControlPoints[k];
+			xEnd = currentDisplay.xCurveControlPoints[k+1];
+
+			glColor4fv(finalResultsTable.table[i].colour.rgba);
+			glVertex3f(xStart, yStart, currentDisplay.basePlane.depth);
+			
+			if (currentDisplay.fadedLayerRender == true) glColor4fv(currentScheme->fadedLine.rgba);
+			glVertex3f(xEnd, yEnd, currentDisplay.basePlane.depth);
+		}
+
+		glEnd();
+	}
+}
+
+
+// Displays the patterns as Lagrange-polynomial curves instead of straight lines
+void renderProminentCurves() {
+
+	int patternSize = finalResultsTable.cols;
+	int nrOfPatterns = (*currentUniqueIDs)[0];
+	int currentPattern = 0;
+
+	if ((currentDisplay.pureColorRender == false) & (currentDisplay.standardRender == false)) {
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_LINE_STIPPLE);
+	}
+
+	for (int i=0; i < nrOfPatterns; i++) {
+
+		currentPattern = finalResultsTable.table[i].id;
+
+		// Render the points
+		glColor4fv(finalResultsTable.table[i].colour.rgba);
+		
+		// Can't set the line width inside a glBegin() and glEnd() block
+		glLineWidth(finalResultsTable.table[i].width);
+				
+		glBegin(GL_LINE_STRIP);
+
+		for (int j=0; j < (patternSize-1)*currentDisplay.scalingFactor+1; j++) {
+			glVertex3f(currentDisplay.interpolatedXPoints[j], currentDisplay.interpolatedYPoints[currentPattern][j], currentDisplay.basePlane.depth);
+		}
+
+		glEnd();
+	}
+
+	if ((currentDisplay.pureColorRender == false) & (currentDisplay.standardRender == false)) {
+		glDisable(GL_LINE_STIPPLE);
+		glDisable(GL_LINE_SMOOTH);
+	}
+}
+
+
+// Displays the patterns as Lagrange-polynomial curves instead of straight lines
+void renderRemainingCurves() {
+
+	int numberOfPoints = (finalResultsTable.cols - 1)*currentDisplay.scalingFactor + 1;
+	int currentPattern = 0;
+		
+	for (int i=(*currentUniqueIDs)[0], j=finalResultsTable.rows; i < j; i++) {
+
+		currentPattern = finalResultsTable.table[i].id;
+
+		// Render the points
+		glColor4fv(finalResultsTable.table[i].colour.rgba);
+		
+		// Can't set the line width inside a glBegin() and glEnd() block
+		glLineWidth(finalResultsTable.table[i].width);
+		
+		glBegin(GL_LINE_STRIP);
+
+		for (int k=0; k < numberOfPoints; k++) {
+			glVertex3f(currentDisplay.interpolatedXPoints[k], currentDisplay.interpolatedYPoints[currentPattern][k], currentDisplay.basePlane.depth);
+		}
+
+		glEnd();
+	}
+}
+
+
+// Renders the top-most plane (at this time, reserved for visual keyboard-layout)
+void renderHelpOverlay() {
+
+	glColor4fv(currentScheme->topMostPlane.rgba);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0, 1.0);
+		glVertex3f(0.0, 0.0, currentDisplay.topMostPlane.depth);
+		glTexCoord2f(1.0, 1.0);
+		glVertex3f(currentDisplay.screenWidth, 0.0, currentDisplay.topMostPlane.depth);
+		glTexCoord2f(1.0, 0.0);
+		glVertex3f(currentDisplay.screenWidth, currentDisplay.screenHeight, currentDisplay.topMostPlane.depth);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(0.0, currentDisplay.screenHeight, currentDisplay.topMostPlane.depth);
+	glEnd();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+
+}
+
+// Renders a semi-transparent window-sized plane above the lines, but below the axes, to allow for quick brightness adjustement.
+void renderDividingPlane() {
+
+	glPushMatrix();
+
+	// Reverse-scale this plane in order to cover the whole window
+	glTranslatef(currentDisplay.screenWidth/2, currentDisplay.screenHeight/2, 0.0);
+	glScalef(1, 1.0/currentDisplay.zoom, 1);
+	glTranslatef(-currentDisplay.screenWidth/2, -currentDisplay.screenHeight/2, 0.0);
+
+	glColor4fv(currentScheme->floatingPlane.rgba);
+	glEnable(GL_BLEND);
+
+	// Draw a second plane, semi-transparent plane on top of the underlying lines
+	glBegin(GL_QUADS);
+		glVertex3f(0.0, 0.0, currentDisplay.floatingPlane.depth);
+		glVertex3f(currentDisplay.screenWidth, 0.0, currentDisplay.floatingPlane.depth);
+		glVertex3f(currentDisplay.screenWidth, currentDisplay.screenHeight, currentDisplay.floatingPlane.depth);
+		glVertex3f(0.0, currentDisplay.screenHeight, currentDisplay.floatingPlane.depth);
+	glEnd();
+
+	glDisable(GL_BLEND);
+
+	glPopMatrix();
+}
+
+
+// Renders a semi-transparent solid polygon-shape that outlines the extents (min/max) for the current data display mode.
+void renderExtentsPlane() {
+
+	glColor4fv(currentScheme->extentsPlane.rgba);
+	glEnable(GL_BLEND);
+	glBegin(GL_QUADS);
+
+	for (int k=0, m = finalResultsTable.cols; k < m - 1; k++) {
+
+		GLfloat yTopStart = currentDisplay.topPadding + (*currentExtentsScheme)[k].minNormalisedValue*(double(currentDisplay.activeHeight));
+		GLfloat yTopEnd = currentDisplay.topPadding + (*currentExtentsScheme)[k+1].minNormalisedValue*(double(currentDisplay.activeHeight));
+		GLfloat yBottomStart = currentDisplay.topPadding + (*currentExtentsScheme)[k].maxNormalisedValue*(double(currentDisplay.activeHeight));
+		GLfloat yBottomEnd = currentDisplay.topPadding + (*currentExtentsScheme)[k+1].maxNormalisedValue*(double(currentDisplay.activeHeight));
+		GLfloat xStart = currentDisplay.leftPadding + coordAxis[k].top.xy[0];
+		GLfloat xEnd = currentDisplay.leftPadding + coordAxis[k+1].top.xy[0];
+
+		glVertex3f(xStart, yTopStart, currentDisplay.extentsPlane.depth);
+		glVertex3f(xStart, yBottomStart, currentDisplay.extentsPlane.depth);
+		glVertex3f(xEnd, yBottomEnd, currentDisplay.extentsPlane.depth);
+		glVertex3f(xEnd, yTopEnd, currentDisplay.extentsPlane.depth);
+	}
+
+	glEnd();
+	glDisable(GL_BLEND);
+}
+
+
+// Render the axes to screen (only the vertical lines)
+void renderAxes() {
+
+	glColor4fv(currentScheme->axis.rgba);
+	glBegin(GL_LINES);
+
+	for (int i=0, j = (int)coordAxis.size(); i < j; i++) {
+		glVertex3f(currentDisplay.leftPadding + coordAxis[i].top.xy[0], coordAxis[i].top.xy[1], currentDisplay.axisPlane.depth);
+		glVertex3f(currentDisplay.leftPadding + coordAxis[i].bottom.xy[0], coordAxis[i].bottom.xy[1], currentDisplay.axisPlane.depth);
+	}
+
+	glEnd();
+}
+
+
+// Render the small horizontal glyph/tick that appears next to the text labels, and directly on the vertical axis bar.
+inline void renderMiniHorizontalTick(const int &axisID, GLfloat yPos) {
+	glBegin(GL_LINES);
+		glVertex3f(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] - 0.01, coordAxis[axisID].top.xy[1] + yPos, currentDisplay.axisPlane.depth);
+		glVertex3f(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + 0.01, coordAxis[axisID].top.xy[1] + yPos, currentDisplay.axisPlane.depth);
+	glEnd();
+}
+
+
+// Only render top and bottom axis labels
+inline void renderBaseLabelsOnly(const int &axisID, const GLfloat &xOffsetAdjust, const char* currentMinVal, const char* currentMaxVal) {
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + xOffsetAdjust, coordAxis[axisID].top.xy[1], strokeFont, currentMinVal);
+	renderMiniHorizontalTick(axisID, 0.0);
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].bottom.xy[0] + xOffsetAdjust, coordAxis[axisID].bottom.xy[1], strokeFont, currentMaxVal);
+	renderMiniHorizontalTick(axisID, currentDisplay.activeHeight);
+}
+
+
+// If applicable, render the extents for each axis
+inline void renderExtentsLabelsOnly(const int &axisID, const GLfloat &xOffsetAdjust) {
+
+	stringstream currentTopVal;
+	stringstream currentBottomVal;
+
+	currentTopVal << fixed << setprecision(currentDisplay.decimalLimit) << (*currentExtentsScheme)[axisID].minDisplayValue;
+	currentBottomVal << fixed << setprecision(currentDisplay.decimalLimit) << (*currentExtentsScheme)[axisID].maxDisplayValue;
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + xOffsetAdjust, coordAxis[axisID].top.xy[1] + currentDisplay.activeHeight*(*currentExtentsScheme)[axisID].minNormalisedValue, strokeFont, currentTopVal.str().c_str());
+	renderMiniHorizontalTick(axisID, currentDisplay.activeHeight*(*currentExtentsScheme)[axisID].minNormalisedValue);
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + xOffsetAdjust, coordAxis[axisID].top.xy[1] + currentDisplay.activeHeight*(*currentExtentsScheme)[axisID].maxNormalisedValue, strokeFont, currentBottomVal.str().c_str());
+	renderMiniHorizontalTick(axisID, currentDisplay.activeHeight*(*currentExtentsScheme)[axisID].maxNormalisedValue);
+}
+
+
+// If applicable, compute axis intervals and render internal interval labels at various densities/resolutions
+inline void renderDetailedLabels(const int &axisID, const GLfloat &xOffsetAdjust, const char* currentMinVal, const char* currentMaxVal) {
+
+	// Rendering offsets
+	GLfloat intervalStepY = currentDisplay.activeHeight / double(coordAxis[axisID].labelIntervals[currentDisplay.currentLabelRenderingResolution] - 2); // Compensate for min/max
+	GLfloat currentInterval = intervalStepY;
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + xOffsetAdjust, coordAxis[axisID].top.xy[1], strokeFont, currentMinVal);
+	renderMiniHorizontalTick(axisID, 0.0);
+
+	// Render the labels at the correct resolution
+	for (int k=1; k < coordAxis[axisID].labelIntervals[currentDisplay.currentLabelRenderingResolution] - 2; k++) {
+
+		stringstream currentVal;
+		currentVal << fixed << setprecision(currentDisplay.decimalLimit) << coordAxis[axisID].numericLabelValues[currentDisplay.currentLabelRenderingResolution][k];
+
+		renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].top.xy[0] + xOffsetAdjust, coordAxis[axisID].top.xy[1] + currentInterval, strokeFont, currentVal.str().c_str());
+		renderMiniHorizontalTick(axisID, currentInterval);
+
+		currentInterval += intervalStepY;
+	}
+
+	renderStrokeString(currentDisplay.leftPadding + coordAxis[axisID].bottom.xy[0] + xOffsetAdjust, coordAxis[axisID].bottom.xy[1], strokeFont, currentMaxVal);
+	renderMiniHorizontalTick(axisID, currentDisplay.activeHeight);
+}
+
+
+// Render the labels to screen
+void renderLabels() {
+
+	glColor4fv(currentScheme->numericLabels.rgba);
+
+	// Draw axis labels
+	for (int i=0, j = (int)coordAxis.size(); i < j; i++) {
+
+		// Use string streams to convert floating-point values to strings
+		stringstream currentMinVal;
+		stringstream currentMaxVal;
+		currentMinVal << fixed << setprecision(currentDisplay.decimalLimit) << coordAxis[i].numericLabelValues[0][0];
+		currentMaxVal << fixed << setprecision(currentDisplay.decimalLimit) << coordAxis[i].numericLabelValues[0][1];
+
+		// Compute the number of characters in each string
+		GLint minSize = (int)currentMinVal.str().size();
+		GLint maxSize = (int)currentMaxVal.str().size();
+
+		// Adjust the offset (how much the label needs to be shifted) based on the number of characters
+		GLfloat xOffsetAdjust = (max(minSize, maxSize)) * (currentDisplay.characterSpacing); // This adjustment is dependent on the font size and type
+
+		// Adjust internal numeric labels to appear next to axes to ease readability
+		if ((i > 0) && (i < j - 1)) {
+			xOffsetAdjust = -xOffsetAdjust;	// Internal labels (shift left by varying amount)
+
+		} else if (i == 0) {
+			xOffsetAdjust = -xOffsetAdjust;	// Left-most labels (shift left by varying amount)
+
+		} else {
+			xOffsetAdjust = 0.025;			// Right-most labels (shift right by constant amount)
+		}
+
+		// Render the labels in one of three different modes
+		if (currentDisplay.currentLabelRenderingMode == baseLabels) {
+			renderBaseLabelsOnly(i, xOffsetAdjust, currentMinVal.str().c_str(), currentMaxVal.str().c_str());
+
+		} else if (currentDisplay.currentLabelRenderingMode == extentsLabels) {
+			renderExtentsLabelsOnly(i, xOffsetAdjust);
+
+		} else if (currentDisplay.currentLabelRenderingMode == detailLabels) {
+			renderDetailedLabels(i, xOffsetAdjust, currentMinVal.str().c_str(), currentMaxVal.str().c_str());
+		}
+	}
+}
+
+
+// Call the necessary rendering functions to output all the lines/labels/axes to screen.
+// The sequence in which the rendering calls are made is important in this function.
+inline void renderAllElements() {
+
+	glPushMatrix();
+
+		// Scale in the vertical dimension only to possibly compensate for curves that extend beyond
+		// the window boundaries.
+		glTranslatef(currentDisplay.screenWidth/2, currentDisplay.screenHeight/2, 0.0);
+		glScalef(1, currentDisplay.zoom, 1);
+		glTranslatef(-currentDisplay.screenWidth/2, -currentDisplay.screenHeight/2, 0.0);
+
+		if (currentDisplay.showCurves == false) {
+			renderProminentLine();
+			renderRemainingLines();
+		} else {
+			renderProminentCurves();
+			renderRemainingCurves();
+		}
+
+		if (currentDisplay.currentLabelRenderingMode != baseLabels) {
+
+			renderDividingPlane();
+
+			if (currentDisplay.currentLabelRenderingMode == extentsLabels) {
+				renderExtentsPlane();
+			}
+		}
+
+		renderLabels();
+		renderAxes();
+
+	glPopMatrix();
+
+	if (currentDisplay.showHelpOverlay == true) {
+		renderHelpOverlay();
+	}
+}
+
+
+// Use jittering to reduce the aliasing when rendering lines (this is more expensive than normal rendering)
+// Render the frame 8 times, shifting the frame less than one pixel each time, and average using the accumulation buffer.
+// The size of the accumulation buffer may differ between implementations. The code should (in future) support automatic querying of the
+// accumulation buffer size for the current platform, and use the correct jitter table accordingly. At the moment, only a single
+// jitter table (for shifting/rendering the scene 8 times) is implemented. This is not guaranteed to work everywhere.
+void renderAntiAliasedElements() {
+
+	GLint viewport[4];
+
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	glClearAccum(0.0, 0.0, 0.0, 0.0);
+	glClear(GL_ACCUM_BUFFER_BIT);
+
+	for (int jitter = 0; jitter < 8; jitter++) {
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glPushMatrix();
+			glTranslatef(jitterTable8[jitter].xy[0]*currentDisplay.screenWidth/double(viewport[2]), jitterTable8[jitter].xy[1]*currentDisplay.screenHeight/double(viewport[3]), 0.0);
+			renderAllElements();
+		glPopMatrix();
+
+		glAccum(GL_ACCUM, 1.0/8.0);
+	}
+
+	glAccum(GL_RETURN, 1.0);
+}
+
+
+// Simply render the scene in a single pass
+void renderStandardElements() {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	renderAllElements();
+}
+
+
+// ----------------- WINDOWING / DISPLAY FUNCTIONS ----------------
+
+// Rendered window's reshape function - manages changes to size of the
+// window, correctly adjusting aspect ratio and setting up orthographic projection.
+void changeParentWindow(int width, int height) {
+
+	if (height == 0) height = 1;
+	glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    // Orthographic projection (also flip axis around so that (0,0) is top left)
+	glOrtho(0.0, currentDisplay.screenWidth, 0.0, currentDisplay.screenHeight, -10.0, 10.0);
+	glScalef(1, -1, 1);
+	glTranslatef(0, -1.0*currentDisplay.screenHeight, 0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+
+// Use the titlebar to display heading, since we don't have a status bar, and would like to use the available screen real-estate as much as possible.
+inline void changeTitleString() {
+
+	stringstream titleString;
+	titleString << currentDisplay.title << ": " << currentDisplay.heading << " - Zoom x" << currentDisplay.zoom << ". ";
+
+	if (currentDisplay.logLastDimension == true) {
+		titleString << currentDisplay.logApplied;
+	} else {
+		titleString << currentDisplay.logNotApplied;
+	}
+	
+	glutSetWindowTitle(titleString.str().c_str());
+}
+
+
+// The main display loop. Render output to screen.
+void display() {
+
+	glClearColor(currentScheme->background.rgba[0], currentScheme->background.rgba[1], currentScheme->background.rgba[2], 1.0);
+	glLoadIdentity();
+
+	glPushMatrix();
+		if (currentDisplay.antiAliasedRendering == true) renderAntiAliasedElements();
+		else renderStandardElements();
+	glPopMatrix();
+
+	changeTitleString();
+
+    glFlush();
+	glutSwapBuffers();
+}
+
+
+// The "pure colour mode" assigns a unique colour based on the value of the dependent variable. This is
+// particularly handy when visualizing clustered data (assuming the cluster index is the dependent variable)
+void switchToPureColorMode(const int& nrOfPatterns, const int& patternSize, const int &lastUniqueIndex) {
+
+	// Sort ascending
+	finalResultsTable.sort(currentDisplay.pureColourSortingDirection, currentDisplay.currentSortKey);
+
+	// Colour the first unique value(s)
+	for (int j=0; j < (*currentUniqueIDs)[0]; j++) {
+		finalResultsTable.table[j].colour = currentScheme->getRampColour(currentDisplay, 0, lastUniqueIndex+1);
+		finalResultsTable.table[j].width = 1.0;
+	}
+
+	// Loop through the mass-middle of unique values
+	for (int i=0; i < lastUniqueIndex; i++) {
+
+		for (int j=(*currentUniqueIDs)[i]; j < (*currentUniqueIDs)[i+1]; j++) {
+			finalResultsTable.table[j].colour = currentScheme->getRampColour(currentDisplay, i+1, lastUniqueIndex+1);
+			finalResultsTable.table[j].width = 1.0;
+		}
+	}
+
+	// Colour the last unique value(s)
+	for (int j=(*currentUniqueIDs)[lastUniqueIndex]; j < nrOfPatterns; j++) {
+		finalResultsTable.table[j].colour = currentScheme->getRampColour(currentDisplay, lastUniqueIndex+1, lastUniqueIndex+1);
+		finalResultsTable.table[j].width = 1.0;
+	}
+
+	currentDisplay.heading = "Single identifying colour per unique data value";
+}
+
+
+// The traditional parallel coordinates rendering mode simply draws all the data patterns using the same colour and line width.
+void switchToTraditionalMode(const int& nrOfPatterns) {
+
+	for (int i=0; i < nrOfPatterns; i++) {
+		finalResultsTable.table[i].colour = currentScheme->standardLine;
+		finalResultsTable.table[i].width = 1.0;
+	}
+
+	currentDisplay.heading = "Traditional parallel coordinates data representation";
+}
+
+
+// The top 20% and remaining 80% patterns are clearly distinguished through darker gray vs lighter gray colours.
+// The best/worst input pattern is set to be rendered in an even ligher/darker gray (but not full colour).
+void switchToGrayScaleMode(const int& nrOfPatterns, const int& patternSize) {
+
+	for (int i=0; i < nrOfPatterns; i++) {
+
+		if ((finalResultsTable.table[i].pattern[patternSize-1] >= (*currentExtentsScheme)[patternSize-1].minNormalisedValue) && (finalResultsTable.table[i].pattern[patternSize-1] <= (*currentExtentsScheme)[patternSize-1].maxNormalisedValue)) {
+			finalResultsTable.table[i].colour = currentScheme->prominentLine;
+			finalResultsTable.table[i].width = 2.0;
+		} else {
+			finalResultsTable.table[i].colour = currentScheme->fadedLine;
+			finalResultsTable.table[i].width = 1.0;
+		}
+	}
+
+	// Still make the best line(s) stand out somehow
+	for (int i=0; i < (*currentUniqueIDs)[0]; i++) {
+		finalResultsTable.table[i].colour = currentScheme->standardLine;
+		finalResultsTable.table[i].width = 2.0;
+	}
+
+	currentDisplay.heading = "80% (dark) / 20% (light) grayscale differentiation";
+}
+
+
+// Colours the top/bottom (depending on rendering mode) 5% using unique colours, while still differentiating between
+// the top 20% and remaining 80% (darker gray vs lighter gray). The best (or worst) input pattern is set to be rendered in red.
+void switchToConditionalColouringMode(const int& nrOfPatterns, const int& patternSize, const int &lastUniqueIndex) {
+
+	// Extract the top/bottom 5% from the top/bottom 20% (taking into account possible duplicates)
+	int fivePercentBoundary = nrOfPatterns / 20;
+	int currentDuplicateIndex = 0;
+	int uniqueClasses = 0;
+
+	// Adjust boundary if it cuts into duplicate values
+	for (int i=0; i < lastUniqueIndex+1; i++) {
+
+		if ((*currentUniqueIDs)[i] == fivePercentBoundary) {
+			uniqueClasses = i;
+			break;
+		} else if ((*currentUniqueIDs)[i] > fivePercentBoundary) {
+			fivePercentBoundary = (*currentUniqueIDs)[i];
+			uniqueClasses = i;
+			break;
+		}
+	}
+
+	// Now colour top 5%
+	currentDuplicateIndex = 1;
+
+	for (int i=(*currentUniqueIDs)[0]; i < fivePercentBoundary; i++) {
+
+		// all the duplicate values should get the same colour
+		if (i < (*currentUniqueIDs)[currentDuplicateIndex]) {
+			finalResultsTable.table[i].colour = currentScheme->getRampColour(currentDisplay, currentDuplicateIndex-1, uniqueClasses);
+			finalResultsTable.table[i].width = 2.0;
+		} else {
+			currentDuplicateIndex++;
+			i--;
+		}
+	}
+
+	// Colour remaining lines
+	for (int i=fivePercentBoundary; i < nrOfPatterns; i++) {
+
+		if ((finalResultsTable.table[i].pattern[patternSize-1] >= (*currentExtentsScheme)[patternSize-1].minNormalisedValue) && (finalResultsTable.table[i].pattern[patternSize-1] <= (*currentExtentsScheme)[patternSize-1].maxNormalisedValue)) {
+			finalResultsTable.table[i].colour = currentScheme->prominentLine;
+			finalResultsTable.table[i].width = 1.0;
+		} else {
+			finalResultsTable.table[i].colour = currentScheme->fadedLine;
+			finalResultsTable.table[i].width = 1.0;
+		}
+	}
+
+	// Finally, colour the best/worst lines
+	for (int i=0; i < (*currentUniqueIDs)[0];i++) {
+		finalResultsTable.table[i].colour = RGBAColour(1.0, 0.0, 0.0, 1.0);
+		finalResultsTable.table[i].width = 2.0;
+	}
+
+	currentDisplay.heading = "5% full colour differentiation";
+}
+
+
+// Ensures that the correct colouring scheme is applied, depending on the current rendering mode.
+void sortAndColourDataTable(double ascending) {
+
+	int nrOfPatterns = finalResultsTable.rows;
+	int patternSize = finalResultsTable.cols;
+	int lastUniqueIndex = (int)currentUniqueIDs->size() - 1;
+
+	// If using index-based colouring
+	if (currentDisplay.pureColorRender == true) {
+
+		switchToPureColorMode(nrOfPatterns, patternSize, lastUniqueIndex);
+
+	// Reset all colours to gray, and don't need sorting
+	} else if (ascending == 0.0) {
+
+		switchToTraditionalMode(nrOfPatterns);
+
+	// If colouring based on some top/bottom (5% / 20%) ordering
+	} else {
+
+		// First sort by fitness (or whatever the last element/dimension of the pattern is)
+		finalResultsTable.sort(ascending, patternSize-1);
+
+		// Only show 20%/80% split
+		if (currentDisplay.grayscaleOnly == true) {
+			switchToGrayScaleMode(nrOfPatterns, patternSize);
+
+		// Show 5% split in full colour
+		} else {
+			switchToConditionalColouringMode(nrOfPatterns, patternSize, lastUniqueIndex);
+		}
+	}
+}
+
+
+// Clears all the dynamic storage used for curve rendering
+void destroyCurveStorage() {
+
+	int nrOfPatterns = finalResultsTable.rows;
+
+	if (currentDisplay.xCurveControlPoints != 0) {
+		delete [] currentDisplay.xCurveControlPoints;
+		currentDisplay.xCurveControlPoints = 0;
+	}
+
+	if (currentDisplay.interpolatedXPoints != 0) {
+		delete [] currentDisplay.interpolatedXPoints;
+		currentDisplay.interpolatedXPoints = 0;
+	}
+
+	if (currentDisplay.yCurveControlPoints != 0) {
+		for (int i=0; i < nrOfPatterns; i++) {
+			if (currentDisplay.yCurveControlPoints[i] != 0) {
+				delete [] currentDisplay.yCurveControlPoints[i];
+				currentDisplay.yCurveControlPoints[i] = 0;
+			}
+			
+		}
+		delete [] currentDisplay.yCurveControlPoints;
+		currentDisplay.yCurveControlPoints = 0;
+	}
+
+	if (currentDisplay.interpolatedYPoints != 0) {
+		
+		for (int i=0; i < nrOfPatterns; i++) {
+			if (currentDisplay.interpolatedYPoints[i] != 0) {
+				delete [] currentDisplay.interpolatedYPoints[i];
+				currentDisplay.interpolatedYPoints[i] = 0;
+			}
+		}
+
+		delete [] currentDisplay.interpolatedYPoints;
+		currentDisplay.interpolatedYPoints = 0;
+	}
+}
+
+
+// Uses Neville's algorithm to compute the y-values for a series of x-values, in the end
+// constructing a Langrange polynomial.
+double computeNeville(int nrOfPoints, double *xInputCoordinates, double *yOutputCoordinates, double step) {
+ 
+	double *f = 0;
+	double fxbar = 0.0;
+
+	f = new double [nrOfPoints];
+	for (int i = 0; i < nrOfPoints; i++) f[i] = yOutputCoordinates[i];
+
+	for (int j = 1; j < nrOfPoints; j++) {
+		for (int i = nrOfPoints-1; i >= j; i-- ) {
+			f[i] = ((step-xInputCoordinates[i-j])*f[i] - (step-xInputCoordinates[i])*f[i-1]) / (xInputCoordinates[i] - xInputCoordinates[i-j]);
+		}
+	}
+
+	fxbar = f[nrOfPoints-1];
+	
+	delete [] f;
+	f = 0;
+	
+	return fxbar;
+}
+
+
+// Compute the intermediate rendering points to represent the curves.
+// It creates the storage and calls a function that uses Neville's algorithm to compute the
+// necessary data points to construct Lagrangian polynomials.
+inline void computeCurveData(const int &dimension, const int &patternCount) {
+
+	double currentValue = 0.0;
+	double xIncrement = 0.0;
+	
+	// Clear the memory 
+	destroyCurveStorage();
+
+	// Extract the x-coordinate components (this will be the same for all patterns)
+	currentDisplay.xCurveControlPoints = new double[dimension];
+	for (int i=0; i < dimension; i++) currentDisplay.xCurveControlPoints[i] = currentDisplay.leftPadding + coordAxis[i].top.xy[0];
+
+	// Extract the y-coordinate components (this will be unique for most (if not all) patterns)
+	currentDisplay.yCurveControlPoints = new double*[patternCount];
+
+	for (int i=0; i < patternCount; i++) {
+		currentDisplay.yCurveControlPoints[i] = new double[dimension];
+
+		// Assign the sorted ID values here, since the ID will be used in the lookup of rendering coordinates
+		// (Only the data table gets sorted, and not the rendering coordinate arrays)
+		finalResultsTable.table[i].id = i;
+
+		for (int j=0; j < dimension; j++) {
+			currentDisplay.yCurveControlPoints[i][j] = currentDisplay.topPadding + finalResultsTable.table[i].pattern[j]*(double(currentDisplay.activeHeight));
+		}
+	}
+
+	// Allocate storage for the interpolated points
+	xIncrement = (fabs(currentDisplay.xCurveControlPoints[dimension-1] - currentDisplay.xCurveControlPoints[0])) / ((dimension-1)*(currentDisplay.scalingFactor));
+
+	currentDisplay.interpolatedXPoints = new double[(dimension-1)*currentDisplay.scalingFactor + 1];
+	for (int i=0; i < (dimension-1)*currentDisplay.scalingFactor + 1; i++) currentDisplay.interpolatedXPoints[i] = 0.0;
+
+	currentDisplay.interpolatedYPoints = new double*[patternCount];
+
+	for (int i=0; i < patternCount; i++) {
+		currentDisplay.interpolatedYPoints[i] = new double[(dimension-1)*currentDisplay.scalingFactor + 1];
+
+		for (int j=0; j < (dimension-1)*currentDisplay.scalingFactor + 1; j++) {
+			currentDisplay.interpolatedYPoints[i][j] = 0.0;
+		}
+	}
+
+	// Compute the source x-values
+	currentDisplay.interpolatedXPoints[0] = currentDisplay.xCurveControlPoints[0];
+	for (int i=1; i < (dimension-1)*currentDisplay.scalingFactor; i++) currentDisplay.interpolatedXPoints[i] = currentDisplay.interpolatedXPoints[i-1] + xIncrement;
+
+	currentDisplay.interpolatedXPoints[(dimension-1)*currentDisplay.scalingFactor] = currentDisplay.xCurveControlPoints[dimension-1];
+
+	// Compute the interpolating y-values
+	for (int i=0; i < patternCount; i++) {
+		currentValue = currentDisplay.xCurveControlPoints[0];
+
+		for (int j=0; j < (dimension-1)*currentDisplay.scalingFactor+1; j++) {
+			currentDisplay.interpolatedYPoints[i][j] = computeNeville(dimension, currentDisplay.xCurveControlPoints, currentDisplay.yCurveControlPoints[i], currentValue);
+			currentValue += xIncrement;
+		}
+	}
+}
+
+
+// This is a rather bulky function that can probably be refactored into smaller functions.
+// In essence, it takes care of the following tasks:
+//		- Determining the maximum/minimum for each component.
+//		- Scaling the data according to the max/min per component.
+//		- Log-transforming the data (avoiding potential log(0) errors)
+//		- Compute the internal label boundary sub-divisions (saving the original values for display)
+//		- Determine the top/bottom 20% cut-off points (considering potential duplicate values)
+//		- Normalising the data (to make it easier to display them in world coordinates)
+//		- Calls the necessary function to compute the curve data points (which assumes that all the previous computation steps were performed)
+
+// Luckily all of this is only computed once.
+void scaleDataTable() {
+
+	int dimension = finalResultsTable.cols;
+	int patternCount = finalResultsTable.rows;
+	double uniqueValue = 0.0;
+	//vector<int> uniqueIDs; // Defined globally
+	uniqueIDs.clear();
+
+	vector<double> minPerDimension;
+	minPerDimension.clear();
+	minPerDimension.reserve(dimension);
+	for (int i=0; i < dimension; i++) minPerDimension.push_back(MAX_DOUBLE);
+
+	vector<double> maxPerDimension;
+	maxPerDimension.clear();
+	maxPerDimension.reserve(dimension);
+	for (int i=0; i < dimension; i++) maxPerDimension.push_back(-MAX_DOUBLE);
+
+	if (currentDisplay.logLastDimension == true) {
+
+		// Find the min/max bounds for the last dimension
+		for (int i=0; i < patternCount; i++) {
+
+			if (finalResultsTable.table[i].pattern[dimension-1] < minPerDimension[dimension-1]) {
+				minPerDimension[dimension-1] = finalResultsTable.table[i].pattern[dimension-1];
+			}
+
+			if (finalResultsTable.table[i].pattern[dimension-1] > maxPerDimension[dimension-1]) {
+				maxPerDimension[dimension-1] = finalResultsTable.table[i].pattern[dimension-1];
+			}
+		}
+
+		// Make the last dimension's values positive, and take its log transform (this could cause "new" negative values)
+		for (int i=0; i < patternCount; i++) {
+
+			// Compensate for negative values and potential accidental log(0) error (possibly extend code to in future allow log-scaling of any number of axes individually?)
+			if (minPerDimension[dimension-1] <= 0) {
+				finalResultsTable.table[i].pattern[dimension-1] = (finalResultsTable.table[i].pattern[dimension-1] - minPerDimension[dimension-1] + MIN_POSITIVE_DOUBLE);
+			}
+
+			finalResultsTable.table[i].pattern[dimension-1] = log(finalResultsTable.table[i].pattern[dimension-1]);
+		}
+
+		// Clear the min/max values
+		maxPerDimension[dimension-1] = -MAX_DOUBLE;
+		minPerDimension[dimension-1] = MAX_DOUBLE;
+	}
+
+	// Find the min/max bounds across all dimensions
+	for (int j=0; j < dimension; j++) {
+		for (int i=0; i < patternCount; i++) {
+
+			if (finalResultsTable.table[i].pattern[j] < minPerDimension[j]) {
+				minPerDimension[j] = finalResultsTable.table[i].pattern[j];
+			}
+
+			if (finalResultsTable.table[i].pattern[j] > maxPerDimension[j]) {
+				maxPerDimension[j] = finalResultsTable.table[i].pattern[j];
+			}
+		}
+	}
+
+	// Compute the interval boundaries per axis
+	for (int j=0; j < dimension; j++) {
+		coordAxis[j].setMinMaxLabels(minPerDimension[j], maxPerDimension[j]);
+	}
+
+	// Phase one of extents calculation - extract non-normalised extent values.
+	// First sort by fitness (or whatever the last element of the pattern is)
+	currentDisplay.currentSortKey = dimension-1;
+	finalResultsTable.sort(1.0, currentDisplay.currentSortKey);
+
+	// Take into account the possibility of duplicates, so first extract unique elements before determining 80% / 20% cut-off points.
+	// Do not attempt to break ties, since this may hide important analysis options later on...
+	uniqueValue = finalResultsTable.table[0].pattern[dimension-1];
+	
+	// Store the id's of unique elements (assume sorted range)
+	for (int i=1; i < patternCount; i++) {
+		if (finalResultsTable.table[i].pattern[dimension-1] != uniqueValue) {
+			uniqueValue = finalResultsTable.table[i].pattern[dimension-1];
+			uniqueIDs.push_back(i);
+		}
+	}
+
+	// Now temporarily reverse the id's for correct rendering when considering "worst" 5% / 20%, and re-number them accordingly
+	reverse(uniqueIDs.begin(), uniqueIDs.end());
+	reversedUniqueIDs = uniqueIDs;
+	for (int i=0, j = (int)(reversedUniqueIDs.size()); i < j; i++) {
+		reversedUniqueIDs[i] = patternCount - reversedUniqueIDs[i];
+	}
+
+	// Correct the intermediate sorting, and set the default value
+	reverse(uniqueIDs.begin(), uniqueIDs.end());
+	currentUniqueIDs = &uniqueIDs;
+
+	// Determine boundary cut-offs for 20% / 80% split, taking into account possible duplicates.
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	// The inclusion/exclusion rule is: considering all values (including duplicates), extract top 20% of the total number of values.
+	// If the 20% boundary happens to intersect a cluster of the same values (duplicates), then include the duplicates outside the 20% boundary as well.
+	// This guarantees that a more representative sample is displayed, since a larger collection of "equally important (the same)" values are included.
+	// Take note however that the 20% boundary does not imply the top/bottom 20% unique values, but rather 20% overall number of values (including duplicates).
+
+	int uniqueCount = (int)(uniqueIDs.size());
+
+	// The final cut-off variables (some still need to be computed, below)
+	int topStart = 0;
+	int topEnd = MAX_INT;		// actual values computed below
+	int bottomStart = MAX_INT;	// actual values computed below
+	int bottomEnd = patternCount-1;
+
+	// Determine raw cut-offs
+	int rawTopEnd = (int)(patternCount*0.2);		// includes duplicates
+	int rawBottomStart = (int)(patternCount*0.8);	// includes duplicates
+
+	// See if raw cut-offs are also unique values. If not, set them to the next biggest unique value (boundary)
+	for (int i=0; i < uniqueCount; i++) {
+
+		// Is the current cut-off point/index in the unique-value id list?
+		if (uniqueIDs[i] == rawTopEnd) {
+			topEnd = rawTopEnd;
+			break;
+
+		// If not, set to the first unique-value index larger than current cut-off point
+		} else if (uniqueIDs[i] > rawTopEnd) {
+			topEnd = uniqueIDs[i];
+			break;
+		}
+	}
+
+	// Do the same for the bottom cut-off (could probably reduce computation time by merging the two loops and breaking on flag settings, but this reads better)
+	// Could do a binary search here to find the index of the first value smaller than or equal to the rawBottomStart value to speed things up... another todo...
+	for (int i=0; i < uniqueCount; i++) {
+
+		// Is the current cut-off point/index in the unique-value id list?
+		if (uniqueIDs[i] == rawBottomStart) {
+			bottomStart = rawBottomStart;
+			break;
+
+		// If not, set to the first unique-value index larger than current cut-off point
+		} else if (uniqueIDs[i] > rawBottomStart) {
+			bottomStart = uniqueIDs[i];
+			break;
+		}
+	}
+
+	// If for some reason the 80% cut-off happened to fall into the last bracket of unique values, set the cut-off equal to the last unique value.
+	// (This is rare, but it happens if there are a few number of unique values, or a large number of repeating values at the end of the sorted range)
+	if (bottomStart == MAX_INT) {
+		
+		if (uniqueCount > 0) {
+			bottomStart = uniqueIDs[uniqueCount-1];
+		} else {
+			bottomStart = uniqueIDs[0];
+		}
+	}
+
+	// Extract the relevant bounded values into seperate vectors
+	for (int i=0; i < dimension; i++) {
+
+		AxisExtents tempExtents;
+
+		double tempMax = -MAX_DOUBLE;
+		double tempMin = MAX_DOUBLE;
+
+		// Get min/max values in top 20%
+		for (int j=topStart; j < topEnd; j++) {
+			if (finalResultsTable.table[j].pattern[i] < tempMin) {
+				tempMin = finalResultsTable.table[j].pattern[i];
+				tempExtents.minID = j;
+			}
+
+			if (finalResultsTable.table[j].pattern[i] > tempMax) {
+				tempMax = finalResultsTable.table[j].pattern[i];
+				tempExtents.maxID = j;
+			}
+		}
+
+		tempExtents.minDisplayValue = finalResultsTable.table[tempExtents.minID].pattern[i];
+		tempExtents.maxDisplayValue = finalResultsTable.table[tempExtents.maxID].pattern[i];
+
+		topTwentyPercent.push_back(tempExtents);
+
+		tempMax = -MAX_DOUBLE;
+		tempMin = MAX_DOUBLE;
+
+		// Get min/max values in bottom 20%
+		for (int j=bottomStart; j < bottomEnd; j++) {
+			if (finalResultsTable.table[j].pattern[i] < tempMin) {
+				tempMin = finalResultsTable.table[j].pattern[i];
+				tempExtents.minID = j;
+			}
+
+			if (finalResultsTable.table[j].pattern[i] > tempMax) {
+				tempMax = finalResultsTable.table[j].pattern[i];
+				tempExtents.maxID = j;
+			}
+		}
+
+		tempExtents.minDisplayValue = finalResultsTable.table[tempExtents.minID].pattern[i];
+		tempExtents.maxDisplayValue = finalResultsTable.table[tempExtents.maxID].pattern[i];
+
+		bottomTwentyPercent.push_back(tempExtents);
+	}
+
+	// Normalise between 0 and 1
+	for (int j=0; j < dimension; j++) {
+		for (int i=0; i < patternCount; i++) {
+
+			// Handle potential division by zero error
+			if (maxPerDimension[j] != minPerDimension[j]) {
+				finalResultsTable.table[i].pattern[j] = (finalResultsTable.table[i].pattern[j] - minPerDimension[j]) / (maxPerDimension[j] - minPerDimension[j]);
+
+			// Effectively set to 0.0
+			} else {
+				finalResultsTable.table[i].pattern[j] = (finalResultsTable.table[i].pattern[j] - minPerDimension[j]);
+			}
+		}
+	}
+
+	// Phase two of extents retrieval: Extract the normalised values for the extents - they are used to determine offsets for correct rendering to screen
+	for (int i=0; i < dimension; i++) {
+
+		// Get top 20% (the normalised values replaced the original values)
+		topTwentyPercent[i].minNormalisedValue = finalResultsTable.table[topTwentyPercent[i].minID].pattern[i];
+		topTwentyPercent[i].maxNormalisedValue = finalResultsTable.table[topTwentyPercent[i].maxID].pattern[i];
+
+		// Get bottom 20% (the normalised values replaced the original values)
+		bottomTwentyPercent[i].minNormalisedValue = finalResultsTable.table[bottomTwentyPercent[i].minID].pattern[i];
+		bottomTwentyPercent[i].maxNormalisedValue = finalResultsTable.table[bottomTwentyPercent[i].maxID].pattern[i];
+	}
+
+	// Set the default extents scheme
+	currentExtentsScheme = &topTwentyPercent;
+
+	// Compute the curve rendering points
+	computeCurveData(dimension, patternCount);
+}
+
+
+// Sets up the necessary storage/data-structures for the input file
+void configureDataTable(int nrOfPatterns, int patternSize) {
+	finalResultsTable = InputTable(nrOfPatterns, patternSize);
+
+	coordAxis.clear();
+	coordAxis.reserve(patternSize);
+
+	double xOffset = (currentDisplay.activeWidth) / (GLfloat)(patternSize - 1);
+
+	for (int i=0; i < patternSize; i++) {
+		coordAxis.push_back(VerticalAxis(GLfloat(i)*xOffset, currentDisplay));
+	}
+}
+
+
+// Read in an input file (to be visualized)
+bool readInputFile(const string &filename, const int &sequenceLength, const int &sequenceDim) {
+
+	bool fileError = false;
+
+	ifstream fin_;
+	fin_.open(filename.c_str(), ios_base::in);
+
+	if (fin_.is_open()) {
+
+		// Instantiate the necessary storage
+		configureDataTable(sequenceLength, sequenceDim);
+
+		// Load data
+		for (int i=0; i < sequenceLength; i++) {
+			for (int j=0; j < sequenceDim; j++) {
+
+				if (fin_.peek() == EOF) {
+					cerr << "End of file reached before data structure could be filled. Check command-line string for possible errors." << endl;
+					i = sequenceLength;
+					fileError = true;
+					break;
+
+				} else {
+					fin_ >> finalResultsTable.table[i].pattern[j];
+				}
+			}
+		}
+
+		fin_.close();
+
+	} else {
+		cerr << "Error operning file '" << filename << "'. Check command-line string for possible errors, or close any application currently using the file." << endl;
+		fileError = true;
+	}
+
+	return fileError;
+}
+
+
+// ----------------- TGA IMAGE SAVING CODE ------------------
+
+// Takes a full-colour screen capture and saves to sequentially numbered TGA output files.
+void captureTGAScreen() {
+
+	string baseFilename = "capture";	// Maybe extend in the future to allow the users to optionally supply their own prefixes from command-line?
+	stringstream outputFile;
+	outputFile << baseFilename << "_";
+	outputFile << right << setfill('0') << setw(4) << dec << captureID;
+	outputFile << ".tga";
+
+	string tgaNotification = "Screen capture saved as: '" + outputFile.str() + "'";
+
+	ofstream fout;
+	fout.open(outputFile.str().c_str(), ios::out | ios::binary);
+
+	if (fout.is_open()) {
+
+		short int currentWidth = glutGet(GLUT_WINDOW_WIDTH);
+		short int currentHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+		unsigned char pixelDepth = 32;	// RGBA storage = 32 bits
+		unsigned char blankChar = 0;
+		unsigned char tgaType = 0;
+		unsigned char tgaMode = pixelDepth / 8;
+		unsigned char temp = 0;
+		short int blankInt = 0;
+		int rawSize = currentWidth * currentHeight * tgaMode;
+
+		// Instantiate output buffer, and initialise to zero
+		unsigned char *frameBufferData = new unsigned char[rawSize];
+		for (int i=0; i < rawSize; i++) frameBufferData[i] = 0;
+
+		// Read the pixel information from the OpenGL frame buffer in RGBA mode
+		glReadBuffer(GL_BACK_LEFT);
+		glReadPixels(0, 0, currentWidth, currentHeight, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)frameBufferData);
+
+		// Determine TGA image type: 2 for RGB or RGBA, 3 for greyscale
+		if ((pixelDepth == 24) || (pixelDepth == 32)) tgaType = 2;
+		else tgaType = 3;
+
+		// Step 1: Write the TGA header (not using palette's here)
+		fout.write((char*)&blankChar, sizeof(unsigned char));		// 0: Offset		(Usually 0 - Size: 1 byte)
+		fout.write((char*)&blankChar, sizeof(unsigned char));		// 1: ColourType	(0 for RGB - Size: 1 byte)
+		fout.write((char*)&tgaType, sizeof(unsigned char));			// 2: ImageType		(2 for RGB - Size: 1 byte)
+		fout.write((char*)&blankInt, sizeof(short int));			// 3: PaletteStart	(0 - Size: 2 bytes)
+		fout.write((char*)&blankInt, sizeof(short int));			// 5: PaletteLen	(0 - Size: 2 bytes)
+		fout.write((char*)&blankChar, sizeof(unsigned char));		// 7: PalBits		(0 - Size: 1 byte)
+		fout.write((char*)&blankInt, sizeof(short int));			// 8: X Origin		(0 - Size: 2 bytes)
+		fout.write((char*)&blankInt, sizeof(short int));			// 10: Y Origin		(0 - Size: 2 bytes)
+		fout.write((char*)&currentWidth, sizeof(short int));		// 12: Width		(pixels - Size: 2 bytes)
+		fout.write((char*)&currentHeight, sizeof(short int));		// 14: Height		(pixels	- Size: 2 bytes)
+		fout.write((char*)&pixelDepth, sizeof(unsigned char));		// 16: BPP			(32 for RGBA - Size: 1 byte)
+		fout.write((char*)&blankChar, sizeof(unsigned char));		// 17: Orientation	(0, Not upside down - Size: 1 byte)
+
+		// Step 2: Convert from RGB(A) to BGR(A)
+		// (Simply swap red and blue components)
+		if (tgaMode >= 3) {
+
+			for (int i=0; i < rawSize; i+=tgaMode) {
+				temp = frameBufferData[i];
+				frameBufferData[i] = frameBufferData[i+2];
+				frameBufferData[i+2] = temp;
+			}
+		}
+
+		// Step 3: Write contents to file, and close it for writing.
+		fout.write((char*)frameBufferData, rawSize*sizeof(unsigned char));
+		fout.close();
+
+		// Clean up the temporary storage
+		delete [] frameBufferData;
+		frameBufferData = 0;
+
+		// Increment counter to guarantee a sequence of captures to multiple files
+		captureID++;
+
+		// Notify the user that a file was saved
+		currentDisplay.heading = tgaNotification;
+		cout << tgaNotification << endl;
+
+	} else {
+		cerr << "Error opening file '" << outputFile.str() << "' for screen capturing. No TGA file saved." << endl;
+	}
+}
+ 
+
+// ----------------- TEXTURE FUNCTIONS ----------------
+
+// Loads bitmap data into the Image data structure for use in texturing.
+inline int loadBitmap(const char *finalName, Image *image) {
+	
+	// This assumes a specific data type size implementation
+    unsigned long size = 0;				// 4 bytes
+    unsigned short int planes = 0;		// 2 bytes
+    unsigned short int bpp = 0;			// 2 bytes
+	
+	//cout << sizeof(size) << " " << sizeof(planes) << " " << sizeof(bpp) << " " << sizeof(image->sizeX) << " " << sizeof(image->sizeY) << endl;
+	
+	ifstream fin;
+	fin.open(finalName, ios::in | ios::binary);
+
+	if (fin.is_open()) {
+		
+		// Skip past some header information
+		fin.seekg(18, ios_base::cur);
+		
+		// Read width information
+		//fin.read(reinterpret_cast<char *>(&(image->sizeX)), sizeof(image->sizeX));
+		fin.read(reinterpret_cast<char *>(&(image->sizeX)), 4);
+
+		// Check that correct bits were read and that no errors occurred
+		//if (fin.gcount() == sizeof(image->sizeX)) {
+		if (fin.gcount() == 4) {
+			
+			// Read height information
+			//fin.read(reinterpret_cast<char *>(&(image->sizeY)), sizeof(image->sizeY));
+			fin.read(reinterpret_cast<char *>(&(image->sizeY)), 4);
+
+			// Check that correct bits were read and that no errors occurred
+			//if (fin.gcount() == sizeof(image->sizeY)) {
+			if (fin.gcount() == 4) {
+		
+				size = image->sizeX * image->sizeY * 3;
+				
+				// Read plane information
+				fin.read(reinterpret_cast<char *>(&planes), sizeof(planes));
+				
+				if (fin.gcount() == sizeof(planes)) {
+				
+					if (planes == 1) {
+					
+						// Read bits per pixel
+						fin.read(reinterpret_cast<char *>(&bpp), sizeof(bpp));
+						
+						if (fin.gcount() == sizeof(bpp)) {
+						
+							if (bpp == 24) {
+							
+								// Skip to data part of file
+								fin.seekg(24, ios_base::cur);
+								
+								// Attempt to allocate enough memory
+								image->data = new (nothrow) char[size];
+								 
+								if (image->data != 0) {
+									
+									// Read the actual data
+									fin.read(image->data, size);
+									
+									if (fin.gcount() == size) {
+									
+									    char temp = 0;
+
+										// Swap red and blue components around
+										for (unsigned long i=0;i<size;i+=3) {
+											temp = image->data[i];
+											image->data[i] = image->data[i+2];
+											image->data[i+2] = temp;
+										}
+
+										return 1;
+										
+									} else {
+										cerr << "Error reading data from '" << finalName << "'. " << endl;
+									}
+								} else {
+									cerr << "Error allocating enough memory to load bitmap: " << size << " bytes needed. " << endl;
+								}
+							} else {
+								cerr << "Error: Bits per pixel from '" << finalName << "' is not equal to 24, instead: " << bpp << endl;
+							}
+						} else {
+							cerr << "Error reading bits per pixel information from '" << finalName << "'. " << endl;
+						}
+					} else {
+						cerr << "Error: Planes from '" << finalName << "' is not equal to 1, instead: " << planes << endl;
+					}
+				} else {
+					cerr << "Error reading planes from '" << finalName << "'. " << endl;
+				}
+			} else {
+			cerr << "Error reading height from '" << finalName << "'. " << endl;
+			}
+		} else {
+			cerr << "Error reading width from '" << finalName << "'. " << endl;
+		}
+	} else {
+		cerr << "Error: file '" << finalName << "' not found." << endl;
+	}
+	
+	return 0;
+}
+
+
+// Converts bitmap data into texture data
+inline void compileGLTextureData(GLuint &theTexture, Image *rawData) {
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glGenTextures(1, &theTexture);
+	glBindTexture(GL_TEXTURE_2D, theTexture);
+
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	
+	// Better compatibility with older generation hardware
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); 
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, rawData->sizeX, rawData->sizeY, GL_RGB, GL_UNSIGNED_BYTE, rawData->data);
+
+	// Better quality output, but fails on some old display drivers
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rawData->sizeX, rawData->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, rawData->data);
+	
+}
+
+
+// Load Bitmaps And Convert To Textures
+void loadTextureFiles() {
+
+	string filename = "help/help_screen.bmp";
+
+	// Temporary texture file data storage
+	Image *rawData = new Image();
+
+	cout << "Loading texture: " << filename << endl;
+
+	// Read in the bitmap file (quit on error)
+	if (!loadBitmap(filename.c_str(), rawData)) exit(1);
+
+	// Convert bitmap data into OpenGL texture data
+	compileGLTextureData(theHelpTexture, rawData);
+
+	// Clear temporary bitmap data (it is recreated each time in the ImageLoad() function)
+	delete [] rawData->data;
+	rawData->data = 0;
+
+	delete rawData;
+	rawData = 0;
+
+	cout << "Loading textures: Done!" << endl;
+}
+
+
+// ----------------- INPUT / INTERACTION FUNCTIONS ----------------
+
+// Handles all normal keyboard input
+void keys(unsigned char key, int x, int y) {
+
+	if (key == '1') {
+		currentDisplay.currentLabelRenderingMode = baseLabels;
+		currentDisplay.standardRender = true;
+		currentDisplay.pureColorRender = false;
+		sortAndColourDataTable(0.0);
+
+	} else if (key == '2') {
+		currentDisplay.standardRender = false;
+		currentDisplay.pureColorRender = false;
+		currentDisplay.grayscaleOnly = !currentDisplay.grayscaleOnly;
+		currentExtentsScheme = &topTwentyPercent;
+		currentUniqueIDs = &uniqueIDs;
+		sortAndColourDataTable(1.0);
+
+	} else if (key == '3') {
+		currentDisplay.standardRender = false;
+		currentDisplay.pureColorRender = false;
+		currentDisplay.grayscaleOnly = !currentDisplay.grayscaleOnly;
+		currentExtentsScheme = &bottomTwentyPercent;
+		currentUniqueIDs = &reversedUniqueIDs;
+		sortAndColourDataTable(-1.0);
+
+	} else if (key == '4') {
+		currentUniqueIDs = &uniqueIDs;
+		if (currentDisplay.currentLabelRenderingMode == extentsLabels) currentDisplay.currentLabelRenderingMode = baseLabels;
+		currentDisplay.standardRender = false;
+		currentDisplay.pureColorRender = true;
+		sortAndColourDataTable(1.0);
+
+	} else if (key == '8') {
+		currentDisplay.showCurves = !currentDisplay.showCurves;
+
+	} else if (key == '9') {
+		currentDisplay.currentLabelRenderingMode = ((++currentDisplay.currentLabelRenderingMode) % 3);
+		if (((currentDisplay.pureColorRender == true) | (currentDisplay.standardRender == true)) && (currentDisplay.currentLabelRenderingMode == extentsLabels)) {
+			currentDisplay.currentLabelRenderingMode++;
+		}
+	} else if (key == '0') {
+		currentDisplay.fadedLayerRender = !currentDisplay.fadedLayerRender;
+
+	} else if (key == 'i') {
+
+		if (currentDisplay.captureFriendly == true) {
+			currentScheme = &screenFriendlyScheme;
+			currentDisplay.captureFriendly = false;
+		} else {
+			currentScheme = &captureFriendlyScheme;
+			currentDisplay.captureFriendly = true;
+		}
+		
+		// Inverting the colours resets the display to the default parallel coordinates view
+		// Otherwise you need to keep track of the last rendering mode and repeat it, because the lines need to be re-coloured.
+		// There may have been many different combinations of actions that lead to the current colouring, so best to just reset to monotone.
+		keys('1', 0, 0);
+
+	} else if (key == ']') {
+
+		if (currentDisplay.currentLabelRenderingMode != baseLabels) {
+			currentDisplay.floatingPlane.opacity -= 0.05;
+			if (currentDisplay.floatingPlane.opacity < 0.0) currentDisplay.floatingPlane.opacity = 0.01;
+
+			currentScheme->floatingPlane.rgba[3] = currentDisplay.floatingPlane.opacity;
+		}
+
+	} else if (key == '[') {
+
+		if (currentDisplay.currentLabelRenderingMode != baseLabels) {
+			currentDisplay.floatingPlane.opacity += 0.05;
+			if (currentDisplay.floatingPlane.opacity > 1.0) currentDisplay.floatingPlane.opacity = 1.0;
+
+			currentScheme->floatingPlane.rgba[3] = currentDisplay.floatingPlane.opacity;
+		}
+
+	} else if (key == '-') {
+
+		if (currentDisplay.currentLabelRenderingMode != baseLabels) {
+			currentDisplay.extentsPlane.opacity -= 0.05;
+			if (currentDisplay.extentsPlane.opacity < 0.0) currentDisplay.extentsPlane.opacity = 0.01;
+
+			currentScheme->extentsPlane.rgba[3] = currentDisplay.extentsPlane.opacity;
+		}
+
+	} else if (key == '=') {	// This is meant to be the '+' key, but nobody would hold down shift to get the actual '+' symbol, so refer to shared '=' symbol instead
+
+		if (currentDisplay.currentLabelRenderingMode != baseLabels) {
+			currentDisplay.extentsPlane.opacity += 0.05;
+			if (currentDisplay.extentsPlane.opacity > 1.0) currentDisplay.extentsPlane.opacity = 1.0;
+
+			currentScheme->extentsPlane.rgba[3] = currentDisplay.extentsPlane.opacity;
+		}
+
+	} else if (key == ',') {	// Meant to be the '<' key (see above explanation)
+
+		// This will only hold for a global scheme (one key changes all the axes' labels).
+		currentDisplay.currentLabelRenderingResolution--;
+		if (currentDisplay.currentLabelRenderingResolution < 1) currentDisplay.currentLabelRenderingResolution = 1;
+
+	} else if (key == '.') {	// Meant to be the '>' key (see above explanation)
+
+		// This will only hold for a global scheme (one key changes all the axes' labels).
+		if  (currentDisplay.currentLabelRenderingResolution < coordAxis[0].numberOfLabelResolutions - 1)
+			currentDisplay.currentLabelRenderingResolution++;
+
+	} else if (key == ';') {
+
+		if (currentDisplay.decimalLimit > 0) currentDisplay.decimalLimit--;
+
+	} else if (key == '\'') {
+
+		if (currentDisplay.decimalLimit < 10) currentDisplay.decimalLimit++;
+
+	} else if (key == 'q') {
+	
+		currentDisplay.zoom += 0.01;
+
+	} else if (key == 'w') {
+	
+		currentDisplay.zoom -= 0.01;
+		if (currentDisplay.zoom <= 0.0) currentDisplay.zoom = 0.01;
+
+	} else if (key == 'n') {
+	
+		currentDisplay.colourShift += 0.1;
+		if (currentDisplay.colourShift > 1.0) currentDisplay.colourShift = 1.0;
+		keys('4', 0, 0);
+	
+	} else if (key == 'm') {
+		currentDisplay.colourShift -= 0.1;
+		if (currentDisplay.colourShift < 0.0) currentDisplay.colourShift = 0.0;
+		keys('4', 0, 0);
+	} else if (key == 'a') {
+		currentDisplay.antiAliasedRendering = !currentDisplay.antiAliasedRendering;
+
+	} else if (key == 'c') {
+		captureTGAScreen();
+
+	} else if (key =='f') {
+		currentDisplay.runFullScreen = !currentDisplay.runFullScreen;
+
+		if (currentDisplay.runFullScreen == true) {
+			glutFullScreen();
+		} else {
+			glutReshapeWindow(currentDisplay.windowWidth, currentDisplay.windowHeight);
+			glutPositionWindow(50, 50);
+		}
+	} else if (key == 'j') {
+		currentDisplay.currentSortKey--;
+		if (currentDisplay.currentSortKey < 0) currentDisplay.currentSortKey = finalResultsTable.cols-1; 
+		keys('4', 0, 0);
+		
+	} else if (key == 'k') {
+		currentDisplay.currentSortKey = (currentDisplay.currentSortKey + 1) % finalResultsTable.cols;
+		keys('4', 0, 0);
+		
+	} else if (key == 'l') {
+		currentDisplay.pureColourSortingDirection = -currentDisplay.pureColourSortingDirection;
+		keys('4', 0, 0);
+		
+	} else if (key == ' ') {
+		currentDisplay.showHelpOverlay = !currentDisplay.showHelpOverlay;
+	}
+
+	if (key == ESCAPE) {
+		destroyCurveStorage();
+		exit(0);
+	}
+
+	glutPostRedisplay();	// Sends signal to redraw the viewport. This should be the last call in this function.
+}
+
+
+// Maps menu items to keyboard input (it may be easier to use mouse-menus than memorizing keyboard shortcuts sometimes)
+void mousePopupMenu(int id) {
+
+	switch(id) {
+		case 1: keys('1', 0, 0); break;
+		case 2: keys('2', 0, 0); break;
+		case 3: keys('3', 0, 0); break;
+		case 4: keys('4', 0, 0); break;
+		case 11: keys('a', 0, 0); break;
+		case 12: keys('f', 0, 0); break;
+		case 13: keys('i', 0, 0); break;
+		case 21: currentDisplay.showCurves = false; break;
+		case 22: currentDisplay.showCurves = true; break;
+		case 31: currentDisplay.currentLabelRenderingMode = baseLabels; // The same effect as pressing the '9' key
+			break;
+		case 321:
+			if ((currentDisplay.pureColorRender == false) & (currentDisplay.standardRender == false)) {
+				currentDisplay.currentLabelRenderingMode = extentsLabels;	// The same effect as pressing the '9' key
+			}
+			break;
+		case 322: keys('=', 0, 0); break;
+		case 323: keys('-', 0, 0); break;
+		case 324: keys('[', 0, 0); break;
+		case 325: keys(']', 0, 0); break;
+		case 331:
+			currentDisplay.currentLabelRenderingMode = detailLabels;	// The same effect as pressing the '9' key
+			break;
+		case 332:
+			currentDisplay.currentLabelRenderingMode = detailLabels;	// The same effect as pressing the '9' key
+			keys('.', 0, 0);
+			break;
+		case 333:
+			currentDisplay.currentLabelRenderingMode = detailLabels;	// The same effect as pressing the '9' key
+			keys(',', 0, 0);
+			break;
+		case 334: keys('[', 0, 0); break;
+		case 335: keys(']', 0, 0); break;
+		case 341: keys('\'', 0, 0); break;
+		case 342: keys(';', 0, 0); break;
+		case 35: keys('0', 0, 0); break;
+		case 41: keys('c', 0, 0); break;
+		case 51: keys('q', 0, 0); break;
+		case 52: keys('w', 0, 0); break;
+		case 53: currentDisplay.zoom = 1.0; break;
+		case 61: keys('4', 0, 0); break;
+		case 62: keys('l', 0, 0); break;
+		case 63: keys('j', 0, 0); break;
+		case 64: keys('k', 0, 0); break;
+		case 91: keys(' ', 0, 0); break;
+		case 92: keys(ESCAPE, 0, 0); break;
+	}
+
+	glutPostRedisplay();
+}
+
+
+// ----------------- MAIN INITIALISATION / OPERATING FUNCTIONS ----------------
+
+// Handles basic initialisation and setup of OpenGL parameters and settings.
+void initGLSettings() {
+
+	// Depth testing configuration
+	glEnable(GL_DEPTH_TEST);
+
+	// Rendering output constants
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	// Alpha-blending function
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Line stipple setting
+	glLineStipple(1, 127);
+
+}
+
+
+// Initialises a menu structure and attaches it to the right mouse button
+void initMenu() {
+
+	GLint colourRenderModeMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Default View", 61);
+	glutAddMenuEntry("Reverse Colour Sorting", 62);
+	glutAddMenuEntry("Select Previous Variable as Sorting Key", 63);
+	glutAddMenuEntry("Select Next Variable as Sorting Key", 64);
+		
+	GLint renderModeMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Traditional Parallel Coordinates (Monotone)", 1);
+	glutAddMenuEntry("Toggle: Best 20% (Grayscale) / Best 5% (Colour)", 2);
+	glutAddMenuEntry("Toggle: Worst 20% (Grayscale) / Worst 5% (Colour)", 3);
+	glutAddSubMenu("Colour-Coded:", colourRenderModeMenu);
+
+	GLint displayModeMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Anti-Aliasing (On/Off)", 11);
+	glutAddMenuEntry("Full-Screen Display (On/Off)", 12);
+	glutAddMenuEntry("Invert Colour Scheme", 13);
+
+	GLint lineRenderingModeMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Render data as straight lines", 21);
+	glutAddMenuEntry("Render data as curved lines", 22);
+
+	GLint extentsLabelMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Default View", 321);
+	glutAddMenuEntry("Increase Overlay Opacity", 322);
+	glutAddMenuEntry("Decrease Overlay Opacity", 323);
+	glutAddMenuEntry("Darken Lines", 324);
+	glutAddMenuEntry("Brighten Lines", 325);
+
+	GLint detailLabelMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Default View", 331);
+	glutAddMenuEntry("Increase Label Subdivisions", 332);
+	glutAddMenuEntry("Decrease Label Subdivisions", 333);
+	glutAddMenuEntry("Darken Lines", 334);
+	glutAddMenuEntry("Brighten Lines", 335);
+
+	GLint numericResolutionMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Increase Numeric Resolution", 341);
+	glutAddMenuEntry("Decrease Numeric Resolution", 342);
+
+	GLint overlayLabelMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Show Base Axis Labels", 31);
+	glutAddSubMenu("Show Data Extents Labels:", extentsLabelMenu);
+	glutAddSubMenu("Show Detailed Labels:", detailLabelMenu);
+	glutAddSubMenu("Numeric Resolution:", numericResolutionMenu);
+	glutAddMenuEntry("Toggle Faded Lines", 35);
+
+	GLint captureMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Capture Screenshot as TGA", 41);
+
+	GLint zoomMenu = glutCreateMenu(mousePopupMenu);
+	glutAddMenuEntry("Increase Vertical Scale", 51);
+	glutAddMenuEntry("Decrease Vertical Scale", 52);
+	glutAddMenuEntry("Restore Default Scale", 53);
+
+	glutCreateMenu(mousePopupMenu);
+	glutAddSubMenu("Visualization Mode:", renderModeMenu);
+	glutAddSubMenu("Line Rendering Mode:", lineRenderingModeMenu);
+	glutAddSubMenu("Overlay Mode:", overlayLabelMenu);
+	glutAddSubMenu("Display Settings:", displayModeMenu);
+	glutAddSubMenu("Zoom:", zoomMenu);
+	glutAddSubMenu("Save as:", captureMenu);
+	glutAddMenuEntry("Help", 91);
+	glutAddMenuEntry("Quit", 92);
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+
+// Initialises some global variables
+void initGlobals() {
+
+	// Definition of screen-friendly rendering scheme (dark backround)
+	screenFriendlyScheme.background = RGBAColour(0.2, 0.2, 0.2, 1.0);
+	screenFriendlyScheme.axis = RGBAColour(1.0, 1.0, 1.0, 1.0);
+	screenFriendlyScheme.numericLabels = RGBAColour(1.0, 1.0, 0.9, 1.0);
+	screenFriendlyScheme.standardLine = RGBAColour(0.9, 0.9, 0.9, 1.0);
+	screenFriendlyScheme.fadedLine = RGBAColour(0.25, 0.25, 0.25, 1.0);
+	screenFriendlyScheme.prominentLine = RGBAColour(0.6, 0.6, 0.6, 1.0);
+	screenFriendlyScheme.floatingPlane = RGBAColour(0.15, 0.15, 0.15, currentDisplay.floatingPlane.opacity);
+	screenFriendlyScheme.extentsPlane = RGBAColour(0.35, 0.75, 0.35, currentDisplay.extentsPlane.opacity);
+	screenFriendlyScheme.topMostPlane = RGBAColour(1.0, 1.0, 1.0, currentDisplay.topMostPlane.opacity);
+
+	// Definition of capture-friendly rendering scheme (white backround, to be used in publications)
+	captureFriendlyScheme.background = RGBAColour(1.0, 1.0, 1.0, 1.0);
+	captureFriendlyScheme.axis = RGBAColour(0.0, 0.0, 0.0, 1.0);
+	captureFriendlyScheme.numericLabels = RGBAColour(0.0, 0.0, 0.0, 1.0);
+	captureFriendlyScheme.standardLine = RGBAColour(0.05, 0.05, 0.05, 1.0);
+	captureFriendlyScheme.fadedLine = RGBAColour(0.90, 0.90, 0.90, 1.0);
+	captureFriendlyScheme.prominentLine = RGBAColour(0.6, 0.6, 0.6, 1.0);
+	captureFriendlyScheme.floatingPlane = RGBAColour(0.5, 0.5, 0.5, currentDisplay.floatingPlane.opacity);
+	captureFriendlyScheme.extentsPlane = RGBAColour(0.35, 0.75, 0.35, currentDisplay.extentsPlane.opacity);
+	captureFriendlyScheme.topMostPlane = RGBAColour(1.0, 1.0, 1.0, currentDisplay.topMostPlane.opacity);
+
+	// Set the default scheme to be the screen-friendly scheme at startup
+	currentScheme = &screenFriendlyScheme;
+
+	// Construct the 8-sample jitter table (once only) - constants obtained from the OpenGL Red Book
+	jitterTable8.push_back(Point2D(0.5625, 0.4375));
+	jitterTable8.push_back(Point2D(0.0625, 0.9375));
+	jitterTable8.push_back(Point2D(0.3125, 0.6875));
+	jitterTable8.push_back(Point2D(0.6875, 0.8125));
+	jitterTable8.push_back(Point2D(0.8125, 0.1875));
+	jitterTable8.push_back(Point2D(0.9375, 0.5625));
+	jitterTable8.push_back(Point2D(0.4375, 0.0625));
+	jitterTable8.push_back(Point2D(0.1875, 0.3125));
+}
+
+
+// Displays a short disclaimer
+void showDisclaimer() {
+	cout << FLUXVIZ_VERSION << " - Copyright (C) " << FLUXVIZ_COPYRIGHT_YEAR << " " << FLUXVIZ_CREATOR << endl;
+	cout << endl;
+	cout << "This program comes with ABSOLUTELY NO WARRANTY; ";
+	cout << "This is free software, and you are welcome to redistribute it under certain conditions. " << endl;
+	cout << "For more details see the 'GPL.txt' file that came with this code distribution." << endl;
+	cout << endl;
+}
+
+
+// Displays a message showing how to properly start the program from the command line
+void showUsage() {
+	cerr << "Usage: ./fluxviz filename(string) numberOfPatterns(number) featuresPerPattern(number) toggleLogTransform(y/n)" << endl;
+	cerr << "Example: ./fluxviz testdata.txt 64 5 y\n" << endl;
+}
+
+
+// Parses the command line flags (this can be extended in the future to be more generic, and use a uniform format (-flag:setting))
+bool parseCommandLine(const int &argc, char** argv, string &filename, int &sequenceLength, int& sequenceDim) {
+
+	bool parseError = false;
+
+	if (argc != 5) {
+		cerr << "Error: Incorrect number of command line parameters entered." << endl;
+		showUsage();
+		parseError = true;
+
+	} else {
+
+		filename = argv[1];
+		sequenceLength = atoi(argv[2]);
+		sequenceDim = atoi(argv[3]);
+
+		if (sequenceLength <= 0) {
+			cerr << "Error: numberOfPatterns must be a positive integer. Check command-line string for possible errors." << endl;
+			showUsage();
+			return true;
+
+		} else if (sequenceDim <= 0) {
+			cerr << "Error: featuresPerPattern must be a positive integer. Check command-line string for possible errors." << endl;
+			showUsage();
+			return true;
+		}
+
+		if (argv[4][0] == 'y') currentDisplay.logLastDimension = true;
+		else currentDisplay.logLastDimension = false;
+
+		parseError = false;
+	}
+
+	return parseError;
+}
+
+
+// The main function
+int main(int argc, char** argv) {
+
+	// I suppose you could replace all the error-related flags in this prototype with "exceptions"...
+	bool readInputError = false;
+	bool commandLineError = false;
+
+	// The code should be extended to maybe auto-read from the file the number of columns/rows. Also extend to read in text-descripions for columns.
+	string filename = " ";
+	int sequenceLength = 0;
+	int sequenceDim = 0;
+
+	// Print the disclaimer to screen
+	showDisclaimer();
+
+	// Also, a generic way of handling command-line parameters (current and future extensions) will be handy (although a bit too much for the current prototype)
+	commandLineError = parseCommandLine(argc, argv, filename, sequenceLength, sequenceDim);
+
+	if (commandLineError == false) {
+
+		readInputError = readInputFile(filename, sequenceLength, sequenceDim);
+
+		if (readInputError == false) {
+
+			// GLUT specifics
+			glutInit(&argc, argv);
+			glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ACCUM | GLUT_DEPTH);
+			glutInitWindowSize(currentDisplay.windowWidth, currentDisplay.windowHeight);
+			glutCreateWindow(currentDisplay.title.c_str());
+			glutReshapeFunc(changeParentWindow);
+			glutDisplayFunc(display);
+			glutKeyboardFunc(keys);
+
+			// Initialise the OpenGL (non-GLUT) subsystem, a menu, and some constants
+			initGLSettings();
+			initMenu();
+			initGlobals();
+
+			// Load texture(s)
+			loadTextureFiles();
+
+			// Set defaults
+			scaleDataTable();
+			sortAndColourDataTable(0.0);
+
+			// Enter the main rendering loop
+			glutMainLoop();
+
+		} else {
+			cerr << "Input file error occurred. Program execution halted.\n" << endl;
+		}
+	} else {
+		cerr << "Command-line input error occurred. Program execution halted.\n" << endl;
+	}
+
+	return 0;
+}

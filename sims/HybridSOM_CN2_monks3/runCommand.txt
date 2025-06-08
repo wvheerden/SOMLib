@@ -1,0 +1,1 @@
+./crossValidateHybridSOM_CN2.sh monks3 >> hybridSOM_CN2_monks3.runOutput 2>> hybridSOM_CN2_monks3.runOutput

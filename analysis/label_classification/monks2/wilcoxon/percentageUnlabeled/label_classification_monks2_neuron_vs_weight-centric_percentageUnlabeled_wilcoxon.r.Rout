@@ -1,0 +1,41 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_monks2_neuron_vs_weight-centric_percentageUnlabeled_wilcoxon.r
+> 
+> a <- c(49.77777778, 49.77777778, 50.66666667, 51.55555556, 50.66666667, 51.11111111, 45.33333333, 49.33333333, 50.66666667, 49.33333333, 52, 53.33333333, 48.44444444, 44.88888889, 45.77777778, 49.33333333, 49.77777778, 51.11111111, 48.88888889, 49.33333333, 50.66666667, 51.11111111, 51.11111111, 49.77777778, 49.77777778, 51.11111111, 51.55555556, 50.66666667, 49.33333333, 48)
+> b <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 465, p-value = 1.735e-06
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.152   0.024   0.165 

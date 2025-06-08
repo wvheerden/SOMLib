@@ -1,0 +1,16 @@
+**ATTRIBUTE FILE**
+
+age: (FLOAT)
+sex: (FLOAT)
+cp: (FLOAT)
+trestbps: (FLOAT)
+chol: (FLOAT)
+fbs: (FLOAT)
+restecg: (FLOAT)
+thalach: (FLOAT)
+exang: (FLOAT)
+oldpeak: (FLOAT)
+slope: (FLOAT)
+ca: (FLOAT)
+thal: (FLOAT)
+heart-disease: presence absence;

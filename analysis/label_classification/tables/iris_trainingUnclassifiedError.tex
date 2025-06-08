@@ -1,0 +1,37 @@
+\begin{table}[p]
+	\caption[Comparison of the training set error due to unclassified data examples for supervised neuron labeling on the Iris plants data set]{Statistical comparison of the training set error due to unclassified data examples for the supervised neuron labeling methods executed on the Iris plants data set.}
+	\textsf{\linespread{1}\scriptsize\makebox[\textwidth][c]{
+		\begin{tabular}[t]{||c|c||cc||cc||cc||}
+			\hhline{~~|t:==:t:==:t:==:t|}
+			\multicolumn{2}{c||}{\rule{0pt}{8pt}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} \\
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{0pt}} & \multicolumn{2}{c||}{\textbf{Neuron}} & \multicolumn{2}{c||}{\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \multicolumn{2}{c||}{\textbf{Cluster (Ward)}} \\
+			\hhline{~~|:==::==::==:|}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$} & ${\cal S}_{TU}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$} & ${\cal S}_{TU}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$} & ${\cal S}_{TU}$ \\
+			\hhline{~~||--||--||--||}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{0.000}}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{0.000}}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{0.000}}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} \\
+			\hhline{|t:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & \cellfilllarge & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} & & & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{0.000}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & & & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (Ward)}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{0.000}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Weight-Centric}} & & & & & & \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Neuron}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{$\times\mathsf{0^0}$}N/A\phantom{$\times\mathsf{0^0}$}} \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{0.000}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & & & & & & \\
+			\hhline{|b:==:b:==:b:==:b:==:b|}
+		\end{tabular}
+	}}
+	\label{tab:comparison_labelClassification_iris_trainingUnclassifiedError}
+\end{table}

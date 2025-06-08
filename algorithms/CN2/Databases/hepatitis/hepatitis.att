@@ -1,0 +1,22 @@
+**ATTRIBUTE FILE**
+
+age: (FLOAT)
+female: no yes;
+steroid: no yes;
+antivirals: no yes;
+fatigue: no yes;
+malaise: no yes;
+anorexia: no yes;
+liver-big: no yes;
+liver-firm: no yes;
+spleen-palpable: no yes;
+spiders: no yes;
+ascites: no yes;
+varices: no yes;
+bilirubin: (FLOAT)
+alk-phosphate: (FLOAT)
+sgot: (FLOAT)
+albumin: (FLOAT)
+protime: (FLOAT)
+histology: no yes;
+class: die live;

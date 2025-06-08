@@ -1,0 +1,17 @@
+
+- According to the documentation some of attributes are uni-valued! This
+	is completely silly, but don't blame me. I've left it as they are
+	in the original data.
+
+- One attribute takes a possible value `--'. The documentation states
+	`-' is meant to denote `unknown', so I assume `--' is also
+	meant to be `unknown'.
+
+- Integer valued atts are considered discrete rather than continous.
+
+- The original data contained two files,
+	data (798 examples)
+	test (100 examples)
+  I've just converted the file `data' here.
+
+

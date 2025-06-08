@@ -1,0 +1,60 @@
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage{amsfonts}
+
+\setlength{\textwidth}{158mm}
+\setlength{\hoffset}{0pt}
+
+\newcommand{\sigdata}[4]{\multicolumn{2}{c||}{\multirow{3}{*}{\raisebox{#1}{\parbox{0pt}{\makebox[0pt][c]{#3}\newline\makebox[0pt][c]{\raisebox{#2}{#4}}}}}}}
+\newlength{\cellfillwidth}
+\setlength{\cellfillwidth}{84.2pt}
+\newlength{\cellfillheightsmall}
+\setlength{\cellfillheightsmall}{32.1pt}
+\newlength{\cellfillheightlarge}
+\setlength{\cellfillheightlarge}{42.1pt}
+\newcommand{\cellfillsmall}{\multicolumn{2}{|l||}{\multirow{3}{*}{\begin{picture}(0,0)\put(-5.95,0){\raisebox{-15.8pt}{\rule{\cellfillwidth}{\cellfillheightsmall}}}\end{picture}}}}
+\newcommand{\cellfilllarge}{\multicolumn{2}{|l||}{\multirow{3}{*}{\begin{picture}(0,0)\put(-5.95,0){\raisebox{-25.5pt}{\rule{\cellfillwidth}{\cellfillheightlarge}}}\end{picture}}}}
+
+\begin{document}
+
+\begin{table}
+	\caption[.]{.}
+	\centering{\linespread{1}\scriptsize\hspace{2\doublerulesep}
+		\begin{tabular}[t]{||c|c||cc||cc||cc||}
+			\hhline{~~|t:==:t:==:t:==:t|}
+			\multicolumn{2}{c||}{} & \multicolumn{2}{c||}{Example-centric} & \multicolumn{2}{c||}{Example-centric} & \multicolumn{2}{c||}{Example-centric} \\
+			\multicolumn{2}{c||}{} & \multicolumn{2}{c||}{neuron} & \multicolumn{2}{c||}{cluster ($k$-means)} & \multicolumn{2}{c||}{cluster (Ward)} \\
+			\hhline{~~|:==::==::==:|}
+			\multicolumn{2}{c||}{} & \multicolumn{1}{c|}{${\cal E}_{TU}$} & ${\cal S}_{TU}$ & \multicolumn{1}{c|}{${\cal E}_{TU}$} & ${\cal S}_{TU}$ & \multicolumn{1}{c|}{${\cal E}_{TU}$} & ${\cal S}_{TU}$ \\
+			\hhline{~~||--||--||--||}
+			\multicolumn{2}{c||}{} & \multicolumn{1}{c|}{\makebox[30px][c]{$0.000$}} & \makebox[30px][c]{$0.000$} & \multicolumn{1}{c|}{\makebox[30px][c]{$0.000$}} & \makebox[30px][c]{$0.000$} & \multicolumn{1}{c|}{\makebox[30px][c]{$0.000$}} & \makebox[30px][c]{$0.000$} \\
+			\hhline{|t:==::==::==::==:|}
+			\multicolumn{2}{||c||}{Example-centric} & & & \cellfilllarge & \cellfilllarge \\
+			\multicolumn{2}{||c||}{cluster ($k$-means)} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} & & & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{$0.000$} & \makebox[30px][c]{$0.000$} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{Example-centric} & & & & & \cellfilllarge \\
+			\multicolumn{2}{||c||}{cluster (Ward)} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{$0.000$} & \makebox[30px][c]{$0.000$} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{Weight-centric} & & & & & & \\
+			\multicolumn{2}{||c||}{neuron} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} & \sigdata{9.6pt}{-2.5pt}{$\phantom{\uparrow}\square\phantom{\uparrow}$}{\phantom{$\times0^0$}NA\phantom{$\times0^0$}} \\
+			\hhline{|:==:|~~||~~||~~||}
+			${\cal E}_{TU}$ & ${\cal S}_{TU}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{$0.000$} & \makebox[30px][c]{$0.000$} & & & & & & \\
+			\hhline{|b:==:b:==:b:==:b:==:b|}
+		\end{tabular}
+	}
+	\label{tab:comparison_labelClassification_pima_trainingUnclassifiedError}
+\end{table}
+
+\end{document}

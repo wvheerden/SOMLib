@@ -1,0 +1,12 @@
+**ATTRIBUTE FILE**
+
+RI: (FLOAT)
+Na: (FLOAT)
+Mg: (FLOAT)
+Al: (FLOAT)
+Si: (FLOAT)
+K: (FLOAT)
+Ca: (FLOAT)
+Ba: (FLOAT)
+Fe: (FLOAT)
+class: "1" "2" "3" "4" "5" "6" "7";

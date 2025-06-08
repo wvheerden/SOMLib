@@ -1,0 +1,9 @@
+**ATTRIBUTE FILE**
+
+averagetrans: (FLOAT)
+livesin: gb uganda france;
+yearsservice: (FLOAT)
+transaction: (FLOAT)
+location: gb uganda france;
+fraud: y n;
+

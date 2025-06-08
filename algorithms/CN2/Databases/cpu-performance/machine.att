@@ -1,0 +1,11 @@
+**ATTRIBUTE FILE**
+
+vendor: adviser amdahl apollo basf bti burroughs c.r.d cambex cdc dec dg formation four-phase gould honeywell hp ibm ipl magnuson microdata nas ncr nixdorf perkin-elmer prime siemens sperry sratus wang harris;
+% Model: many unique symbols (edited out)
+MYCT: (FLOAT)
+MMIN: (FLOAT)
+MMAX: (FLOAT)
+CACH: (FLOAT)
+CHMIN: (FLOAT)
+CHMAX: (FLOAT)
+PRP: (FLOAT)

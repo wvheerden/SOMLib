@@ -1,0 +1,1 @@
+./crossValidateC4_5.sh pima >> c4-5_pima.runOutput 2>> c4-5_pima.runOutput

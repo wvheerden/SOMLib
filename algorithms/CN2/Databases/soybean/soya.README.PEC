@@ -1,0 +1,12 @@
+
+- The provided README file says that there are 316 instances, however
+	the provided data consists of two files:
+		data: 307 exs
+		test: 376 exs
+	I don't know if the test exs overlap with the data exs.
+  I've just converted the `data' file.
+
+- The Irvine data also has a smaller data set of 47 examples which I've
+	ignored.
+
+- The conversion is straightforward.

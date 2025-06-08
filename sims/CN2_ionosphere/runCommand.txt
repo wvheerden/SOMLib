@@ -1,0 +1,1 @@
+./crossValidateCN2.sh ionosphere >> cn2_ionosphere.runOutput 2>> cn2_ionosphere.runOutput

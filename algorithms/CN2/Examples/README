@@ -1,0 +1,27 @@
+
+SIMPLE 5 MINUTE TUTORIAL
+========================
+There are three toy example domains to briefly illustrate the data format for 
+CN2, stored in the examples subdirectory. Two data files are needed: (i) a
+declaration of the data types of each attribute, and (ii) the examples (one
+per line). By convention these have .att and .exs filename extensions.
+
+To use cn2 for the "traffic" domain (say) do:
+	 % cd Examples
+         % ../cn
+         CN> r            % (for read)
+         READ> a          % (for attributes)
+         Filename? traffic.att
+         CN> r
+         READ> e          % (for examples)
+         Filename? traffic.exs
+         CN> i            % to induce some rules
+         CN> w            % to write the rules to a file
+         Filename? traffic.rul
+         CN> q            % quit
+also
+         CN> ?            % gives online help
+
+Also, the Databases subdirectory contains some additional databases in CN2
+format for you to experiment with.
+

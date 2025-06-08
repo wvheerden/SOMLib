@@ -1,0 +1,177 @@
+
+PLATFORMS
+=========
+The CN2 source and executable has been tested on 
+	- Sun Workstation under SunOS4.*. 
+
+Rick Kufrin (NCSA) has recently made some minor changes to the software
+to allow it to work on other platforms. He reports the modified files
+appear to work on:
+	- SunOS 4.1.3 (with and without old-style ioctl requests)
+	- Solaris 5.4
+	- IRIX 5.3 (Silicon Graphics)
+	- HP-UX A.09.05 (Hewlett-Packard)
+also
+	- Linux 1.2.8: **see APPENDIX 2 below for more info**
+	- Windows XP: **see APPENDIX 3 below for more info**
+
+***The modified files are in the directory MultiPlatform***. To 
+recompile with these updated files, move them over the original
+source files and recompile. I've put these updated files in a separate
+directory to preserve the original, well-tested CN and also allow
+people to use other platforms if needed.
+
+Also, see Appendix 2 and 3 below for further Linux and Windows XP information.
+
+To make including these updates, type:
+	% cd cn2		      (cn2 is the dir where you unloaded the distrn)
+	% mv -f MultiPlatform/* .     (if you want these updates included)
+	% make
+
+Many thanks to Rick Kufrin for making these changes available, and for
+Johannes Fuernkranz for sharing how to port to Windows XP!!
+
+Peter Clark
+
+LINUX VERSION: See APPENDIX 2 for more info
+WINDOWS XP VERSION: See APPENDIX 3 for more info
+
+======================================================================
+			APPENDIX 1
+======================================================================
+
+For people interested in the technical details of these changes, Rick Kufrin
+writes:
+
+> From rkufrin@ncsa.uiuc.edu Thu Mar  7 09:41:12 1996
+> The changes are minimal:
+>  1. Change from <sgtty>-style terminal I/O to <termios> ( _HAVE_TERMIOS )
+>  2. Conditional #define of FLT_MAX if no <float.h> ( _HAVE_FLOAT_H )
+>  3. Conditional #define of log2() if not available ( _HAVE_LOG2 )
+>  4. Rename of remove() to remove_item()
+>  5. SGI/SunOS-specific CFLAGS definitions in the Makefile
+> Changes (1), (2) and (3) are #ifdef'd with the symbols in parentheses 
+> above (it should be clear from the Makefile) - there are some comments
+> at the beginning of the affected files, also.  Feel free to edit
+> however you wish - I hope you find this useful.
+
+and also
+
+> From rkufrin@ncsa.uiuc.edu Thu Mar 21 12:12:29 1996
+> Here are the cpp directives that affect compilation:
+>    _TTYOLD       : if defined, uses old-style ioctl() from earlier CN2 sources
+>    _HAVE_LOG2    : if defined, uses system's log2()
+>    _HAVE_FLOAT_H : if defined, #include's <float.h>
+>    _USE_TIOCSTI  : if defined, assumes ioctl() request to simulate
+>                    terminal input is available (it isn't on HP-UX)
+> This appears to work on:
+>    SunOS 4.1.3 (with and without old-style ioctl requests)
+>    Solaris 5.4
+>    IRIX 5.3
+>    HP-UX A.09.05
+>    Linux 1.2.8
+>
+> (there are separate lines in the modified Makefile to specify
+> the values for CFLAGS that I used on the above systems).
+> This was my first exposure to Solaris, by the way - I had
+> to ask around for a workaround to strange behavior of readdir -
+> this is mentioned in the Makefile.  I think all modifications
+> I made are commented within the source files.
+
+======================================================================
+			APPENDIX 2
+======================================================================
+
+An additional email for those interested in the LINUX version:
+
+> From rkufrin@ncsa.uiuc.edu Thu May  2 12:38:33 2002
+> 
+> Hi Peter et al, It seems that my original
+> changes to CN2 for Linux work just fine.  I just compiled
+> a version of CN2 that I pulled off of the UTexas web site
+> on an IA-32 (Pentium III) machine running RedHat 7.1.
+> 
+> Here is what has to be changed to get it to work on Linux.
+> 
+> 1. Follow the directions just as Peter's README says, moving
+>    the files from MultiPlatform to the main CN2 directory.
+> 
+> 2. Edit the Makefile.  It's set up by default to work on Sun 
+>    systems, but there is also a Linux entry.  Comment out the Sun
+>    CFLAGS specification, and uncomment the Linux one.
+> 
+> 3. Edit the Linux one and REMOVE the cpp directive
+>    "-D_USE_TIOCSTI".  This does not appear to be needed
+>    for recent Linux versions.
+> 
+> 4. make clean
+> 
+> 5. make
+> 
+> Best,
+> Rick
+> 
+> PS Peter: You might want to leave two Linux CFLAGS entries - one 
+> with the -D_USE_TIOCSTI intact and another without it, and just
+> mention that Linux users should start with the shorter one
+> but may need to use the other if they have an older version
+> of the OS.  That should cover all the bases.  I imagine
+> the other versions I did (SGI/Solaris/HP-UX) are well out-of-date
+> by now, but I have only gotten requests to fix the Linux
+> version - they come in every so often but regularly.  They
+> coincide often with end-of-school-term projects and conference
+> deadlines...
+ 
+-- end --
+
+======================================================================
+		APPENDIX 3
+======================================================================
+
+From juffi@ai.univie.ac.at Wed Jan 29 12:50:11 2003
+
+Hi,
+
+I managed to get CN2 running on Cygwin under Windows XP. It required one 
+non-trivial hack, which I found on the net. Attached is what I did. If 
+you think it could be useful for others, feel free to include it in the 
+README or something. If not, just dump it. :-)
+
+[Cygwin is a UNIX-like environment that runs under all Windows enviroments. 
+ You need to install that first, and then I hope that the procedure I 
+ followed should also work for you.
+	Cygwin is available from http://www.cygwin.com/ ]
+
+regards, Juffi
+-- 
+Johannes Fuernkranz
+Austrian Research Inst. for Artificial Intelligence tel:+43-1-5336112-19
+Schottengasse 3, A-1010 Vienna, Austria, Europe     fax:+43-1-5336112-77
+http://www.oefai.at/~juffi                         mailto:juffi@oefai.at
+
+How I got CN2 running on cygwin (Windows XP):
+
+- use the version in the MultiPlatform directory
+- Makefile: substitute all cc calls with gcc
+- Makefile: install bison, use bison -y instead of yacc
+- Makefile: install flex, use library -lfl instead of -ll
+- Makefile: CFLAGS -DHAVE_LOG2, possibly also -DHAVE_FLOAT_H, but not
+            -D_USE_TIOCSTI
+- lex.yy.c: patch line 20 in the following way:
+
+/* FILE *yyin = {stdin}, *yyout = {stdout}
+fix for cygwin: http://sources.redhat.com/ml/libc-alpha/1998-q2/msg00155.html
+ */
+
+FILE *yyin, *yyout;
+static void yyin_construct (void) __attribute__((constructor));
+static void yyin_construct (void) { yyin = stdin; }
+static void yyout_construct (void) __attribute__((constructor));
+static void yyout_construct (void) { yyout = stdout; }
+
+It worked for me. Your mileage may vary...   Juffi
+
+-- end --
+
+
+

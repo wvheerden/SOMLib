@@ -1,0 +1,17 @@
+Minimum map dimension: 2.000
+Maximum map dimension: 12.000
+
+Minimum learning rate: 0.000
+Maximum learning rate: 10.000
+
+Minimum learning rate decay: 0.000
+Maximum learning rate decay: 1500.000
+
+Minimum kernel width: 0.000
+Maximum kernel width: 12.000
+
+Minimum kernel width decay: 0.000
+Maximum kernel width decay: 100.000
+
+Minimum generalization error: 3.333
+Maximum generalization error: 61.333

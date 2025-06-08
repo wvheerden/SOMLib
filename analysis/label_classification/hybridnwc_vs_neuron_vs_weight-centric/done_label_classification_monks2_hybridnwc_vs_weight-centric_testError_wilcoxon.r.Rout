@@ -1,0 +1,34 @@
+
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_iris_k-means_vs_neuron_trainingError_wilcoxon.r
+> 
+> library('coin')
+Loading required package: survival
+> 
+> a <- c(14.285714285714285, 28.571428571428569, 14.285714285714285, 21.428571428571427, 21.428571428571427, 21.428571428571427, 21.428571428571427, 21.428571428571427, 0.000000000000000, 21.428571428571427, 21.428571428571427, 28.571428571428569, 28.571428571428569, 35.714285714285715, 28.571428571428569, 14.285714285714285, 28.571428571428569, 0.000000000000000, 0.000000000000000, 35.714285714285715, 35.714285714285715, 7.142857142857142, 21.428571428571427, 14.285714285714285, 14.285714285714285, 14.285714285714285, 28.571428571428569, 28.571428571428569, 21.428571428571427, 0.000000000000000)
+> b <- c(28.571428571428569, 28.571428571428569, 35.714285714285715, 28.571428571428569, 42.857142857142854, 21.428571428571427, 28.571428571428569, 42.857142857142854, 28.571428571428569, 28.571428571428569, 21.428571428571427, 28.571428571428569, 28.571428571428569, 35.714285714285715, 35.714285714285715, 14.285714285714285, 35.714285714285715, 14.285714285714285, 28.571428571428569, 14.285714285714285, 35.714285714285715, 35.714285714285715, 50.000000000000000, 28.571428571428569, 21.428571428571427, 14.285714285714285, 50.000000000000000, 28.571428571428569, 28.571428571428569, 28.571428571428569)
+> 
+> pvalue(wilcoxsign_test(a ~ b, alternative = "two.sided", distribution = exact(), zero.method = "Pratt"))
+[1] 3.051758e-05
+> 
+> proc.time()
+   user  system elapsed 
+  1.081   0.040   1.137 

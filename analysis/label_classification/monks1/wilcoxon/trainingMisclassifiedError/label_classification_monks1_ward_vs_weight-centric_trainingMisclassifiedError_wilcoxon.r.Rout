@@ -1,0 +1,40 @@
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_monks1_ward_vs_weight-centric_trainingMisclassifiedError_wilcoxon.r
+> 
+> a <- c(27.03349282, 23.20574163, 20.57416268, 28.46889952, 25.83732057, 23.68421053, 24.88038278, 24.16267943, 26.07655502, 24.88038278, 25.11961722, 25.59808612, 25.59808612, 25.59808612, 25.35885167, 25.83732057, 26.31578947, 22.72727273, 26.55502392, 23.20574163, 27.51196172, 21.77033493, 26.55502392, 23.20574163, 25.11961722, 20.57416268, 25.11961722, 22.96650718, 24.88038278, 27.03349282)
+> b <- c(22.96650718, 28.70813397, 30.14354067, 31.81818182, 28.22966507, 30.62200957, 27.99043062, 30.86124402, 27.51196172, 29.42583732, 27.03349282, 28.46889952, 25.11961722, 26.79425837, 26.55502392, 32.29665072, 26.55502392, 29.66507177, 26.07655502, 24.16267943, 26.55502392, 23.20574163, 30.62200957, 31.33971292, 27.99043062, 28.46889952, 29.90430622, 26.79425837, 27.03349282, 26.31578947)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 33, p-value = 4.252e-05
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.230   0.030   0.234 

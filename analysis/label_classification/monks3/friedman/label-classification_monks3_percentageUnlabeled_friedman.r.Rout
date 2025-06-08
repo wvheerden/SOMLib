@@ -1,0 +1,66 @@
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## R CMD BATCH --no-restore --no-save label-classification_monks3_percentageUnlabeled_friedman.r
+> 
+> data <-
++ matrix(c(0, 33.88429752, 7.03125, 0,
++ 1.730103806, 31.40495868, 3.125, 0,
++ 4.498269896, 25.61983471, 7.03125, 0,
++ 0, 32.23140496, 7.03125, 0,
++ 3.460207612, 23.96694215, 5.078125, 0,
++ 2.76816609, 35.53719008, 10.9375, 0,
++ 0.692041522, 30.5785124, 8.984375, 0,
++ 0, 33.05785124, 7.8125, 0,
++ 4.498269896, 38.01652893, 8.203125, 0,
++ 1.038062284, 32.23140496, 5.859375, 0,
++ 3.460207612, 42.97520661, 1.171875, 0,
++ 2.422145329, 30.5785124, 0.78125, 0,
++ 1.384083045, 29.75206612, 5.078125, 0,
++ 0.692041522, 28.92561983, 14.0625, 0,
++ 2.076124567, 28.09917355, 8.203125, 0,
++ 0.692041522, 33.05785124, 3.125, 0,
++ 0, 32.23140496, 7.421875, 0,
++ 1.384083045, 28.09917355, 8.203125, 0,
++ 1.730103806, 38.01652893, 4.296875, 0,
++ 6.574394464, 32.23140496, 10.546875, 0,
++ 5.190311419, 39.66942149, 5.859375, 0,
++ 1.038062284, 31.40495868, 12.109375, 0,
++ 4.844290657, 47.9338843, 3.125, 0,
++ 0.692041522, 27.27272727, 8.984375, 0,
++ 4.152249135, 36.36363636, 8.59375, 0,
++ 1.730103806, 30.5785124, 2.34375, 0,
++ 0.692041522, 33.05785124, 7.8125, 0,
++ 2.422145329, 33.05785124, 2.734375, 0,
++ 3.114186851, 31.40495868, 4.6875, 0,
++ 1.038062284, 29.75206612, 12.890625, 0),
++ nrow = 30,
++ byrow = TRUE,
++ dimnames = list(1 : 30, c("K-means", "Neuron", "Ward", "Weight-centric")))
+> friedman.test(data)
+
+	Friedman rank sum test
+
+data:  data 
+Friedman chi-squared = 85.4189, df = 3, p-value < 2.2e-16
+
+> 
+> proc.time()
+   user  system elapsed 
+  0.260   0.030   0.269 

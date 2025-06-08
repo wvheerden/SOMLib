@@ -1,0 +1,1 @@
+./crossValidateSIG.sh ionosphere >> sig_ionosphere_ward.runOutput 2>> sig_ionosphere_ward.runOutput

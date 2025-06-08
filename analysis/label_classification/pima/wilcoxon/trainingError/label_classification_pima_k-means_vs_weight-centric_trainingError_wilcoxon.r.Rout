@@ -1,0 +1,41 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_pima_k-means_vs_weight-centric_trainingError_wilcoxon.r
+> 
+> a <- c(25.03364738, 22.34185734, 22.88021534, 25.16823688, 22.74562584, 23.41857335, 24.76446837, 23.28398385, 22.61103634, 23.01480485, 22.61103634, 24.62987887, 25.30282638, 24.49528937, 23.68775236, 23.68775236, 24.76446837, 24.49528937, 23.68775236, 24.89905787, 23.14939435, 24.09152086, 23.95693136, 23.82234186, 25.57200538, 26.7833109, 23.01480485, 25.43741588, 24.89905787, 23.14939435)
+> b <- c(21.5343203230148, 22.3418573351279, 21.9380888290713, 21.5343203230148, 23.5531628532974, 23.5531628532974, 21.1305518169583, 23.956931359354, 21.8034993270525, 22.3418573351279, 21.2651413189771, 21.399730820996, 22.3418573351279, 23.0148048452221, 24.3606998654105, 23.0148048452221, 21.9380888290713, 23.956931359354, 22.8802153432032, 24.8990578734859, 21.399730820996, 22.6110363391655, 21.6689098250336, 22.3418573351279, 20.4576043068641, 22.3418573351279, 20.7267833109018, 22.0726783310902, 23.956931359354, 21.399730820996)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 440, p-value = 2.065e-05
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.180   0.008   0.173 

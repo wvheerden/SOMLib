@@ -1,0 +1,116 @@
+iris, k-means, neuron, Training error, 25.05747126436781258, 3.65517241379310498, 21.4023
+iris, k-means, neuron, Training error (misclassified), 25.05747126436781258, 3.65517241379310498, 21.4023
+iris, k-means, neuron, Generalization error, 21.33333333333333215, 4.00000000000000000, 17.3333
+iris, k-means, neuron, Generalization error (misclassified), 21.33333333333333215, 3.33333333333333348, 18
+iris, k-means, neuron, Percentage unlabeled neurons, 0.00000000000000000, 19.46666666666666501, -19.4667
+iris, ward, neuron, Training error, 16.98850574712643891, 3.65517241379310498, 13.3333
+iris, ward, k-means, Training error, 16.98850574712643891, 25.05747126436781258, -8.06897
+iris, ward, neuron, Training error (misclassified), 16.98850574712643891, 3.65517241379310498, 13.3333
+iris, ward, k-means, Training error (misclassified), 16.98850574712643891, 25.05747126436781258, -8.06897
+iris, ward, neuron, Generalization error, 18.00000000000000000, 4.00000000000000000, 14
+iris, ward, neuron, Generalization error (misclassified), 18.00000000000000000, 3.33333333333333348, 14.6667
+iris, ward, k-means, Percentage unlabeled neurons, 11.48148148148148273, 0.00000000000000000, 11.4815
+iris, weight-centric, neuron, Training error, 2.57471264367816177, 3.65517241379310498, -1.08046
+iris, weight-centric, k-means, Training error, 2.57471264367816177, 25.05747126436781258, -22.4828
+iris, weight-centric, ward, Training error, 2.57471264367816177, 16.98850574712643891, -14.4138
+iris, weight-centric, neuron, Training error (misclassified), 2.57471264367816177, 3.65517241379310498, -1.08046
+iris, weight-centric, k-means, Training error (misclassified), 2.57471264367816177, 25.05747126436781258, -22.4828
+iris, weight-centric, ward, Training error (misclassified), 2.57471264367816177, 16.98850574712643891, -14.4138
+iris, weight-centric, k-means, Generalization error, 3.33333333333333348, 21.33333333333333215, -18
+iris, weight-centric, ward, Generalization error, 3.33333333333333348, 18.00000000000000000, -14.6667
+iris, weight-centric, k-means, Generalization error (misclassified), 3.33333333333333348, 21.33333333333333215, -18
+iris, weight-centric, ward, Generalization error (misclassified), 3.33333333333333348, 18.00000000000000000, -14.6667
+iris, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 19.46666666666666501, -19.4667
+iris, weight-centric, ward, Percentage unlabeled neurons, 0.00000000000000000, 11.48148148148148273, -11.4815
+ionosphere, k-means, neuron, Training error, 7.91176470588235325, 10.13725490196078205, -2.22549
+ionosphere, k-means, neuron, Training error (misclassified), 7.91176470588235325, 10.13725490196078205, -2.22549
+ionosphere, k-means, neuron, Percentage unlabeled neurons, 1.88271604938271642, 3.80952380952380931, -1.92681
+ionosphere, ward, neuron, Training error, 8.59803921568627239, 10.13725490196078205, -1.53922
+ionosphere, ward, neuron, Training error (misclassified), 8.59803921568627239, 10.13725490196078205, -1.53922
+ionosphere, ward, neuron, Percentage unlabeled neurons, 1.52592592592592591, 3.80952380952380931, -2.2836
+ionosphere, weight-centric, neuron, Training error, 15.21568627450980493, 10.13725490196078205, 5.07843
+ionosphere, weight-centric, k-means, Training error, 15.21568627450980493, 7.91176470588235325, 7.30392
+ionosphere, weight-centric, ward, Training error, 15.21568627450980493, 8.59803921568627239, 6.61765
+ionosphere, weight-centric, neuron, Training error (misclassified), 15.21568627450980493, 10.13725490196078205, 5.07843
+ionosphere, weight-centric, k-means, Training error (misclassified), 15.21568627450980493, 7.91176470588235325, 7.30392
+ionosphere, weight-centric, ward, Training error (misclassified), 15.21568627450980493, 8.59803921568627239, 6.61765
+ionosphere, weight-centric, ward, Generalization error, 15.15151515151514872, 8.18181818181818343, 6.9697
+ionosphere, weight-centric, ward, Generalization error (misclassified), 15.15151515151514872, 8.18181818181818343, 6.9697
+ionosphere, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 3.80952380952380931, -3.80952
+ionosphere, weight-centric, k-means, Percentage unlabeled neurons, 0.00000000000000000, 1.88271604938271642, -1.88272
+ionosphere, weight-centric, ward, Percentage unlabeled neurons, 0.00000000000000000, 1.52592592592592591, -1.52593
+monks1, k-means, neuron, Training error, 26.64274322169058706, 18.12599681020733300, 8.51675
+monks1, k-means, neuron, Training error (misclassified), 26.64274322169058706, 18.12599681020733300, 8.51675
+monks1, k-means, neuron, Generalization error, 33.57142857142856940, 20.00000000000000000, 13.5714
+monks1, k-means, neuron, Generalization error (misclassified), 33.09523809523809490, 18.80952380952381020, 14.2857
+monks1, k-means, neuron, Percentage unlabeled neurons, 1.60664819944598358, 43.46938775510205488, -41.8627
+monks1, ward, neuron, Training error, 24.84848484848485128, 18.12599681020733300, 6.72249
+monks1, ward, k-means, Training error, 24.84848484848485128, 26.64274322169058706, -1.79426
+monks1, ward, neuron, Training error (misclassified), 24.84848484848485128, 18.12599681020733300, 6.72249
+monks1, ward, k-means, Training error (misclassified), 24.84848484848485128, 26.64274322169058706, -1.79426
+monks1, ward, neuron, Generalization error, 27.61904761904761330, 20.00000000000000000, 7.61905
+monks1, ward, neuron, Generalization error (misclassified), 27.38095238095237605, 18.80952380952381020, 8.57143
+monks1, ward, neuron, Percentage unlabeled neurons, 7.01822916666666696, 43.46938775510205488, -36.4512
+monks1, ward, k-means, Percentage unlabeled neurons, 7.01822916666666696, 1.60664819944598358, 5.41158
+monks1, weight-centric, neuron, Training error, 27.97448165869218428, 18.12599681020733300, 9.84848
+monks1, weight-centric, ward, Training error, 27.97448165869218428, 24.84848484848485128, 3.126
+monks1, weight-centric, neuron, Training error (misclassified), 27.97448165869218428, 18.12599681020733300, 9.84848
+monks1, weight-centric, ward, Training error (misclassified), 27.97448165869218428, 24.84848484848485128, 3.126
+monks1, weight-centric, neuron, Generalization error, 31.66666666666666430, 20.00000000000000000, 11.6667
+monks1, weight-centric, neuron, Generalization error (misclassified), 31.66666666666666430, 18.80952380952381020, 12.8571
+monks1, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 43.46938775510205488, -43.4694
+monks1, weight-centric, k-means, Percentage unlabeled neurons, 0.00000000000000000, 1.60664819944598358, -1.60665
+monks1, weight-centric, ward, Percentage unlabeled neurons, 0.00000000000000000, 7.01822916666666696, -7.01823
+monks2, k-means, neuron, Training error, 32.30462519936204302, 15.76555023923445020, 16.5391
+monks2, k-means, neuron, Training error (misclassified), 32.30462519936204302, 15.76555023923445020, 16.5391
+monks2, k-means, neuron, Generalization error, 32.38095238095237960, 20.23809523809524080, 12.1429
+monks2, k-means, neuron, Generalization error (misclassified), 32.38095238095237960, 19.52380952380952550, 12.8571
+monks2, k-means, neuron, Percentage unlabeled neurons, 6.10082304526748942, 49.80740740740741757, -43.7066
+monks2, ward, neuron, Training error, 22.40031897926634841, 15.76555023923445020, 6.63477
+monks2, ward, k-means, Training error, 22.40031897926634841, 32.30462519936204302, -9.90431
+monks2, ward, neuron, Training error (misclassified), 22.40031897926634841, 15.76555023923445020, 6.63477
+monks2, ward, k-means, Training error (misclassified), 22.40031897926634841, 32.30462519936204302, -9.90431
+monks2, ward, neuron, Generalization error, 29.52380952380952550, 20.23809523809524080, 9.28571
+monks2, ward, neuron, Generalization error (misclassified), 29.04761904761905100, 19.52380952380952550, 9.52381
+monks2, ward, neuron, Percentage unlabeled neurons, 6.94367497691597269, 49.80740740740741757, -42.8637
+monks2, weight-centric, neuron, Training error, 23.94736842105263719, 15.76555023923445020, 8.18182
+monks2, weight-centric, k-means, Training error, 23.94736842105263719, 32.30462519936204302, -8.35726
+monks2, weight-centric, neuron, Training error (misclassified), 23.94736842105263719, 15.76555023923445020, 8.18182
+monks2, weight-centric, k-means, Training error (misclassified), 23.94736842105263719, 32.30462519936204302, -8.35726
+monks2, weight-centric, neuron, Generalization error, 29.76190476190475920, 20.23809523809524080, 9.52381
+monks2, weight-centric, neuron, Generalization error (misclassified), 29.76190476190475920, 19.52380952380952550, 10.2381
+monks2, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 49.80740740740741757, -49.8074
+monks2, weight-centric, k-means, Percentage unlabeled neurons, 0.00000000000000000, 6.10082304526748942, -6.10082
+monks2, weight-centric, ward, Percentage unlabeled neurons, 0.00000000000000000, 6.94367497691597269, -6.94367
+monks3, k-means, neuron, Training error, 26.61881977671450628, 23.82775119617224746, 2.79107
+monks3, k-means, neuron, Training error (misclassified), 26.61881977671450628, 23.82775119617224746, 2.79107
+monks3, k-means, neuron, Percentage unlabeled neurons, 2.13379469434832769, 32.69972451790633272, -30.5659
+monks3, ward, k-means, Training error, 25.00000000000000000, 26.61881977671450628, -1.61882
+monks3, ward, k-means, Training error (misclassified), 25.00000000000000000, 26.61881977671450628, -1.61882
+monks3, ward, neuron, Percentage unlabeled neurons, 6.77083333333333304, 32.69972451790633272, -25.9289
+monks3, ward, k-means, Percentage unlabeled neurons, 6.77083333333333304, 2.13379469434832769, 4.63704
+monks3, weight-centric, neuron, Training error, 19.76874003189793072, 23.82775119617224746, -4.05901
+monks3, weight-centric, k-means, Training error, 19.76874003189793072, 26.61881977671450628, -6.85008
+monks3, weight-centric, ward, Training error, 19.76874003189793072, 25.00000000000000000, -5.23126
+monks3, weight-centric, neuron, Training error (misclassified), 19.76874003189793072, 23.82775119617224746, -4.05901
+monks3, weight-centric, k-means, Training error (misclassified), 19.76874003189793072, 26.61881977671450628, -6.85008
+monks3, weight-centric, ward, Training error (misclassified), 19.76874003189793072, 25.00000000000000000, -5.23126
+monks3, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 32.69972451790633272, -32.6997
+monks3, weight-centric, k-means, Percentage unlabeled neurons, 0.00000000000000000, 2.13379469434832769, -2.13379
+monks3, weight-centric, ward, Percentage unlabeled neurons, 0.00000000000000000, 6.77083333333333304, -6.77083
+pima, k-means, neuron, Training error, 24.04665769403319331, 20.58770749214894025, 3.45895
+pima, k-means, neuron, Training error (misclassified), 24.04665769403319331, 20.58770749214894025, 3.45895
+pima, k-means, neuron, Percentage unlabeled neurons, 0.24221453287197239, 3.26388888888888884, -3.02167
+pima, ward, neuron, Training error, 25.27590847913862859, 20.58770749214894025, 4.6882
+pima, ward, k-means, Training error, 25.27590847913862859, 24.04665769403319331, 1.22925
+pima, ward, neuron, Training error (misclassified), 25.27590847913862859, 20.58770749214894025, 4.6882
+pima, ward, k-means, Training error (misclassified), 25.27590847913862859, 24.04665769403319331, 1.22925
+pima, ward, neuron, Percentage unlabeled neurons, 0.20833333333333334, 3.26388888888888884, -3.05556
+pima, weight-centric, neuron, Training error, 22.39120681920143241, 20.58770749214894025, 1.8035
+pima, weight-centric, k-means, Training error, 22.39120681920143241, 24.04665769403319331, -1.65545
+pima, weight-centric, ward, Training error, 22.39120681920143241, 25.27590847913862859, -2.8847
+pima, weight-centric, neuron, Training error (misclassified), 22.39120681920143241, 20.58770749214894025, 1.8035
+pima, weight-centric, k-means, Training error (misclassified), 22.39120681920143241, 24.04665769403319331, -1.65545
+pima, weight-centric, ward, Training error (misclassified), 22.39120681920143241, 25.27590847913862859, -2.8847
+pima, weight-centric, neuron, Percentage unlabeled neurons, 0.00000000000000000, 3.26388888888888884, -3.26389
+pima, weight-centric, k-means, Percentage unlabeled neurons, 0.00000000000000000, 0.24221453287197239, -0.242215

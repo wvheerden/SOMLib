@@ -1,0 +1,493 @@
+% ESPRIT_REPORT.STY -- style file for ESPRIT reports
+%
+% There are undoubtably many bugs in this style.  If you make bug fixes,
+% improvements, etc.  please let me know. Remember, none of this is
+% guaranteed to work! 
+%
+% P. Greenway, AIP Dept., Sowerby Research Centre,
+% FPC 267, British Aerospace, PO Box 5, Filton, Bristol, UK, BS12 7QW.
+%
+% 11 July 1989
+%
+
+\typeout{ESPRIT_REPORT style -- 11 July 1989}
+
+\def\@ptsize{2} \@namedef{ds@10pt}{\def\@ptsize{0}}
+\@namedef{ds@11pt}{\def\@ptsize{1}}\@namedef{ds@12pt}{\def\@ptsize{2}}
+\def\ds@twoside{\@twosidetrue \@mparswitchtrue} \def\ds@draft{\overfullrule
+5pt}
+\def\readfrontpage{\null}\def\projectno{\null}\def\eec{\null}\def\eecsym{\null}
+
+%%% SITE SPECIFIC INFORMATION STARTS HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% N.B. the filenames in each of the following \special commands MUST
+% be amended to include to the directory in which the xxxx.ps files
+% are to be stored. Typically, this will be ``near'' the style file
+% directory, e.g. /usr/lib/tex/macros, so you would need to have
+%
+%  \special{/usr/lib/tex/macros/skidstitle.ps}
+%
+
+\def\ds@skids{\def\readfrontpage{\special{skidstitle.ps}}
+\def\projectno{1560}\def\eec{ESPRIT\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@adot{\def\readfrontpage{\special{adottitle.ps}}
+\def\projectno{2638}\def\eec{ESPRIT\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@vidi{\def\readfrontpage{\special{vidititle.ps}}
+\def\projectno{2592}\def\eec{ESPRIT\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@hii{\def\readfrontpage{\special{hiititle.ps}}
+\def\projectno{2202}\def\eec{BRITE\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@pan{\def\readfrontpage{\special{pantitle.ps}}
+\def\projectno{2483}\def\eec{ESPRIT\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@mlt{\def\readfrontpage{\special{psfile='/users/tim/.TeXinputs/mlttitle.ps'}}
+\def\projectno{2154}\def\eec{ESPRIT\ }\def\eecsym{$\bf\in$\ }}
+
+\def\ds@nippy{\def\readfrontpage{\special{nippytitle.ps}}
+\def\projectno{Molecular Electronics}\def\eec{LINK\ }\def\eecsym{\null}}
+%
+%%% SITE SPECIFIC INFORMATION ENDS HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\@options
+\input art1\@ptsize.sty\relax
+
+\def\labelenumi{\arabic{enumi}.}
+\def\theenumi{\arabic{enumi}}
+\def\labelenumii{(\alph{enumii})}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+\def\labelenumiii{\roman{enumiii}.}
+\def\theenumiii{\roman{enumiii}}
+\def\p@enumiii{\theenumi(\theenumii)}
+\def\labelenumiv{\Alph{enumiv}.}
+\def\theenumiv{\Alph{enumiv}}
+\def\p@enumiv{\p@enumiii\theenumiii}
+
+\def\labelitemi{$\bullet$}
+\def\labelitemii{\bf --}
+\def\labelitemiii{$\ast$}
+\def\labelitemiv{$\cdot$}
+
+\def\verse{\let\\=\@centercr
+ \list{}{\itemsep\z@ \itemindent -1.5em\listparindent \itemindent
+ \rightmargin\leftmargin\advance\leftmargin 1.5em}\item[]}
+\let\endverse\endlist
+\def\quotation{\list{}{\listparindent 1.5em
+ \itemindent\listparindent
+ \rightmargin\leftmargin \parsep 0pt plus 1pt}\item[]}
+\let\endquotation=\endlist
+\def\quote{\list{}{\rightmargin\leftmargin}\item[]}
+\let\endquote=\endlist
+
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\def\description{\list{}{\labelwidth\z@ \itemindent-\leftmargin
+ \let\makelabel\descriptionlabel}}
+\let\enddescription\endlist
+
+\def\theequation{\arabic{equation}}
+
+
+\def\titlepage{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \else \newpage \fi \thispagestyle{empty}\c@page\z@}
+\def\endtitlepage{\if@restonecol\twocolumn \else \newpage \fi}
+
+\arraycolsep 5pt \tabcolsep 6pt \arrayrulewidth .4pt \doublerulesep 2pt
+\tabbingsep \labelsep
+
+\skip\@mpfootins = \skip\footins
+\fboxsep = 3pt \fboxrule = .4pt
+
+\newcounter {part}
+\newcounter {section}
+\newcounter {subsection}[section]
+\newcounter {subsubsection}[subsection]
+\newcounter {paragraph}[subsubsection]
+\newcounter {subparagraph}[paragraph]
+
+\def\thepart{\Roman{part}} \def\thesection {\arabic{section}}
+\def\thesubsection {\thesection.\arabic{subsection}}
+\def\thesubsubsection {\thesubsection .\arabic{subsubsection}}
+\def\theparagraph {\thesubsubsection.\arabic{paragraph}}
+\def\thesubparagraph {\theparagraph.\arabic{subparagraph}}
+
+\def\@pnumwidth{1.55em}
+\def\@tocrmarg {2.55em}
+\def\@dotsep{4.5}
+\setcounter{tocdepth}{3}
+
+\def\tableofcontents{\section*{Contents}
+ \@starttoc{toc}}
+\def\l@part#1#2{\addpenalty{\@secpenalty}
+ \addvspace{2.25em plus 1pt} \begingroup
+ \@tempdima 3em \parindent \z@ \rightskip \@pnumwidth \parfillskip
+-\@pnumwidth
+ {\large \bf \leavevmode #1\hfil \hbox to\@pnumwidth{\hss #2}}\par
+ \nobreak \endgroup}
+\def\l@section#1#2{\addpenalty{\@secpenalty} \addvspace{1.0em plus 1pt}
+\@tempdima 1.5em \begingroup
+ \parindent \z@ \rightskip \@pnumwidth
+ \parfillskip -\@pnumwidth
+ \bf \leavevmode #1\hfil \hbox to\@pnumwidth{\hss #2}\par
+ \endgroup}
+\def\l@subsection{\@dottedtocline{2}{1.5em}{2.3em}}
+\def\l@subsubsection{\@dottedtocline{3}{3.8em}{3.2em}}
+\def\l@paragraph{\@dottedtocline{4}{7.0em}{4.1em}}
+\def\l@subparagraph{\@dottedtocline{5}{10em}{5em}}
+\def\listoffigures{\section*{List of Figures}\@starttoc{lof}}
+\def\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\def\listoftables{\section*{List of Tables}\@starttoc{lot}}
+\let\l@table\l@figure
+
+\def\thebibliography#1{\section*{References}\list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy
+ \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+
+\newif\if@restonecol
+\def\theindex{\@restonecoltrue\if@twocolumn\@restonecolfalse\fi
+\columnseprule \z@
+\columnsep 35pt\twocolumn[\section*{Index}]
+ \thispagestyle{plain}\parindent\z@
+ \parskip\z@ plus .3pt\relax\let\item\@idxitem}
+\def\@idxitem{\par\hangindent 40pt}
+\def\subitem{\par\hangindent 40pt \hspace*{20pt}}
+\def\subsubitem{\par\hangindent 40pt \hspace*{30pt}}
+\def\endtheindex{\if@restonecol\onecolumn\else\clearpage\fi}
+\def\indexspace{\par \vskip 10pt plus 5pt minus 3pt\relax}
+
+\def\footnoterule{\kern-3\p@
+ \hrule width .4\columnwidth
+ \kern 2.6\p@}
+
+\long\def\@makefntext#1{\parindent 1em\noindent
+ \hbox to 1.8em{\hss$^{\@thefnmark}$}#1}
+
+\setcounter{topnumber}{2}
+\def\topfraction{.5}
+\setcounter{bottomnumber}{2}
+\def\bottomfraction{.5}
+\setcounter{totalnumber}{4}
+\def\textfraction{.1}
+\def\floatpagefraction{.2}
+\setcounter{dbltopnumber}{2}
+\def\dbltopfraction{.5}
+\def\dblfloatpagefraction{.2}
+
+\long\def\@makecaption#1#2{
+ \vskip 10pt           
+ \setbox\@tempboxa\hbox{#1: #2}
+ \ifdim \wd\@tempboxa >\hsize \unhbox\@tempboxa\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil}
+ \fi}
+
+\newcounter{figure}
+\def\thefigure{\@arabic\c@figure}
+\def\fps@figure{tbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{Figure \thefigure}
+\def\figure{\@float{figure}}
+\let\endfigure\end@float
+\@namedef{figure*}{\@dblfloat{figure}}
+\@namedef{endfigure*}{\end@dblfloat}
+\newcounter{table}
+\def\thetable{\@arabic\c@table}
+\def\fps@table{tbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{Table \thetable}
+\def\table{\@float{table}}
+\let\endtable\end@float
+\@namedef{table*}{\@dblfloat{table}}
+\@namedef{endtable*}{\end@dblfloat}
+
+\topsep -5pt plus 4pt minus 1pt
+%  Sloppy formatting to avoid hyphens and overfull boxes
+\sloppy
+
+%  Use a4 page by default
+\topmargin 0 pt     %    Nominal distance from top of paper to top of page
+%
+% margins first
+%
+\topmargin=-0.5in
+\oddsidemargin=0.25in
+\evensidemargin=0.0in
+\marginparsep=0.15in
+%
+% headers and footers next
+%
+\headheight=0.4in
+\headsep=0.4in
+\footheight=0.3in
+
+%
+% Finally text height and width
+%
+\textheight 8.75in
+\textwidth=6in
+
+           
+%  Other page size parameters
+\footskip=0.7in
+\footnotesep=0.2in
+\parskip=3ex
+\parindent=0pt
+
+%
+%  Front page environment - will include pre-printed ESPRIT_REPORT front page..
+%        
+\newdimen\spaceonpage
+\def\documenttype#1{\gdef\mydocumenttype{#1}}
+\def\reference#1{\gdef\myreference{#1}} 
+ \gdef\myreference{\makebox[0in]{\phantom{a}}}
+ \gdef\mydocumenttype{\makebox[0in]{\phantom{a}}}
+%
+\def\makefrontpage{\def\nl{\hfil\break}
+\readfrontpage % This is the title page!
+\let\footnotesize\small \let\footnoterule\relax \setcounter{page}{0}
+\thispagestyle{empty}
+\null\vskip 10cm % Space to start of TeX output
+\Large
+\begin{center}\begin{tabular}{rp{8cm}}
+{\bf Document:} & \mydocumenttype\\[.1cm]
+{\bf Title:} & \@title\\[.1cm]
+{\bf Prepared by:} & \@author\\
+&\\[0.8cm]
+{\large\bf Reference:} & {\large \myreference}\\
+&\\[-0.75cm]
+{\large\bf Date:} & {\large \@date}\\
+\end{tabular}\end{center}
+\normalsize
+\null\vfil\eject
+\setcounter{footnote}{0} \let\thanks\relax}
+%
+\def\summary{\titlepage
+\null\vfil
+\begin{center}
+{\bf Summary}
+\end{center}}
+\def\endsummary{\par\vfil\null\endtitlepage}
+%
+\def\maketitle{\par\def\nl{\\}
+ \begingroup
+ \def\@makefnmark{\hbox 
+ to 0pt{$^{\@thefnmark}$\hss}} 
+ \if@twocolumn 
+ \twocolumn[\@maketitle] 
+ \else \newpage
+ \global\@topnum\z@ \@maketitle \fi\@thanks
+ \endgroup
+ \let\maketitle\relax
+ \let\@maketitle\relax
+ \gdef\@thanks{}\gdef\@author{}\gdef\@title{}\let\thanks\relax}
+\def\@maketitle{\newpage
+ \null
+ \vskip 2em \begin{center}
+ {\LARGE \mydocumenttype} \\ {\LARGE \@title \par} \vskip 1.5em 
+ {\large \lineskip .5em
+ \begin{tabular}[t]{c}\@author 
+ \end{tabular}\par} 
+ \vskip 1em {\large \myreference} \\ {\large \@date} \end{center}
+ \par
+ \vskip 1.5em} 
+\def\abstract{\if@twocolumn
+\section*{Abstract}
+\else \small 
+\begin{center}
+{\bf Abstract\vspace{-.5em}\vspace{0pt}} 
+\end{center}
+\begin{quote} 
+\fi}
+\def\endabstract{\if@twocolumn\else\end{quote}\normalsize\fi}
+
+%  All footnotes use numbers
+\setcounter{footnote}{0}
+\def\thefootnote      {\arabic{footnote}}
+
+\def\setwpno#1{\def\wpno{WP#1.}}
+\def\wpno{}
+
+\newcommand{\workpackage}[2]{
+\newpage
+\setcounter{page}{1}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\setcounter{footnote}{0}
+\setwpno{#1}
+\section*{WP#1:\ #2}}
+
+\font\ssi=cmssi10 scaled \magstephalf
+\def\rl#1{\rlap#1\hskip.19mm#1}
+
+\newcommand{\headr}{\advance\headheight by 0.75in\advance\textheight by -0.75in
+{\unitlength=1mm    
+\begin{picture}(160,15)(15,0)
+\put(140,5){\makebox(30,15){\shortstack{
+\strut\Large$\bf\in$\ \small\sl \eec\ \projectno}}}
+\ssi
+\put(15,5){\makebox(34,15)[l]{\shortstack{\rl{B}\rl{R}\rl{I}\rl{T}%
+\rl{I}\rl{S}\rl{H}\\\strut\rl{A}\rl{E}\rl{R}\rl{O}%
+\rl{S}\rl{P}\rl{A}\rl{C}\rl{E}}}}
+\end{picture}}
+}
+
+\newcommand{\headl}{\advance\headheight by 0.75in\advance\textheight by -0.75in
+{\unitlength=1mm    
+\begin{picture}(150,15)(15,0)
+\put(15,5){\makebox(30,15){\shortstack{
+\strut\Large$\bf\in$\ \small\sl \eec\ \projectno}}}
+\ssi
+\put(140,5){\makebox(34,15)[l]{\shortstack{\rl{B}\rl{R}\rl{I}\rl{T}%
+\rl{I}\rl{S}\rl{H}\\\strut\rl{A}\rl{E}\rl{R}\rl{O}%
+\rl{S}\rl{P}\rl{A}\rl{C}\rl{E}}}}
+\end{picture}}
+}
+
+%  Headers and footers
+\markboth{}{}
+
+\def\ps@empty{\let\@mkboth\markboth
+\def\@oddfoot{}
+\def\@evenfoot{}
+\def\@evenhead{}
+\def\@oddhead{}}
+
+\def\ps@headings{\let\@mkboth\markboth
+\def\@oddfoot{\hfil \rm \thepage \hfil}
+\def\@evenfoot{\hfil \rm \thepage \hfil}
+\def\@evenhead{}
+\def\@oddhead{}}
+
+\def\ps@baeheadings{\let\@mkboth\markboth
+\def\@oddfoot{\hfil \rm \thepage \hfil}
+\def\@evenfoot{\hfil \rm \thepage \hfil}
+\def\@evenhead{\headl}
+\def\@oddhead{\headr}}
+
+\def\ps@myheadings{\let\@mkboth\@gobbletwo
+\def\@oddfoot{\hfil \rm \thepage \hfil}
+\def\@evenfoot{\hfil \rm \thepage \hfil}
+\def\@oddhead{\hbox{} \Large\eecsym \small\sl \eec \projectno\hfil\rightmark}
+\def\@evenhead{\small\sl\leftmark\hfil \Large\eecsym \small 
+\sl \eec \projectno\hbox{}}
+}
+
+\def\ps@myheadingsnofeet{\let\@mkboth\@gobbletwo
+\def\@oddfoot{}
+\def\@evenfoot{}
+\def\@oddhead{\hbox{} \Large\eecsym \small\sl \eec \projectno\hfil\rightmark}
+\def\@evenhead{\small\sl\leftmark\hfil \Large\eecsym \small
+\sl \eec \projectno\hbox{}}
+}
+
+\def\ps@myheadingssectionfeet{\let\@mkboth\@gobbletwo
+\def\@oddfoot{\hfil \rm \thesection.\thepage \hfil}
+\def\@evenfoot{\hfil \rm \thesection.\thepage \hfil}
+\def\@oddhead{\hbox{} \Large\eecsym \small\sl \eec \projectno\hfil\rightmark}
+\def\@evenhead{\small\sl\leftmark\hfil \Large\eecsym \small
+\sl \eec \projectno\hbox{}}
+}
+
+\def\ps@myheadingswpfeet{\let\@mkboth\@gobbletwo
+\def\@oddfoot{\hfil \rm \wpno\thepage \hfil}
+\def\@evenfoot{\hfil \rm \wpno\thepage \hfil}
+\def\@oddhead{\hbox{} \Large\eecsym \small\sl \eec \projectno\hfil\rightmark}
+\def\@evenhead{\small\sl\leftmark\hfil \Large\eecsym \small
+\sl \eec \projectno\hbox{}}
+}
+
+\def\paragraph{\@startsection
+     {paragraph}{4}{\z@}{-1.75ex plus -1ex minus -.2ex}
+     {0.75ex plus .2ex}{\bf}}                    
+\setcounter{secnumdepth}{6}
+
+
+%
+% Create definitions for \maketable command
+% This is a table showing the status etc of the report
+%
+\def\doctype#1{\def\printdoctype{#1}}
+\def\task#1{\def\printtask{#1}}
+\def\status#1{\def\printstatus{#1}}
+\def\classification#1{\def\printclassification{#1}}
+\def\docclass#1{\def\printdocclass{#1}}
+\def\intid#1{\def\printintid{#1}}
+\def\distribution#1{\def\printdistribution{#1}}
+%
+% Define the above commands to be \null so you do not get errors
+% if they do not get defined by the user
+%
+\doctype{\null}
+\task{\null}          
+\status{\null}
+\classification{\null}
+\docclass{\null}
+\intid{\null}         
+\distribution{\null}
+%
+% Now define the actual table
+%
+\def\maketable{
+        \begin{center}
+            \begin{tabular}{|l@{\quad : \quad}l|}
+                \hline
+                Task & \printtask \\
+                Document type & \printdoctype \\
+                Status & \printstatus \\
+                Classification & \printclassification \\
+                Document class & \printdocclass \\
+                Int. Doc. ID & \printintid  \\
+                Distribution & \printdistribution \\
+                \hline
+            \end{tabular}
+        \end{center}}
+%
+% keyword definition
+%
+\def\keywords{\noindent{\bf Keywords:\ }}
+%
+%  abstract definition
+%
+%\def\abstract{\noindent{\bf Abstract:\ }}
+%
+
+%
+% Stuff for minutes
+%                     
+\newcounter{minute}
+\setcounter{minute}{0}
+%
+%
+\def\themin{\arabic{minute}}
+\def\min#1{\addtocounter{minute}{1} \ \\ \noindent{\bf \themin . \ \ #1:} \\}
+\def\act#1{\ \\ \noindent {{\bf Action:}\ \ \ #1}}
+\def\attend{\ \\ \noindent {\bf Attending:} \\}
+\def\apology{\ \\ \noindent {\bf Apologies:} \\}
+%
+%  "Alias" for pounds sign etc.
+\let\sterling=\pounds
+\def\st{$^{\rm st}$}
+\def\nd{$^{\rm nd}$}                     
+\def\rd{$^{\rm rd}$}
+\def\th{$^{\rm th}$}
+\def\ital#1{{\em #1}}
+\def \bfst {$^{\bf st\ }$}
+\def \bfnd {$^{\bf nd\ }$}
+\def \bfrd {$^{\bf rd\ }$}
+\def \bfth {$^{\bf th\ }$}
+
+\def\frontpagehack{\ \newpage \setcounter{page}{1}}
+
+% Default initializations
+
+\ps@plain                   % 'plain' page style
+\pagenumbering{arabic}      % Arabic page numbers
+\onecolumn                  % Single-column.

@@ -1,0 +1,1 @@
+./crossValidateHybridSOM_CN2.sh pima >> hybridSOM_CN2_pima.runOutput 2>> hybridSOM_CN2_pima.runOutput

@@ -1,0 +1,1832 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: sig_monks1_gnuplot_generalization.tex
+%%Creator: gnuplot 4.6 patchlevel 1
+%%CreationDate: Sat Aug 17 19:24:18 2013
+%%DocumentFonts: 
+%%BoundingBox: 50 50 842 302
+%%EndComments
+%%BeginProlog
+/gnudict 256 dict def
+gnudict begin
+%
+% The following true/false flags may be edited by hand if desired.
+% The unit line width and grayscale image gamma correction may also be changed.
+%
+/Color false def
+/Blacktext true def
+/Solid false def
+/Dashlength 1 def
+/Landscape false def
+/Level1 false def
+/Rounded false def
+/ClipToBoundingBox false def
+/SuppressPDFMark false def
+/TransparentPatterns false def
+/gnulinewidth 5.000 def
+/userlinewidth gnulinewidth def
+/Gamma 1.0 def
+/BackgroundColor {-1.000 -1.000 -1.000} def
+%
+/vshift -73 def
+/dl1 {
+  10.0 Dashlength mul mul
+  Rounded { currentlinewidth 0.75 mul sub dup 0 le { pop 0.01 } if } if
+} def
+/dl2 {
+  10.0 Dashlength mul mul
+  Rounded { currentlinewidth 0.75 mul add } if
+} def
+/hpt_ 31.5 def
+/vpt_ 31.5 def
+/hpt hpt_ def
+/vpt vpt_ def
+/doclip {
+  ClipToBoundingBox {
+    newpath 50 50 moveto 842 50 lineto 842 302 lineto 50 302 lineto closepath
+    clip
+  } if
+} def
+%
+% Gnuplot Prolog Version 4.6 (September 2012)
+%
+%/SuppressPDFMark true def
+%
+/M {moveto} bind def
+/L {lineto} bind def
+/R {rmoveto} bind def
+/V {rlineto} bind def
+/N {newpath moveto} bind def
+/Z {closepath} bind def
+/C {setrgbcolor} bind def
+/f {rlineto fill} bind def
+/g {setgray} bind def
+/Gshow {show} def   % May be redefined later in the file to support UTF-8
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow {currentpoint stroke M 0 vshift R 
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+/Rshow {currentpoint stroke M dup stringwidth pop neg vshift R
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+/Cshow {currentpoint stroke M dup stringwidth pop -2 div vshift R 
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+/UP {dup vpt_ mul /vpt exch def hpt_ mul /hpt exch def
+  /hpt2 hpt 2 mul def /vpt2 vpt 2 mul def} def
+/DL {Color {setrgbcolor Solid {pop []} if 0 setdash}
+ {pop pop pop 0 setgray Solid {pop []} if 0 setdash} ifelse} def
+/BL {stroke userlinewidth 2 mul setlinewidth
+	Rounded {1 setlinejoin 1 setlinecap} if} def
+/AL {stroke userlinewidth 2 div setlinewidth
+	Rounded {1 setlinejoin 1 setlinecap} if} def
+/UL {dup gnulinewidth mul /userlinewidth exch def
+	dup 1 lt {pop 1} if 10 mul /udl exch def} def
+/PL {stroke userlinewidth setlinewidth
+	Rounded {1 setlinejoin 1 setlinecap} if} def
+3.8 setmiterlimit
+% Default Line colors
+/LCw {1 1 1} def
+/LCb {0 0 0} def
+/LCa {0 0 0} def
+/LC0 {1 0 0} def
+/LC1 {0 1 0} def
+/LC2 {0 0 1} def
+/LC3 {1 0 1} def
+/LC4 {0 1 1} def
+/LC5 {1 1 0} def
+/LC6 {0 0 0} def
+/LC7 {1 0.3 0} def
+/LC8 {0.5 0.5 0.5} def
+% Default Line Types
+/LTw {PL [] 1 setgray} def
+/LTb {BL [] LCb DL} def
+/LTa {AL [1 udl mul 2 udl mul] 0 setdash LCa setrgbcolor} def
+/LT0 {PL [] LC0 DL} def
+/LT1 {PL [4 dl1 2 dl2] LC1 DL} def
+/LT2 {PL [2 dl1 3 dl2] LC2 DL} def
+/LT3 {PL [1 dl1 1.5 dl2] LC3 DL} def
+/LT4 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
+/LT5 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC5 DL} def
+/LT6 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC6 DL} def
+/LT7 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC7 DL} def
+/LT8 {PL [2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 4 dl2] LC8 DL} def
+/Pnt {stroke [] 0 setdash gsave 1 setlinecap M 0 0 V stroke grestore} def
+/Dia {stroke [] 0 setdash 2 copy vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath stroke
+  Pnt} def
+/Pls {stroke [] 0 setdash vpt sub M 0 vpt2 V
+  currentpoint stroke M
+  hpt neg vpt neg R hpt2 0 V stroke
+ } def
+/Box {stroke [] 0 setdash 2 copy exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V closepath stroke
+  Pnt} def
+/Crs {stroke [] 0 setdash exch hpt sub exch vpt add M
+  hpt2 vpt2 neg V currentpoint stroke M
+  hpt2 neg 0 R hpt2 vpt2 V stroke} def
+/TriU {stroke [] 0 setdash 2 copy vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath stroke
+  Pnt} def
+/Star {2 copy Pls Crs} def
+/BoxF {stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V closepath fill} def
+/TriUF {stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath fill} def
+/TriD {stroke [] 0 setdash 2 copy vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath stroke
+  Pnt} def
+/TriDF {stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath fill} def
+/DiaF {stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath fill} def
+/Pent {stroke [] 0 setdash 2 copy gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath stroke grestore Pnt} def
+/PentF {stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath fill grestore} def
+/Circle {stroke [] 0 setdash 2 copy
+  hpt 0 360 arc stroke Pnt} def
+/CircleF {stroke [] 0 setdash hpt 0 360 arc fill} def
+/C0 {BL [] 0 setdash 2 copy moveto vpt 90 450 arc} bind def
+/C1 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 90 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C2 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 90 180 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C3 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 180 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C4 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 180 270 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C5 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 90 arc
+	2 copy moveto
+	2 copy vpt 180 270 arc closepath fill
+	vpt 0 360 arc} bind def
+/C6 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 90 270 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C7 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 270 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C8 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 270 360 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C9 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 270 450 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C10 {BL [] 0 setdash 2 copy 2 copy moveto vpt 270 360 arc closepath fill
+	2 copy moveto
+	2 copy vpt 90 180 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C11 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 180 arc closepath fill
+	2 copy moveto
+	2 copy vpt 270 360 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C12 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 180 360 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C13 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 0 90 arc closepath fill
+	2 copy moveto
+	2 copy vpt 180 360 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/C14 {BL [] 0 setdash 2 copy moveto
+	2 copy vpt 90 360 arc closepath fill
+	vpt 0 360 arc} bind def
+/C15 {BL [] 0 setdash 2 copy vpt 0 360 arc closepath fill
+	vpt 0 360 arc closepath} bind def
+/Rec {newpath 4 2 roll moveto 1 index 0 rlineto 0 exch rlineto
+	neg 0 rlineto closepath} bind def
+/Square {dup Rec} bind def
+/Bsquare {vpt sub exch vpt sub exch vpt2 Square} bind def
+/S0 {BL [] 0 setdash 2 copy moveto 0 vpt rlineto BL Bsquare} bind def
+/S1 {BL [] 0 setdash 2 copy vpt Square fill Bsquare} bind def
+/S2 {BL [] 0 setdash 2 copy exch vpt sub exch vpt Square fill Bsquare} bind def
+/S3 {BL [] 0 setdash 2 copy exch vpt sub exch vpt2 vpt Rec fill Bsquare} bind def
+/S4 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt Square fill Bsquare} bind def
+/S5 {BL [] 0 setdash 2 copy 2 copy vpt Square fill
+	exch vpt sub exch vpt sub vpt Square fill Bsquare} bind def
+/S6 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt vpt2 Rec fill Bsquare} bind def
+/S7 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt vpt2 Rec fill
+	2 copy vpt Square fill Bsquare} bind def
+/S8 {BL [] 0 setdash 2 copy vpt sub vpt Square fill Bsquare} bind def
+/S9 {BL [] 0 setdash 2 copy vpt sub vpt vpt2 Rec fill Bsquare} bind def
+/S10 {BL [] 0 setdash 2 copy vpt sub vpt Square fill 2 copy exch vpt sub exch vpt Square fill
+	Bsquare} bind def
+/S11 {BL [] 0 setdash 2 copy vpt sub vpt Square fill 2 copy exch vpt sub exch vpt2 vpt Rec fill
+	Bsquare} bind def
+/S12 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill Bsquare} bind def
+/S13 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill
+	2 copy vpt Square fill Bsquare} bind def
+/S14 {BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill
+	2 copy exch vpt sub exch vpt Square fill Bsquare} bind def
+/S15 {BL [] 0 setdash 2 copy Bsquare fill Bsquare} bind def
+/D0 {gsave translate 45 rotate 0 0 S0 stroke grestore} bind def
+/D1 {gsave translate 45 rotate 0 0 S1 stroke grestore} bind def
+/D2 {gsave translate 45 rotate 0 0 S2 stroke grestore} bind def
+/D3 {gsave translate 45 rotate 0 0 S3 stroke grestore} bind def
+/D4 {gsave translate 45 rotate 0 0 S4 stroke grestore} bind def
+/D5 {gsave translate 45 rotate 0 0 S5 stroke grestore} bind def
+/D6 {gsave translate 45 rotate 0 0 S6 stroke grestore} bind def
+/D7 {gsave translate 45 rotate 0 0 S7 stroke grestore} bind def
+/D8 {gsave translate 45 rotate 0 0 S8 stroke grestore} bind def
+/D9 {gsave translate 45 rotate 0 0 S9 stroke grestore} bind def
+/D10 {gsave translate 45 rotate 0 0 S10 stroke grestore} bind def
+/D11 {gsave translate 45 rotate 0 0 S11 stroke grestore} bind def
+/D12 {gsave translate 45 rotate 0 0 S12 stroke grestore} bind def
+/D13 {gsave translate 45 rotate 0 0 S13 stroke grestore} bind def
+/D14 {gsave translate 45 rotate 0 0 S14 stroke grestore} bind def
+/D15 {gsave translate 45 rotate 0 0 S15 stroke grestore} bind def
+/DiaE {stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath stroke} def
+/BoxE {stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V closepath stroke} def
+/TriUE {stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath stroke} def
+/TriDE {stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath stroke} def
+/PentE {stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath stroke grestore} def
+/CircE {stroke [] 0 setdash 
+  hpt 0 360 arc stroke} def
+/Opaque {gsave closepath 1 setgray fill grestore 0 setgray closepath} def
+/DiaW {stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V Opaque stroke} def
+/BoxW {stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V Opaque stroke} def
+/TriUW {stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V Opaque stroke} def
+/TriDW {stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V Opaque stroke} def
+/PentW {stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  Opaque stroke grestore} def
+/CircW {stroke [] 0 setdash 
+  hpt 0 360 arc Opaque stroke} def
+/BoxFill {gsave Rec 1 setgray fill grestore} def
+/Density {
+  /Fillden exch def
+  currentrgbcolor
+  /ColB exch def /ColG exch def /ColR exch def
+  /ColR ColR Fillden mul Fillden sub 1 add def
+  /ColG ColG Fillden mul Fillden sub 1 add def
+  /ColB ColB Fillden mul Fillden sub 1 add def
+  ColR ColG ColB setrgbcolor} def
+/BoxColFill {gsave Rec PolyFill} def
+/PolyFill {gsave Density fill grestore grestore} def
+/h {rlineto rlineto rlineto gsave closepath fill grestore} bind def
+%
+% PostScript Level 1 Pattern Fill routine for rectangles
+% Usage: x y w h s a XX PatternFill
+%	x,y = lower left corner of box to be filled
+%	w,h = width and height of box
+%	  a = angle in degrees between lines and x-axis
+%	 XX = 0/1 for no/yes cross-hatch
+%
+/PatternFill {gsave /PFa [ 9 2 roll ] def
+  PFa 0 get PFa 2 get 2 div add PFa 1 get PFa 3 get 2 div add translate
+  PFa 2 get -2 div PFa 3 get -2 div PFa 2 get PFa 3 get Rec
+  TransparentPatterns {} {gsave 1 setgray fill grestore} ifelse
+  clip
+  currentlinewidth 0.5 mul setlinewidth
+  /PFs PFa 2 get dup mul PFa 3 get dup mul add sqrt def
+  0 0 M PFa 5 get rotate PFs -2 div dup translate
+  0 1 PFs PFa 4 get div 1 add floor cvi
+	{PFa 4 get mul 0 M 0 PFs V} for
+  0 PFa 6 get ne {
+	0 1 PFs PFa 4 get div 1 add floor cvi
+	{PFa 4 get mul 0 2 1 roll M PFs 0 V} for
+ } if
+  stroke grestore} def
+%
+/languagelevel where
+ {pop languagelevel} {1} ifelse
+ 2 lt
+	{/InterpretLevel1 true def}
+	{/InterpretLevel1 Level1 def}
+ ifelse
+%
+% PostScript level 2 pattern fill definitions
+%
+/Level2PatternFill {
+/Tile8x8 {/PaintType 2 /PatternType 1 /TilingType 1 /BBox [0 0 8 8] /XStep 8 /YStep 8}
+	bind def
+/KeepColor {currentrgbcolor [/Pattern /DeviceRGB] setcolorspace} bind def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop 0 0 M 8 8 L 0 8 M 8 0 L stroke} 
+>> matrix makepattern
+/Pat1 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop 0 0 M 8 8 L 0 8 M 8 0 L stroke
+	0 4 M 4 8 L 8 4 L 4 0 L 0 4 L stroke}
+>> matrix makepattern
+/Pat2 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop 0 0 M 0 8 L
+	8 8 L 8 0 L 0 0 L fill}
+>> matrix makepattern
+/Pat3 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop -4 8 M 8 -4 L
+	0 12 M 12 0 L stroke}
+>> matrix makepattern
+/Pat4 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop -4 0 M 8 12 L
+	0 -4 M 12 8 L stroke}
+>> matrix makepattern
+/Pat5 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop -2 8 M 4 -4 L
+	0 12 M 8 -4 L 4 12 M 10 0 L stroke}
+>> matrix makepattern
+/Pat6 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop -2 0 M 4 12 L
+	0 -4 M 8 12 L 4 -4 M 10 8 L stroke}
+>> matrix makepattern
+/Pat7 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop 8 -2 M -4 4 L
+	12 0 M -4 8 L 12 4 M 0 10 L stroke}
+>> matrix makepattern
+/Pat8 exch def
+<< Tile8x8
+ /PaintProc {0.5 setlinewidth pop 0 -2 M 12 4 L
+	-4 0 M 12 8 L -4 4 M 8 10 L stroke}
+>> matrix makepattern
+/Pat9 exch def
+/Pattern1 {PatternBgnd KeepColor Pat1 setpattern} bind def
+/Pattern2 {PatternBgnd KeepColor Pat2 setpattern} bind def
+/Pattern3 {PatternBgnd KeepColor Pat3 setpattern} bind def
+/Pattern4 {PatternBgnd KeepColor Landscape {Pat5} {Pat4} ifelse setpattern} bind def
+/Pattern5 {PatternBgnd KeepColor Landscape {Pat4} {Pat5} ifelse setpattern} bind def
+/Pattern6 {PatternBgnd KeepColor Landscape {Pat9} {Pat6} ifelse setpattern} bind def
+/Pattern7 {PatternBgnd KeepColor Landscape {Pat8} {Pat7} ifelse setpattern} bind def
+} def
+%
+%
+%End of PostScript Level 2 code
+%
+/PatternBgnd {
+  TransparentPatterns {} {gsave 1 setgray fill grestore} ifelse
+} def
+%
+% Substitute for Level 2 pattern fill codes with
+% grayscale if Level 2 support is not selected.
+%
+/Level1PatternFill {
+/Pattern1 {0.250 Density} bind def
+/Pattern2 {0.500 Density} bind def
+/Pattern3 {0.750 Density} bind def
+/Pattern4 {0.125 Density} bind def
+/Pattern5 {0.375 Density} bind def
+/Pattern6 {0.625 Density} bind def
+/Pattern7 {0.875 Density} bind def
+} def
+%
+% Now test for support of Level 2 code
+%
+Level1 {Level1PatternFill} {Level2PatternFill} ifelse
+%
+/Symbol-Oblique /Symbol findfont [1 0 .167 1 0 0] makefont
+dup length dict begin {1 index /FID eq {pop pop} {def} ifelse} forall
+currentdict end definefont pop
+Level1 SuppressPDFMark or 
+{} {
+/SDict 10 dict def
+systemdict /pdfmark known not {
+  userdict /pdfmark systemdict /cleartomark get put
+} if
+SDict begin [
+  /Title (sig_monks1_gnuplot_generalization.tex)
+  /Subject (gnuplot plot)
+  /Creator (gnuplot 4.6 patchlevel 1)
+  /Author (wvheerden)
+%  /Producer (gnuplot)
+%  /Keywords ()
+  /CreationDate (Sat Aug 17 19:24:18 2013)
+  /DOCINFO pdfmark
+end
+} ifelse
+end
+%%EndProlog
+%%Page: 1 1
+gnudict begin
+gsave
+doclip
+50 50 translate
+0.050 0.050 scale
+0 setgray
+newpath
+1.000 UL
+LTb
+1.000 UL
+LTb
+0 5039 N
+0 0 L
+15837 0 L
+0 5039 V
+0 5039 L
+Z stroke
+1.000 UP
+1.000 UL
+LTb
+1.000 UL
+LT0
+0.76 0.76 0.76 C 0 5039 M
+1320 2549 L
+2640 778 L
+1319 905 V
+5279 3966 L
+6599 974 L
+7919 3140 L
+9238 4202 L
+1320 512 V
+11878 2490 L
+1320 2519 V
+14517 0 L
+1320 4375 V
+0 4759 M
+1320 1821 L
+1320 787 V
+1319 318 V
+5279 4222 L
+6599 1663 L
+7919 522 L
+9238 1939 L
+1320 2401 V
+11878 1092 L
+1320 394 V
+14517 304 L
+1320 2354 V
+0 4479 M
+1320 128 L
+2640 3041 L
+3959 1958 L
+5279 561 L
+6599 994 L
+7919 4813 L
+9238 640 L
+1320 3897 V
+11878 266 L
+1320 3622 V
+14517 544 L
+1320 2517 V
+0 4199 M
+1320 1102 L
+1320 0 V
+3959 3882 L
+5279 2677 L
+6599 1102 L
+7919 3937 L
+9238 472 L
+1320 3150 V
+1320 945 V
+1320 -315 V
+14517 620 L
+1320 1891 V
+0 4199 M
+1320 3041 L
+2640 1073 L
+1319 709 V
+5279 1585 L
+6599 1388 L
+7919 325 L
+9238 4813 L
+1320 -985 V
+1320 138 V
+13198 502 L
+1319 156 V
+1320 2395 V
+0 4479 M
+1320 2382 L
+2640 1083 L
+3959 655 L
+5279 4311 L
+6599 807 L
+7919 3327 L
+9238 2421 L
+1320 1024 V
+11878 1988 L
+1320 1496 V
+14517 772 L
+1320 2002 V
+0 3639 M
+1320 1220 L
+1320 237 V
+3959 3277 L
+5279 1535 L
+1320 551 V
+7919 39 L
+9238 4055 L
+1320 472 V
+11878 1693 L
+1320 2283 V
+14517 836 L
+1320 1751 V
+0 4759 M
+1320 2697 L
+1320 590 V
+3959 2188 L
+1320 -82 V
+6599 492 L
+7919 2382 L
+9238 846 L
+1320 4173 V
+1320 -826 V
+13198 3169 L
+14517 874 L
+1320 4165 V
+0 4759 M
+1320 2234 L
+2640 3612 L
+3959 103 L
+5279 2392 L
+6599 30 L
+7919 1565 L
+9238 2628 L
+1320 1141 V
+1320 296 V
+1320 630 V
+14517 886 L
+1320 2070 V
+0 3919 M
+1320 581 L
+2640 2746 L
+3959 1283 L
+5279 2628 L
+6599 1368 L
+7919 2431 L
+9238 30 L
+1320 3976 V
+1320 -335 V
+13198 679 L
+1319 220 V
+1320 1352 V
+0 4199 M
+1320 2874 L
+1320 708 V
+3959 1238 L
+5279 4763 L
+6599 2165 L
+7919 4842 L
+9238 197 L
+1320 3937 V
+11878 1929 L
+1320 -551 V
+14517 899 L
+1320 1005 V
+0 3359 M
+1320 135 V
+2640 2352 L
+1319 369 V
+5279 1132 L
+1320 157 V
+7919 2825 L
+9238 3888 L
+1320 1141 V
+11878 2805 L
+1320 630 V
+14517 912 L
+1320 2259 V
+0 3639 M
+1320 1073 L
+2640 3986 L
+3959 3757 L
+1320 898 V
+6599 1309 L
+7919 4498 L
+9238 955 L
+1320 3897 V
+1320 138 V
+13198 2943 L
+14517 975 L
+1320 1755 V
+0 3639 M
+1320 1437 L
+1320 590 V
+1319 645 V
+5279 846 L
+1320 906 V
+7919 3641 L
+9238 2106 L
+1320 1654 V
+1320 -827 V
+1320 1496 V
+14517 1038 L
+1320 903 V
+0 4759 M
+1320 276 L
+2640 512 L
+1319 947 V
+5279 3740 L
+6599 512 L
+7919 354 L
+9238 4370 L
+1320 472 V
+11878 3267 L
+1320 -236 V
+14517 1051 L
+1320 3242 V
+0 4199 M
+1320 1555 L
+2640 413 L
+3959 2192 L
+5279 4665 L
+6599 217 L
+7919 2264 L
+9238 3720 L
+1320 709 V
+11878 846 L
+1320 3937 V
+14517 1051 L
+1320 2313 V
+0 5039 M
+1320 -39 V
+2640 2716 L
+3959 591 L
+5279 276 L
+6599 827 L
+7919 3819 L
+9238 2795 L
+1320 472 V
+11878 433 L
+1320 2283 V
+14517 1064 L
+1320 1820 V
+0 3639 M
+1320 996 V
+2640 2077 L
+3959 819 L
+5279 4793 L
+6599 778 L
+7919 1919 L
+1319 748 V
+1320 1221 V
+1320 -335 V
+13198 640 L
+1319 449 V
+1320 1438 V
+0 3359 M
+1320 1968 L
+2640 1653 L
+3959 606 L
+5279 2598 L
+6599 236 L
+7919 4645 L
+9238 2756 L
+1320 1574 V
+11878 2126 L
+1320 -788 V
+1319 -161 V
+1320 1296 V
+0 2799 M
+1320 2352 L
+2640 3888 L
+3959 608 L
+5279 3769 L
+6599 1644 L
+1320 984 V
+9238 1644 L
+1320 2795 V
+11878 2214 L
+1320 2756 V
+14517 1177 L
+1320 -62 V
+0 4759 M
+1320 689 L
+2640 807 L
+3959 4020 L
+5279 335 L
+6599 1555 L
+7919 1398 L
+9238 1122 L
+1320 1811 V
+11878 1870 L
+1320 -630 V
+1319 -50 V
+1320 473 V
+0 3919 M
+1320 18 V
+2640 3307 L
+3959 2897 L
+5279 1102 L
+6599 157 L
+7919 472 L
+1319 945 V
+1320 3150 V
+11878 1732 L
+1320 2205 V
+14517 1203 L
+1320 2030 V
+0 5039 M
+1320 3366 L
+1320 433 V
+3959 925 L
+5279 4586 L
+6599 2657 L
+7919 610 L
+9238 3484 L
+1320 236 V
+1320 197 V
+13198 1083 L
+1319 120 V
+1320 276 V
+0 4199 M
+1320 955 L
+2640 3632 L
+3959 3355 L
+5279 837 L
+6599 325 L
+7919 915 L
+9238 4537 L
+10558 3317 L
+11878 1329 L
+1320 1338 V
+14517 1241 L
+1320 922 V
+0 4479 M
+1320 866 L
+2640 2441 L
+3959 354 L
+1320 827 V
+6599 2598 L
+7919 2283 L
+9238 1338 L
+1320 2205 V
+1320 0 V
+13198 236 L
+1319 1017 V
+1320 -179 V
+0 3639 M
+1320 3080 L
+2640 1348 L
+1319 18 V
+5279 2962 L
+6599 404 L
+7919 4301 L
+9238 679 L
+1320 2401 V
+1320 -728 V
+13198 226 L
+1319 1040 V
+1320 575 V
+0 4759 M
+1320 4321 L
+2640 1132 L
+3959 3132 L
+5279 69 L
+6599 1722 L
+1320 512 V
+1319 748 V
+1320 1220 V
+11878 1348 L
+1320 866 V
+1319 -910 V
+1320 1443 V
+0 4199 M
+1320 364 L
+2640 4380 L
+3959 2451 L
+1320 866 V
+6599 2805 L
+7919 1427 L
+9238 2451 L
+1320 2165 V
+11878 1604 L
+13198 344 L
+1319 973 V
+1320 425 V
+0 4199 M
+1320 1407 L
+2640 2943 L
+3959 2736 L
+5279 1565 L
+6599 699 L
+7919 2943 L
+9238 1329 L
+1320 3425 V
+11878 2529 L
+1320 866 V
+14517 1329 L
+1320 2122 V
+0 5039 M
+1320 984 L
+2640 4212 L
+3959 2086 L
+5279 4134 L
+6599 276 L
+7919 1693 L
+9238 3346 L
+10558 2244 L
+1320 315 V
+1320 1968 V
+14517 1355 L
+1320 636 V
+0 3919 M
+1320 1929 L
+2640 748 L
+3959 409 L
+1320 890 V
+1320 551 V
+7919 748 L
+9238 1772 L
+1320 787 V
+1320 1575 V
+13198 1693 L
+1319 -338 V
+1320 -334 V
+0 4479 M
+1320 3563 L
+2640 2106 L
+3959 1435 L
+5279 138 L
+6599 256 L
+1320 945 V
+1319 669 V
+1320 551 V
+1320 2323 V
+1320 -394 V
+14517 1367 L
+1320 552 V
+0 3639 M
+1320 111 V
+2640 679 L
+3959 96 L
+5279 404 L
+6599 2726 L
+1320 984 V
+1319 -78 V
+1320 748 V
+11878 1998 L
+1320 1102 V
+14517 1367 L
+1320 585 V
+0 2799 M
+1320 4734 L
+2640 2372 L
+3959 100 L
+5279 2096 L
+6599 1585 L
+7919 4695 L
+9238 3277 L
+1320 1299 V
+11878 69 L
+1320 3858 V
+14517 1431 L
+1320 104 V
+0 4759 M
+1320 3730 L
+1320 905 V
+3959 2122 L
+5279 3258 L
+6599 738 L
+7919 4321 L
+9238 3179 L
+10558 2116 L
+1320 -335 V
+1320 788 V
+14517 1443 L
+1320 286 V
+0 5039 M
+1320 1653 L
+2640 79 L
+3959 3701 L
+5279 2283 L
+1320 158 V
+7919 4960 L
+9238 3071 L
+1320 944 V
+1320 -944 V
+13198 394 L
+1319 1062 V
+1320 2070 V
+0 3919 M
+1320 413 L
+2640 217 L
+3959 1779 L
+5279 768 L
+6599 2146 L
+1320 944 V
+9238 5019 L
+1320 -708 V
+11878 335 L
+1320 2125 V
+1319 -991 V
+1320 1026 V
+0 3079 M
+1320 2667 L
+2640 1683 L
+3959 1273 L
+5279 305 L
+6599 1959 L
+7919 1683 L
+9238 69 L
+1320 3425 V
+1320 295 V
+1320 866 V
+14517 1545 L
+1320 -323 V
+0 3079 M
+1320 896 L
+2640 4321 L
+3959 2476 L
+5279 2313 L
+6599 1053 L
+7919 2116 L
+9238 344 L
+1320 3977 V
+11878 1466 L
+1320 788 V
+1319 -697 V
+1320 -95 V
+0 3919 M
+1320 748 L
+2640 2874 L
+3959 2362 L
+5279 2008 L
+6599 3504 L
+7919 4606 L
+1319 236 V
+10558 2480 L
+1320 1890 V
+13198 984 L
+1319 586 V
+15837 464 L
+0 4199 M
+1320 309 V
+2640 3051 L
+3959 552 L
+5279 2972 L
+6599 1831 L
+7919 1516 L
+9238 3445 L
+1320 -709 V
+1320 433 V
+13198 2146 L
+1319 -563 V
+15837 994 L
+0 3359 M
+1320 1132 L
+2640 3140 L
+3959 847 L
+5279 3809 L
+6599 2706 L
+7919 4242 L
+9238 1525 L
+1320 2717 V
+11878 443 L
+1320 2834 V
+14517 1621 L
+1320 141 V
+0 5039 M
+1320 856 L
+2640 3336 L
+3959 4872 L
+5279 3533 L
+6599 2037 L
+7919 3179 L
+1319 748 V
+10558 2628 L
+1320 2185 V
+13198 1899 L
+1319 -266 V
+1320 -249 V
+0 4199 M
+1320 1998 L
+2640 4793 L
+3959 4174 L
+5279 4045 L
+6599 3730 L
+7919 4793 L
+9238 4281 L
+1320 -748 V
+1320 -649 V
+13198 1151 L
+1319 495 V
+15837 505 L
+0 3919 M
+1320 2431 L
+2640 1762 L
+1319 372 V
+5279 699 L
+1320 393 V
+7919 4124 L
+9238 1092 L
+1320 1221 V
+1320 925 V
+1320 866 V
+14517 1659 L
+1320 -195 V
+0 4479 M
+1320 1644 L
+2640 4124 L
+3959 1692 L
+5279 4950 L
+6599 3140 L
+7919 817 L
+9238 620 L
+1320 4370 V
+1320 -650 V
+13198 2372 L
+1319 -701 V
+1320 -660 V
+0 4759 M
+1320 1151 L
+1320 552 V
+3959 1393 L
+1320 821 V
+6599 758 L
+7919 3474 L
+9238 1663 L
+1320 276 V
+11878 817 L
+1320 2834 V
+14517 1671 L
+1320 -270 V
+0 4759 M
+1320 3218 L
+2640 1289 L
+3959 290 L
+5279 1486 L
+6599 3454 L
+7919 4911 L
+9238 1565 L
+1320 1850 V
+11878 2136 L
+1320 -79 V
+1319 -360 V
+15837 916 L
+0 4479 M
+1320 610 L
+2640 4508 L
+3959 4305 L
+5279 2460 L
+6599 1791 L
+7919 59 L
+9238 1516 L
+10558 335 L
+1320 2086 V
+13198 1319 L
+1319 416 V
+15837 98 L
+0 3919 M
+1320 2096 L
+2640 3277 L
+3959 921 L
+5279 4419 L
+6599 2333 L
+7919 3789 L
+9238 3238 L
+1320 -354 V
+1320 -492 V
+13198 187 L
+1319 1548 V
+1320 -116 V
+0 3359 M
+1320 2136 L
+2640 4183 L
+3959 172 L
+5279 758 L
+6599 718 L
+7919 207 L
+9238 2254 L
+1320 1771 V
+1320 -98 V
+13198 541 L
+1319 1194 V
+1320 509 V
+0 4199 M
+1320 512 L
+2640 1850 L
+3959 2978 L
+5279 197 L
+6599 3267 L
+1320 158 V
+9238 2559 L
+1320 2362 V
+1320 0 V
+13198 1535 L
+1319 200 V
+1320 -587 V
+0 4199 M
+1320 3917 L
+2640 4980 L
+3959 2058 L
+5279 413 L
+6599 3838 L
+7919 846 L
+1319 197 V
+1320 2913 V
+1320 -433 V
+1320 1418 V
+14517 1747 L
+15837 279 L
+0 4199 M
+1320 3464 L
+1320 630 V
+3959 268 L
+5279 2205 L
+6599 4724 L
+7919 2834 L
+1319 0 V
+1320 0 V
+1320 -629 V
+1320 1889 V
+14517 1760 L
+15837 406 L
+0 3639 M
+1320 829 V
+1320 118 V
+3959 340 L
+5279 1594 L
+6599 295 L
+7919 2657 L
+9238 2382 L
+1320 1811 V
+11878 610 L
+1320 1890 V
+1319 -740 V
+1320 808 V
+0 4479 M
+1320 2638 L
+2640 4763 L
+3959 3224 L
+5279 1378 L
+6599 4134 L
+7919 1457 L
+1319 236 V
+1320 2677 V
+11878 1220 L
+1320 1654 V
+14517 1760 L
+15837 453 L
+0 4199 M
+1320 2146 L
+1320 118 V
+3959 3631 L
+5279 2185 L
+1320 748 V
+7919 413 L
+9238 768 L
+1320 2440 V
+11878 1122 L
+1320 866 V
+1319 -215 V
+15837 692 L
+0 3919 M
+1320 2943 L
+2640 1959 L
+1319 710 V
+5279 2470 L
+1320 315 V
+7919 699 L
+9238 2706 L
+1320 1772 V
+11878 679 L
+1320 158 V
+1319 936 V
+1320 -463 V
+0 3919 M
+1320 3612 L
+2640 108 L
+3959 3834 L
+5279 5029 L
+6599 384 L
+1320 984 V
+9238 384 L
+1320 2795 V
+11878 955 L
+1320 2755 V
+14517 1785 L
+1320 -108 V
+0 4759 M
+1320 718 L
+2640 4970 L
+3959 982 L
+5279 3120 L
+1320 275 V
+7919 2884 L
+1319 787 V
+1320 -433 V
+11878 620 L
+1320 1024 V
+1319 141 V
+15837 360 L
+0 4479 M
+1320 97 V
+2640 3159 L
+3959 1143 L
+1320 166 V
+6599 2687 L
+7919 128 L
+9238 3120 L
+1320 -906 V
+1320 532 V
+13198 1250 L
+1319 535 V
+15837 635 L
+0 4759 M
+1320 2195 L
+2640 581 L
+3959 2309 L
+1320 673 V
+6599 2746 L
+7919 2155 L
+1319 -39 V
+1320 276 V
+1320 2499 V
+13198 89 L
+1319 1721 V
+15837 706 L
+0 4759 M
+1320 -15 V
+2640 4389 L
+3959 4133 L
+5279 689 L
+6599 4429 L
+1320 315 V
+1319 39 V
+10558 2657 L
+1320 2323 V
+13198 3641 L
+14517 1836 L
+15837 292 L
+0 1960 M
+1320 620 L
+2640 266 L
+3959 1519 L
+5279 3297 L
+6599 1171 L
+1320 40 V
+9238 3691 L
+1320 -355 V
+1320 611 V
+13198 2923 L
+14517 1848 L
+15837 790 L
+0 3919 M
+1320 3425 L
+2640 2401 L
+3959 1732 L
+5279 3110 L
+6599 2401 L
+7919 3504 L
+9238 2480 L
+1320 -787 V
+1320 -315 V
+1320 -236 V
+1319 706 V
+15837 318 L
+0 4759 M
+1320 1791 L
+2640 1594 L
+1319 781 V
+5279 1752 L
+6599 3602 L
+1320 473 V
+1319 354 V
+1320 236 V
+11878 2342 L
+13198 768 L
+1319 1080 V
+1320 -292 V
+0 5039 M
+1320 4183 L
+2640 2136 L
+3959 1978 L
+5279 915 L
+6599 3080 L
+7919 1309 L
+9238 4616 L
+1320 197 V
+11878 3454 L
+13198 1329 L
+1319 519 V
+1320 -602 V
+0 5039 M
+1320 2027 L
+2640 3090 L
+3959 1791 L
+5279 1043 L
+6599 3208 L
+7919 2736 L
+1319 197 V
+1320 -866 V
+1320 -433 V
+1320 157 V
+1319 57 V
+15837 277 L
+0 2799 M
+1320 728 L
+2640 1791 L
+1319 866 V
+5279 4232 L
+6599 571 L
+7919 2775 L
+9238 4704 L
+1320 -708 V
+1320 433 V
+13198 886 L
+1319 975 V
+1320 -87 V
+0 4199 M
+1320 -75 V
+1320 118 V
+3959 627 L
+5279 1762 L
+1320 157 V
+7919 4714 L
+9238 738 L
+10558 620 L
+1320 295 V
+1320 630 V
+1319 329 V
+15837 93 L
+0 4479 M
+1320 1850 L
+2640 4606 L
+3959 1098 L
+5279 905 L
+1320 552 V
+1320 472 V
+9238 905 L
+10558 118 L
+1320 4724 V
+13198 827 L
+1319 1047 V
+15837 100 L
+0 3359 M
+1320 1585 L
+2640 482 L
+1319 76 V
+1320 908 V
+6599 955 L
+1320 590 V
+9238 128 L
+1320 1299 V
+1320 3051 V
+13198 2037 L
+1319 -163 V
+15837 601 L
+0 4479 M
+1320 3986 L
+1320 -79 V
+3959 469 L
+5279 3789 L
+6599 443 L
+7919 1899 L
+9238 89 L
+1320 905 V
+1320 2027 V
+1320 315 V
+14517 1886 L
+15837 642 L
+0 5039 M
+1320 2490 L
+2640 4458 L
+3959 3907 L
+5279 1663 L
+6599 3986 L
+7919 2451 L
+9238 4891 L
+10558 3120 L
+11878 738 L
+1320 3622 V
+14517 1937 L
+15837 393 L
+0 2240 M
+1320 1142 L
+2640 3740 L
+3959 177 L
+5279 3346 L
+6599 1378 L
+7919 2795 L
+1319 394 V
+1320 1102 V
+11878 3031 L
+1320 -866 V
+1319 -215 V
+15837 877 L
+0 2520 M
+1320 994 L
+1320 236 V
+3959 547 L
+5279 167 L
+6599 2175 L
+7919 2057 L
+9238 1821 L
+1320 2165 V
+11878 974 L
+1320 0 V
+1319 976 V
+15837 904 L
+0 2799 M
+1320 390 V
+2640 4527 L
+3959 2575 L
+5279 39 L
+6599 591 L
+7919 4527 L
+9238 512 L
+1320 3307 V
+1320 -945 V
+13198 433 L
+1319 1529 V
+1320 -565 V
+0 4759 M
+1320 1358 L
+2640 4941 L
+3959 19 L
+5279 3602 L
+6599 1201 L
+7919 4665 L
+9238 295 L
+1320 551 V
+1320 433 V
+1320 2756 V
+14517 1975 L
+15837 374 L
+0 3919 M
+1320 1427 L
+2640 3789 L
+3959 1520 L
+1320 419 V
+6599 4576 L
+7919 3277 L
+9238 1230 L
+1320 2874 V
+11878 2116 L
+1320 1024 V
+14517 1988 L
+15837 384 L
+0 4199 M
+1320 4084 L
+2640 2470 L
+3959 1531 L
+5279 3612 L
+6599 4635 L
+7919 4045 L
+1319 -39 V
+1320 275 V
+11878 482 L
+1320 2756 V
+14517 1988 L
+15837 684 L
+0 3359 M
+1320 696 V
+1320 236 V
+3959 1957 L
+5279 5000 L
+6599 1772 L
+7919 4134 L
+9238 3110 L
+1320 472 V
+1320 945 V
+1320 -236 V
+14517 2000 L
+1320 -982 V
+0 3919 M
+1320 3090 L
+2640 4468 L
+3959 2157 L
+5279 4389 L
+6599 3248 L
+1320 630 V
+9238 2342 L
+1320 2441 V
+11878 2697 L
+1320 -394 V
+1319 -290 V
+15837 706 L
+0 1960 M
+1320 1860 L
+2640 49 L
+3959 908 L
+5279 4813 L
+6599 837 L
+1320 984 V
+9238 4261 L
+1320 -511 V
+11878 1368 L
+1320 3622 V
+14517 2013 L
+15837 950 L
+0 3639 M
+1320 2913 L
+1320 945 V
+3959 1831 L
+5279 1024 L
+1320 157 V
+1320 0 V
+9238 4330 L
+10558 2756 L
+1320 1574 V
+13198 1653 L
+1319 373 V
+1320 -605 V
+0 4479 M
+1320 659 L
+1320 748 V
+1319 675 V
+5279 4596 L
+6599 1604 L
+7919 1250 L
+9238 2313 L
+1320 -748 V
+1320 1555 V
+13198 1860 L
+1319 166 V
+15837 863 L
+0 4759 M
+1320 2844 L
+2640 4261 L
+1319 87 V
+5279 207 L
+6599 2214 L
+1320 591 V
+9238 1388 L
+10558 167 L
+1320 3051 V
+13198 778 L
+1319 1260 V
+15837 99 L
+0 3639 M
+1320 2785 L
+1320 906 V
+3959 3329 L
+5279 1683 L
+1320 0 V
+7919 4006 L
+9238 3494 L
+10558 2431 L
+1320 925 V
+1320 787 V
+14517 2038 L
+15837 888 L
+0 4199 M
+1320 807 L
+2640 3917 L
+3959 1422 L
+1320 54 V
+1320 906 V
+7919 4271 L
+9238 2736 L
+1320 -866 V
+1320 -827 V
+13198 20 L
+1319 2031 V
+15837 338 L
+0 3079 M
+1320 138 L
+2640 1201 L
+3959 2393 L
+5279 1673 L
+1320 906 V
+7919 4626 L
+9238 2303 L
+1320 394 V
+1320 2086 V
+13198 3681 L
+14517 2051 L
+15837 786 L
+0 3919 M
+1320 1250 L
+2640 4675 L
+3959 181 L
+5279 148 L
+6599 4321 L
+7919 581 L
+9238 3061 L
+1320 -355 V
+1320 611 V
+1320 236 V
+14517 2064 L
+15837 134 L
+0 3919 M
+1320 1762 L
+2640 1250 L
+3959 3488 L
+5279 3179 L
+1320 157 V
+1320 276 V
+9238 3415 L
+10558 1092 L
+1320 2500 V
+13198 1388 L
+1319 676 V
+15837 157 L
+0 4199 M
+1320 3336 L
+1320 118 V
+3959 2367 L
+5279 344 L
+6599 3021 L
+7919 2037 L
+9238 4990 L
+10558 2037 L
+11878 128 L
+1320 1575 V
+1319 361 V
+15837 230 L
+0 3359 M
+1320 735 V
+2640 2205 L
+3959 3307 L
+5279 315 L
+6599 4094 L
+1320 630 V
+9238 2205 L
+1320 0 V
+1320 1889 V
+13198 945 L
+1319 1119 V
+15837 380 L
+0 5039 M
+1320 1525 L
+1320 906 V
+3959 659 L
+5279 423 L
+1320 0 V
+7919 226 L
+9238 4754 L
+10558 1171 L
+1320 3445 V
+13198 2884 L
+1319 -808 V
+15837 945 L
+0 4759 M
+1320 4330 L
+1320 315 V
+3959 1272 L
+5279 2756 L
+1320 787 V
+7919 3228 L
+9238 394 L
+1320 4094 V
+11878 79 L
+1320 472 V
+1319 1538 V
+15837 561 L
+0 3359 M
+1320 39 L
+2640 2638 L
+1319 807 V
+5279 669 L
+6599 2480 L
+7919 1378 L
+9238 3661 L
+10558 1929 L
+1320 315 V
+1320 1338 V
+14517 2089 L
+15837 246 L
+0 3639 M
+1320 160 V
+2640 2815 L
+3959 1137 L
+5279 4153 L
+6599 2854 L
+7919 4429 L
+1319 39 V
+10558 2972 L
+11878 256 L
+1320 4330 V
+14517 2102 L
+15837 685 L
+0 3359 M
+1320 2903 L
+2640 344 L
+3959 2198 L
+5279 3691 L
+1320 708 V
+1320 197 V
+9238 1880 L
+1320 1850 V
+1320 -650 V
+13198 1112 L
+1319 1002 V
+15837 803 L
+0 3639 M
+1320 108 L
+2640 1644 L
+3959 376 L
+5279 3415 L
+6599 3100 L
+7919 2903 L
+9238 1132 L
+1320 512 V
+11878 994 L
+1320 3307 V
+14517 2114 L
+15837 241 L
+0 3919 M
+1320 2264 L
+2640 4271 L
+3959 2630 L
+1320 -91 V
+6599 610 L
+1320 473 V
+9238 3956 L
+10558 1988 L
+11878 295 L
+1320 2520 V
+1319 -688 V
+15837 1089 L
+0 2799 M
+1320 1191 L
+2640 718 L
+1319 752 V
+5279 3592 L
+6599 2293 L
+1320 118 V
+1319 158 V
+10558 1191 L
+1320 1791 V
+1320 394 V
+14517 2127 L
+15837 220 L
+stroke
+3.000 UL
+LT1
+0.00 0.00 0.00 C 0 4479 M
+1320 2047 L
+2640 3937 L
+3959 2693 L
+5279 472 L
+6599 2047 L
+7919 3622 L
+1319 945 V
+10558 1417 L
+1320 2205 V
+13198 2047 L
+1319 -540 V
+15837 376 L
+stroke
+1.000 UL
+LTb
+0 5039 N
+0 0 L
+15837 0 L
+0 5039 V
+0 5039 L
+Z stroke
+1.000 UP
+1.000 UL
+LTb
+1320 0 M
+0 5039 V
+2640 0 M
+0 5039 V
+3959 0 M
+0 5039 V
+5279 0 M
+0 5039 V
+6599 0 M
+0 5039 V
+7919 0 M
+0 5039 V
+9238 0 M
+0 5039 V
+10558 0 M
+0 5039 V
+11878 0 M
+0 5039 V
+13198 0 M
+0 5039 V
+14517 0 M
+0 5039 V
+stroke
+grestore
+end
+showpage
+%%Trailer

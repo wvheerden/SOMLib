@@ -1,0 +1,54 @@
+8
+
+dir
+2
+https://fluxviz.svn.sourceforge.net/svnroot/fluxviz/Examples
+https://fluxviz.svn.sourceforge.net/svnroot/fluxviz
+
+
+
+2008-03-04T12:18:58.755098Z
+2
+nelisfranken
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+96660f1d-8a47-0410-afcc-ca45c0c1a536
+
+iris_dataset.txt
+file
+
+
+
+
+2008-02-29T14:54:55.000000Z
+d7a06719d9f8170a143e649defff6358
+2008-03-04T12:18:58.755098Z
+2
+nelisfranken
+has-props
+
+largesample.txt
+file
+
+
+
+
+2008-03-04T12:11:40.000000Z
+e025dff1b87326ca06abf0024a129ff7
+2008-03-04T12:18:58.755098Z
+2
+nelisfranken
+has-props
+

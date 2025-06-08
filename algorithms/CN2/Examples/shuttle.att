@@ -1,0 +1,9 @@
+**ATTRIBUTE FILE**
+
+STABILITY: stab xstab;
+ERROR: XL LX MM SS;
+SIGN: pp nn;
+WIND: head tail;
+MAGNITUDE: Low Medium Strong OutOfRange;
+VISIBILITY: yes no;
+Class: noauto auto;

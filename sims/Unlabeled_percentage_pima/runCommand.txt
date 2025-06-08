@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh pima >> label-classification_pima_neuron.runOutput 2>> label-classification_pima_neuron.runOutput

@@ -1,0 +1,66 @@
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## R CMD BATCH --no-restore --no-save label-classification_monks2_percentageUnlabeled_friedman.r
+> 
+> data <-
++ matrix(c(0, 49.77777778, 10.8033241, 0,
++ 0, 49.77777778, 4.432132964, 0,
++ 0, 50.66666667, 10.24930748, 0,
++ 0, 51.55555556, 8.033240997, 0,
++ 0, 50.66666667, 4.709141274, 0,
++ 0, 51.11111111, 4.986149584, 0,
++ 0, 45.33333333, 7.756232687, 0,
++ 12.5, 49.33333333, 3.601108033, 0,
++ 0, 50.66666667, 12.46537396, 0,
++ 0, 49.33333333, 14.68144044, 0,
++ 12.5, 52, 4.986149584, 0,
++ 12.5, 53.33333333, 12.46537396, 0,
++ 12.5, 48.44444444, 7.202216066, 0,
++ 0, 44.88888889, 9.695290859, 0,
++ 0, 45.77777778, 4.709141274, 0,
++ 12.5, 49.33333333, 4.709141274, 0,
++ 0, 49.77777778, 5.540166205, 0,
++ 0, 51.11111111, 4.155124654, 0,
++ 0, 48.88888889, 10.8033241, 0,
++ 12.5, 49.33333333, 4.986149584, 0,
++ 0, 50.66666667, 1.385041551, 0,
++ 0, 51.11111111, 12.46537396, 0,
++ 0, 51.11111111, 5.540166205, 0,
++ 0, 49.77777778, 7.479224377, 0,
++ 0, 49.77777778, 3.601108033, 0,
++ 0, 51.11111111, 5.817174515, 0,
++ 0, 51.55555556, 10.52631579, 0,
++ 0, 50.66666667, 1.662049861, 0,
++ 0, 49.33333333, 6.094182825, 0,
++ 0, 48, 2.770083102, 0),
++ nrow = 30,
++ byrow = TRUE,
++ dimnames = list(1 : 30, c("K-means", "Neuron", "Ward", "Weight-centric")))
+> friedman.test(data)
+
+	Friedman rank sum test
+
+data:  data 
+Friedman chi-squared = 79.0435, df = 3, p-value < 2.2e-16
+
+> 
+> proc.time()
+   user  system elapsed 
+  0.230   0.050   0.257 

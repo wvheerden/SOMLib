@@ -1,0 +1,4 @@
+
+I've had to strip off the first attribute (example number) which 
+uniquely determines the class value as the examples are ordered
+by class.

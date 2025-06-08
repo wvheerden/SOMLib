@@ -1,0 +1,66 @@
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## R CMD BATCH --no-restore --no-save label-classification_pima_trainingUnclassifiedError_friedman.r
+> 
+> data <-
++ matrix(c(0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0,
++ 0, 0, 0, 0),
++ nrow = 30,
++ byrow = TRUE,
++ dimnames = list(1 : 30, c("K-means", "Neuron", "Ward", "Weight-centric")))
+> friedman.test(data)
+
+	Friedman rank sum test
+
+data:  data 
+Friedman chi-squared = NaN, df = 3, p-value = NA
+
+> 
+> proc.time()
+   user  system elapsed 
+   0.25    0.02    0.25 

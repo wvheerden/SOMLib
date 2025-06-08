@@ -1,0 +1,41 @@
+
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_iris_k-means_vs_neuron_trainingError_wilcoxon.r
+> 
+> a <- c(33.79310345, 33.10344828, 17.93103448, 12.4137931, 32.4137931, 33.79310345, 24.82758621, 18.62068966, 35.17241379, 34.48275862, 33.10344828, 35.17241379, 10.34482759, 8.965517241, 14.48275862, 33.10344828, 33.79310345, 34.48275862, 13.79310345, 33.10344828, 8.275862069, 15.86206897, 17.24137931, 9.655172414, 34.48275862, 13.10344828, 33.10344828, 25.51724138, 33.79310345, 33.79310345)
+> b <- c(3.44827586206896, 3.44827586206896, 3.44827586206896, 4.13793103448276, 4.13793103448276, 2.75862068965517, 4.82758620689655, 3.44827586206896, 3.44827586206896, 4.13793103448276, 2.75862068965517, 4.13793103448276, 4.13793103448276, 2.75862068965517, 2.75862068965517, 4.13793103448276, 2.75862068965517, 4.13793103448276, 3.44827586206896, 3.44827586206896, 2.75862068965517, 4.13793103448276, 2.75862068965517, 4.13793103448276, 4.82758620689655, 4.82758620689655, 2.75862068965517, 4.82758620689655, 3.44827586206896, 3.44827586206896)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 465, p-value = 1.816e-06
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.212   0.032   2.362 

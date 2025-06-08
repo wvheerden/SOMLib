@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh ionosphere >> label-classification_ionosphere_neuron.runOutput 2>> label-classification_ionosphere_neuron.runOutput

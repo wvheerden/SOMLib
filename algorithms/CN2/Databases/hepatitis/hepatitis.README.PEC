@@ -1,0 +1,9 @@
+
+This database converts straightforwardly.
+
+I've changed the attribute 
+	sex: male female;
+to be
+	female: no yes;
+to make the database conversion slightly easier.
+

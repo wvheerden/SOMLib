@@ -1,0 +1,1 @@
+./crossValidateSIG.sh iris >> sig_iris_ward.runOutput 2>> sig_iris_ward.runOutput

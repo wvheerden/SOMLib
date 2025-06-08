@@ -1,0 +1,1 @@
+./crossValidateHybridSOM_CN2.sh ionosphere >> hybridSOM_CN2_ionosphere.runOutput 2>> hybridSOM_CN2_ionosphere.runOutput

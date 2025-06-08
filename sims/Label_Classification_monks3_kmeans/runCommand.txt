@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh monks3 >> label-classification_monks3_kmeans.runOutput 2>> label-classification_monks3_kmeans.runOutput

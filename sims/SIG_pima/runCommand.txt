@@ -1,0 +1,1 @@
+./crossValidateSIG.sh pima >> sig_pima_ward.runOutput 2>> sig_pima_ward.runOutput

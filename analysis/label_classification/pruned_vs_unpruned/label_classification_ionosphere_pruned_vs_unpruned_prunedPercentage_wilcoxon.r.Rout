@@ -1,0 +1,34 @@
+
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_iris_k-means_vs_neuron_trainingError_wilcoxon.r
+> 
+> library('coin')
+Loading required package: survival
+> 
+> a <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+> b <- c(20.4081632653061, 26.530612244898, 24.4897959183673, 28.5714285714286, 26.530612244898, 26.530612244898, 20.4081632653061, 24.4897959183673, 26.530612244898, 24.4897959183673, 22.4489795918367, 30.6122448979592, 30.6122448979592, 24.4897959183673, 26.530612244898, 22.4489795918367, 20.4081632653061, 24.4897959183673, 24.4897959183673, 26.530612244898, 16.3265306122449, 22.4489795918367, 24.4897959183673, 20.4081632653061, 22.4489795918367, 24.4897959183673, 22.4489795918367, 22.4489795918367, 22.4489795918367, 20.4081632653061)
+> 
+> pvalue(wilcoxsign_test(a ~ b, alternative = "two.sided", distribution = exact(), zero.method = "Pratt"))
+[1] 1.862645e-09
+> 
+> proc.time()
+   user  system elapsed 
+  1.202   0.033   1.231 

@@ -1,0 +1,7 @@
+
+I had to remove four of the examples with unknown class value:
+
+"0" ? audi gas turbo two hatchback "4wd" front 99.50 178.20 67.90 52.00 3053 ohc five 131 mpfi 3.13 3.40 7.00 160 5500 16 22 ?;
+"1" ? isuzu gas std two sedan fwd front 94.50 155.90 63.60 52.00 1874 ohc four 90 "2bbl" 3.03 3.11 9.60 70 5400 38 43 ?;
+"0" ? isuzu gas std four sedan fwd front 94.50 155.90 63.60 52.00 1909 ohc four 90 "2bbl" 3.03 3.11 9.60 70 5400 38 43 ?;
+"1" ? porsche gas std two hatchback rwd front 98.40 175.70 72.30 50.50 3366 dohcv eight 203 mpfi 3.94 3.11 10.00 288 5750 17 28 ?;

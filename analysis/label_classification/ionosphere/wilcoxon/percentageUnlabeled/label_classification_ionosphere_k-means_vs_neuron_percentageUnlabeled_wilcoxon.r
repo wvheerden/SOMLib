@@ -1,0 +1,7 @@
+## install.packages(c("exactRankTests"))
+## R CMD BATCH --no-restore --no-save label_classification_ionosphere_k-means_vs_neuron_percentageUnlabeled_wilcoxon.r
+
+a <- c(1.8518518519, 2.1604938272, 0.6172839506, 3.0864197531, 0, 0, 0.6172839506, 1.5432098765, 1.8518518519, 1.2345679012, 0, 4.6296296296, 4.012345679, 0.9259259259, 2.7777777778, 3.3950617284, 1.2345679012, 1.8518518519, 0.9259259259, 1.8518518519, 0, 0, 0.6172839506, 3.0864197531, 4.012345679, 4.9382716049, 0.6172839506, 1.8518518519, 1.5432098765, 5.2469135802)
+b <- c()
+
+wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)

@@ -1,0 +1,8 @@
+
+- The original attribute 2, the boolean attribute `alive' or `dead', is
+	the class to predict.
+- The one example with an `unknown' class value has been deleted.
+- Attributes 1 and 10-13 have been deleted (see semantics in README 
+	file to see why)
+- The original attribute value `*' has been taken to mean `unknown'
+

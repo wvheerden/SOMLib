@@ -1,0 +1,46 @@
+\begin{table}[p]
+	\caption[Comparison of the training set error due to misclassified data examples for rule extraction on the ionosphere data set]{Statistical comparison of the training set error due to misclassified data examples for the rule extraction algorithms executed on the ionosphere data set.}
+	\vspace{-3.09pt}
+	\textsf{\linespread{1}\scriptsize\makebox[\textwidth][c]{
+		\begin{tabular}[t]{||c|c||cc||cc||cc||cc||}
+			\hhline{~~|t:==:t:==:t:==:t:==:t|}
+			\multicolumn{2}{c||}{\rule{0pt}{8pt}} & \multicolumn{2}{c||}{\raisebox{0.5pt}{\textbf{Unmodified CN2}}} & \multicolumn{2}{c||}{\raisebox{0.5pt}{\textbf{Unmodified C4.5}}} & \multicolumn{2}{c||}{\raisebox{0.5pt}{\textbf{HybridSOM (CN2)}}} & \multicolumn{2}{c||}{\raisebox{0.5pt}{\textbf{HybridSOM (C4.5)}}} \\
+			\hhline{~~|:==::==::==::==:|}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$} & ${\cal S}_{T\!M}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$} & ${\cal S}_{T\!M}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$} & ${\cal S}_{T\!M}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$} & ${\cal S}_{T\!M}$ \\
+			\hhline{~~||--||--||--||--||}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{6.049}$}}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{0.455}$}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{9.118}$}}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{0.278}$}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{18.873}$}}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{5.097}$}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{20.941}$}}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{4.276}$}} \\
+			\hhline{|t:==::==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\raisebox{0.5pt}{\textbf{Unmodified C4.5}}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \cellfillsmall{38.4pt} & \cellfillsmall{38.4pt} & \cellfillsmall{38.4pt} \\
+			\hhline{|:==:|~~||~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$ & ${\cal S}_{T\!M}$ & & & & & & & & \\
+			\hhline{||--||~~||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{$\mathsf{9.118}$}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{0.278}$}} & & & & & & & & \\
+			\hhline{|:==::==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\raisebox{0.5pt}{\textbf{HybridSOM (CN2)}}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \cellfillsmall{38.4pt} & \cellfillsmall{38.4pt} \\
+			\hhline{|:==:|~~||~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$ & ${\cal S}_{T\!M}$ & & & & & & & & \\
+			\hhline{||--||~~||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{$\mathsf{18.873}$}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{5.097}$}} & & & & & & & & \\
+			\hhline{|:==::==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\raisebox{0.5pt}{\textbf{HybridSOM (C4.5)}}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{0.061}$\phantom{$\times\mathsf{0^0}$/}} & \cellfillsmall{38.4pt} \\
+			\hhline{|:==:|~~||~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$ & ${\cal S}_{T\!M}$ & & & & & & & & \\
+			\hhline{||--||~~||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{$\mathsf{20.941}$}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{4.276}$}} & & & & & & & & \\
+			\hhline{|:==::==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\raisebox{0.5pt}{\textbf{SIG* algorithm}}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{0.013}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{-7.9pt}{-2.5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{4.422\times10^{-6}}$\phantom{$\times\mathsf{0^0}$/}} \\
+			\hhline{|:==:|~~||~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T\!M}$ & ${\cal S}_{T\!M}$ & & & & & & & & \\
+			\hhline{||--||~~||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{$\mathsf{16.147}$}} & \makebox[30px][c]{\raisebox{-0.5pt}{$\mathsf{3.118}$}} & & & & & & & & \\
+			\hhline{|b:==:b:==:b:==:b:==:b:==:b|}
+		\end{tabular}
+	}
+	\phantom{
+		\begin{minipage}{\textwidth}
+			\vspace{6pt}
+			\fontsize{7}{10}\selectfont\makebox[13.5pt][r]{\textsuperscript{$\ast$}}\hspace{\footnotenumberspace}Means differ by $\mathsf{3.081\times10^{-15}}$, while standard deviations differ by $\mathsf{9.841\times10^{-16}}$, indicating practically insignificant result differences.
+		\end{minipage}
+	}}
+	\label{tab:comparison_ruleExtractors_ionosphere_trainingMisclassifiedError}
+\end{table}

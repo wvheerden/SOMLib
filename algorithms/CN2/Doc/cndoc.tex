@@ -1,0 +1,1015 @@
+% "@(#)cndoc.tex 4.8 6/15/92 MLT"
+\documentstyle[mlt,named]{esprit_report}
+\def\gap{\hspace{1em}}
+\def\CN{{\sc cn2}}
+\def\AQ{{\sc aq}}
+\def\ID{{\small NewID}}
+\def\tab{{\sc tab}}
+\def\esc{{\sc esc}}
+\def\und{\mbox{\_}}
+\def\emacs{{\sc emacs}}
+\def\ret{\raisebox{-0.75ex}{$\swarrow$}}
+\newcommand{\bt}{~\mbox{${\bullet}$~}}          % a bullet
+\newcommand{\m}[1]{\mbox{${\tt #1}$}}           % nice maths mode
+\documenttype{Manual}
+\author{Robin Boswell \nl The Turing Institute Limited}
+\date{January 1990}
+\title{Manual for CN2 version 6.1}
+\reference{TI/P2154/RAB/4/1.5}
+\task{T}
+\doctype{Manual}
+\status{Draft}
+\classification{Public}
+\docclass{ITM}
+\intid{TI/MLT/4.0T/RAB/1.2}
+\distribution{Universal}
+\begin{document}
+%\makefrontpage
+\maketitle
+\maketable
+
+\begin{abstract}
+This document is an introduction and user's manual for release 6.1
+of the rule-induction program \CN.
+\end{abstract}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+The program described in this manual is version 6.1
+of the Turing Institute's implementation of \CN.  For details of
+the \CN\ algorithm itself, and plans for further work, see
+\cite{mlt:7}.  
+
+   For brevity, I shall use the term ``\CN'' in the following account
+to refer both to the algorithm and to its current implementation. 
+
+\section{Overview}
+For instructions on installing \CN, see Appendix
+\S\ref{getting_started}.
+
+\CN\ is a rule-induction program which takes a set of {\it examples}
+(vectors of attribute-values), and generates a set of {\it rules} for
+classifying them.     It also allows you to {\it evaluate}
+the accuracy of a set of rules (in terms of a set of pre-classified
+examples).
+
+To use the program, you must provide an 
+ASCII file of examples in a standard format (described in 
+\S~\ref{input}). When the program has induced some rules from these
+examples, you may display or evaluate them, or store them in a file.
+Rules are stored in a human-readable form, but they may
+also be read back in by \CN, to save re-calculating them.
+
+If you have data files in MLT CKRL format, then these
+can be converted into \CN's format by 
+a CKRL translator (provided by the Turing Institute).
+In addition, \CN\ can itself translate attributes, examples
+and decision-trees into CKRL format (see the {\bf Ckrl} command
+in section~\ref{commands}).
+
+   See Appendix \S\ref{script} for an example of a terminal
+session with \CN.
+
+   The interface to \CN\ is similar to that for the Turing Institute's
+other recently-developed program \ID\, described in \cite{mlt:10}, so 
+if you are 
+using both programs, you may find the following comparisons useful:
+
+\begin{description}
+ \item[Input]  The format of attribute and example files is
+  identical for the two programs.  (Declarations of attributes
+  as `binary' are meaningful only for \ID: such declarations will 
+  be silently ignored by \CN.)
+
+ \item[Commands] The interfaces are similar, but \ID\ has a smaller
+   menu of commands
+  than \CN, because it has fewer customisable parameters
+   (such as `significance threshold').
+
+ \item[Output] The output formats differ (as do the algorithms):
+ \CN\ generates production rules and \ID\ generates decision trees.
+\end{description}
+
+\section{Example and Attribute Files}
+\label{input}
+
+The input to \CN\ consists of:
+\begin{enumerate}
+ \item A set of attribute declarations.
+ \item A set of examples.
+\end{enumerate}
+
+Items 1.\ and 2.\ may be presented in the same file, or in two different
+files.  Storing the attributes separately from the examples makes 
+it possible to read and process several example files in succession
+without having to re-load the attribute declarations (provided all
+the examples use the same attributes).
+
+\subsection{Files}
+Input files are of three types:
+\begin{enumerate}
+ \item Attribute files.
+ \item Examples files.
+ \item Attribute and Example files.
+\end{enumerate}
+
+The most complex of these, the attribute and example file, 
+consists of a header, followed by attribute declarations,
+then examples.  The two types of data are separated by punctuation,
+as specified in \S~\ref{att_syntax}.
+(See \S~\ref{example} for a specimen of
+such a file).
+
+Attribute and example files consist of the 
+appropriate header followed respectively by attributes and examples.
+
+In all file types, characters between a `\%' and the next end-of-line 
+are regarded as comments and ignored.
+
+Formally: 
+\begin{quotation} \sf
+\begin{tabbing}
+foo \= qq \= wumpus wumpus wumpus wumpus wump \= \kill
+attribute-and-example-file ::= \\
+\>\>   att-and-ex-header \gap attribute-delarations \gap
+                          separator \gap examples \gap separator \\[1.5ex]
+att-and-ex-header ::=  \\
+\>\>   ``$\ast\ast$ATTRIBUTE AND EXAMPLE FILE$\ast\ast$'' \\[1.5ex]
+separator ::=  \\
+\>\>   ``\verb+@+'' \\[2.5ex]
+attribute-file ::= \\
+\>\>   att-header \gap attributes \\[1.5ex]
+att-header ::= \\
+\>\>   ``$\ast\ast$ATTRIBUTE FILE$\ast\ast$'' \\[2.5ex]
+example-file ::= \\
+\>\>   ex-header \gap examples \\[1.5ex]
+ex-header ::=  \\
+\>\>   ``$\ast\ast$EXAMPLE FILE$\ast\ast$''
+\end{tabbing}
+\end{quotation}
+The format for {\it attributes} and {\it examples} in the above
+grammar is defined below.
+
+\subsection{Attributes}
+\subsubsection{Semantics}
+Attributes are of two types: discrete and ordered.  A discrete 
+attribute takes one of a finite set of values (and the set of values
+has no further structure).  An ordered attribute takes numeric
+values: integer or floating point.
+
+An attribute {\it declaration} consists of the name of the attribute,
+together with either:
+\begin{itemize}
+ \item Its possible values (for a discrete attribute), or
+ \item Its numeric type (for an ordered attribute).
+\end{itemize}
+
+For the purposes of the rule-induction algorithm, one of the
+attributes is distinguished as the {\it class attribute}.
+The aim of the algorithm is to find rules whereby the class
+attribute of an example may be inferred from the non-class 
+attributes. The class attribute must be discrete.
+
+
+\subsubsection{Attribute ordering}
+In some domains, it may be desirable to impose constraints
+on the order in which attributes are tested.  For example,
+one should determine whether a patient is female before asking
+whether she is pregnant, rather than afterwards.  Such
+constraints may be imposed on \CN\ by means of 
+{\it attribute ordering declarations}, which (optionally) follow
+the attribute declarations. 
+
+Note that it is not possible
+to make the {\it result} of one attribute test a precondition 
+of some other test (for example, ``if sex is male, then don't
+ask about pregnancy'') but given sensible data, an inappropriate
+test will yield a low entropy gain, and so be excluded anyway
+by \CN's existing criteria.
+
+An attribute ordering declaration takes the form:
+\begin{quotation}
+Attribute$_1$ BEFORE Attribute$_2$;
+\end{quotation}
+
+You may include as many such declarations as you wish.  Note
+that \CN\ does not currently check for ``loops'' (A before B
+before C before A \ldots): if you introduce such a loop, the
+result will be that none of the attributes involved will ever
+be used.
+
+Finally, note that the order in which attribute tests are {\it displayed}
+in \CN's output has no significance (as it happens, it matches the
+order of attribute declaration), so in particular is not affected by
+attribute ordering constraints.  The only effect of, for example, the constraint 
+{\tt sex BEFORE pregnancy} is to ensure that any
+rule containing a test of {\tt pregnancy} also contains a test of 
+{\tt sex}.
+
+\subsubsection{Syntax}
+\label{att_syntax}
+An attribute declaration consists of the attribute's name, followed
+either by its possible values (if it's discrete), or its numeric
+type (if it's ordered), separated by appropriate punctuation.
+The class attribute must be declared last.  (i.e.\ \CN\ will
+treat the last attribute as the class attribute).
+
+Formally:
+\begin{quotation} \sf
+\begin{tabbing} 
+foo \= qq \= wumpus wumpus wumpus wumpus wump \= \kill
+attribute-data ::= \\
+\>\> attribute-declarations \gap att-ordering-section\\
+\> $\mid$ \> attribute-declarations \\[2.5ex]
+attribute-declarations ::= \\
+\>\>attribute-declaration \\
+\> $\mid$ \> attribute-declarations \gap attribute-declaration \\[2.5ex]
+attribute-declaration ::= \\
+\>\>        string ``:'' attribute-values ``;'' \>   \rm \% For discrete attributes \\
+\>$\mid$ \> string ``:'' ``('' type ``)''      \> 
+                           \rm \% For ordered attributes \\[2.5ex]
+attribute-values ::=  \\
+\>\>      string \gap attribute-values  \\
+\>  $\mid$  \> string  \\[2.5ex]
+type ::= \\
+\>\>   ``FLOAT''   \\
+\> $\mid$ \> ``INT'' \\[2.5ex]
+string ::=  \\
+\>\>  quoted-string   \\
+\>$\mid$ \> unquoted-string  \\
+att-orderings-section ::= \\
+\>\> ``ORDERINGS'' attribute-orderings\\[2.5ex]
+attribute-orderings ::= \\
+\>\> attribute-ordering \\
+\>  $\mid$  \> attribute-orderings attribute-ordering \\[2.5ex]
+attribute-ordering ::= \\
+\>\> string ``BEFORE'' string ``;'' \\
+\end{tabbing}
+\rm
+An {\it unquoted-string} is a sequence of one or more characters made
+up of upper
+or lower-case letters, digits, and the characters ``--'', ``+'' and ``\und'',
+with the constraint that the first character must be a letter or ``\und''.
+
+A {\it quoted-string} is any sequence of printable characters (except
+newline and the double-quote character) surrounded by double-quotes.
+
+Thus the following are all valid strings:
+\begin{quotation}
+\begin{verbatim}
+Fred   _42  "42"  "%^=- !"
+\end{verbatim}
+\end{quotation}
+and the following are not valid strings:
+\begin{quotation}
+\begin{verbatim}
+42   -green  + 
+\end{verbatim}
+\end{quotation}
+\end{quotation}
+
+For example:
+
+\begin{verbatim}
+   sex: male female;
+   job: cleaner secretary manager director hacker;
+   salary: (FLOAT)
+   status: content discontented   % The class attribute
+
+   ORDERING
+
+   sex BEFORE salary;
+
+\end{verbatim}
+
+\subsection{Examples}
+\subsubsection{Semantics} 
+Each example consists of a set of values, one for each attribute,
+and may also include a weight.
+
+\paragraph{Values}
+Each value must be of the appropriate type.  However, in addition
+to the numeric and string values given in the attribute declarations,
+any attribute except the class attribute may take
+one of the two special values ``Unknown'' or ``Don't Care''.
+
+The ``Unknown'' value
+is used to represent an unknown value (!), such as frequently 
+occur in real-world data.
+The ``Don't Care'' value, on the other hand, is assigned to
+an attribute whose value is irrelevant to the classification 
+of the example.  In practice, ``Don't Care'' values are
+most likely to arise as a means of compressing synthetic data.
+
+Thus, an ``Unknown'' attribute corresponds roughly to
+an existentially quantified variable,
+whereas a ``Don't Care'' attribute is universally quantified.
+
+A brief account of how \ID\ handles ``unknown'' and ``don't care''
+values appears in Appendix \ref{unknown}
+
+\paragraph{Weights}
+By default, each example is assigned a weight of 1, and this is
+sufficient for most applications.  However, in some
+cases it may be useful to assign different weights to examples; the 
+weight must be a positive real number.  If you use this facility, you
+should note that references in this document to the ``number of
+examples'' in a set (e.g.\ \ref{all_eval}) really mean ``the sum of the weights
+of the examples''.
+
+
+\subsubsection{Syntax}
+
+\begin{quotation} \sf
+\begin{tabbing}
+foo \= qq \= wumpus  wumpus w \= \kill
+examples ::= \\
+\>\>  example \\
+\> $\mid$ \> examples \gap example  \\[2.5ex]
+example ::= \\
+\>\>   values ``;''  \\
+\>$\mid$ \>values ``w'' number \\[2.5ex]
+values ::=  \\
+\>\>   value  \\
+\>$\mid$ \>values \gap value \\[2.5ex]
+value ::=    \\
+\>\>string   \\
+\>$\mid$ \> number  \\
+\>$\mid$ \> ``?''  \> \rm \% Unknown \\
+\>$\mid$ \> ``$\ast$'' \> \rm \% Don't Care \\[2.5ex]
+number ::= \\
+\>\> integer \\
+\>$\mid$ \> float \\
+\end{tabbing}
+\end{quotation}
+
+In addition, the order of items in {\it values} must correspond to the
+order of the attributes as previously declared, so the length
+of {\it values} must be equal to the number of attributes, and 
+each {\it value$_n$} must match the type of {\it attribute$_n$}.
+
+\subsection{Specimen input file}
+\label{example}
+This is a small ``Attribute and Example'' file:
+
+{\small
+\begin{verbatim}
+**ATTRIBUTE AND EXAMPLE FILE**
+% Vertebrate classification
+skin_covering: none hair feathers scales;
+milk:          yes no;
+homeothermic:  yes no;
+habitat:       land sea air;
+reproduction:  oviparous viviparous;
+breathing:     lungs gills;
+class:	mammal fish reptile bird amphibian;
+
+@
+% mammal
+hair           yes     yes     land    viviparous      lungs mammal;
+none           yes     yes     sea     viviparous      lungs mammal;
+hair           yes     yes     sea     oviparous       lungs mammal;
+hair           yes     yes     air     viviparous      lungs mammal;
+
+% fish 
+scales         no      no       sea    oviparous       gills fish w 4;
+
+% reptile
+scales         no      no      land    oviparous       lungs reptile w 3.2;
+scales         no      no      sea     oviparous       lungs reptile;
+
+% bird
+feathers       no      yes     air     oviparous       lungs bird;
+feathers       no      yes     land    oviparous       lungs bird;
+
+% amphibian
+none           no      no      land    oviparous       lungs amphibian;
+@
+\end{verbatim}}
+
+
+\section{Rules: files and  evaluation}
+
+\subsection{File format}
+When \CN\ writes a rule set to file, it does so in a
+human-readable ASCII form, but unlike example and attribute files,
+you are not expected to write or modify rule files yourself.
+(i.e.\ you do so at your own risk, and should note that
+\CN\ does very little error-checking when reading rule files).
+In future releases, a graphical interface may be provided
+for manipulating rules.
+
+  A small rule-set appears as part of the trace on 
+page~\pageref{little_rules}.
+
+\subsection{Class distributions}
+\label{distributions}
+The list of numbers at the end of each rule indicates the 
+number of training examples covered by that rule, divided into
+classes.
+
+The precise significance of the counts depends on whether
+the rules are ordered or unordered.  Ordered rules are
+intended to be executed in order (!), so the counts 
+associated with rule $N$ refer to the examples 
+covered\footnote{A rule is said to {\it cover} an example if the 
+example satisfies the conditions of the rule}
+by rule $N$ which were $not$ covered by any of the rules
+$1$ through $N-1$.  This applies also to the default rule---since
+this rule has no conditions, its counts comprise all
+the examples which were not covered by the preceding rules.
+
+The counts associated with each of a set of {\it unordered}
+rules, however, comprise all the examples covered by that rule
+including those which may be covered by other rules as well.
+Again, this applies equally to the default rule, whose count
+therefore comprises the whole example set.
+
+\subsubsection{Rare classes}
+Given the above definition of ``class distribution'', you
+might expect that the class predicted by a rule would always
+show the largest class-count in the corresponding distribution; 
+so to avoid possible confusion when using the program, you should
+note that this won't always be the case.
+
+In the case of ordered rules, the class predicted by each rule 
+will be the majority class among the examples covered, 
+{\it by definition}.
+
+In the case of unordered rules, however, this property will not
+always hold, though it usually will.  The exceptions are rules
+which give better than average predictions of rarely-occurring
+classes.  For example, in a medical domain, where the program 
+is trying to predict the rarely-occurring phenomenon of 
+diabetes, the following rule might be induced:
+
+
+\begin{tabbing}
+foo \= h \= hoo ho\= \kill
+\> IF \>\>     temperature = high \\
+\> \>  AND \>   fluid-intake = high  \\
+\> THEN \>\>   diagnosis = diabetes [420 0 0 \underline{126}]
+\end{tabbing}
+
+
+where there are 126 examples of diabetes, and 420 of something
+different (colds, as it happens).  Since the occurrence of
+diabetes in the general population is only 0.1\%, a rule
+that predicts it with an accuracy of 30\% is clearly of some
+use, even if 70\% of patients satisfying the conditions just
+have colds.
+
+
+
+\subsection{Evaluation}
+\label{evaluation}
+The evaluation module takes a set of rules and a pre-classified set of 
+examples, and compares the classification given by the rules
+with the given class-values.  There are currently two modes of
+evaluation: {\it all} and {\it individual}.  (Individual rule 
+evaluation is a recent addition in response to local demand).
+
+\subsubsection{``All'' rule evaluation}
+\label{all_eval}
+In this mode, the evaluation is of a set of rules taken as a whole.
+The results are displayed in the form of a matrix:
+
+\begin{tabular}{rr|rrrrr|r} 
+\multicolumn{3}{r}{PREDICTED} \\
+\multicolumn{2}{l|}{ACTUAL} & 
+mammal &  fish &  reptil  & bird  &  amphib & Accuracy \\ \cline{2-8}
+\raisebox{1.5ex}{\rule{0mm}{1ex}}    
+&  mammal &  3 &  0 &  0 &  0 &  0 &   100 \%  \\
+  
+&    fish &  0 &  1 &  0 &  0 &  0 &   100 \%   \\
+
+& reptile &  0 &  0 &  1 &  0 &  0 &   100 \%  \\
+
+&    bird &  1 &  0 &  1 &  2 &  0 &  50 \%   \\
+
+& amphibia &  0 &  0 &  0 &  0 &  1 &  100 \% \\
+\multicolumn{8}{l}{} \\
+\multicolumn{8}{l}{Overall accuracy: 80 \%} \\
+\multicolumn{8}{l}{Default accuracy: 40 \%}
+\end{tabular}
+
+The entry in row $i$, column $j$ of the matrix is the number of
+examples classified by the rules  as class $j$ which were really of 
+class $i$. (So, in the sample matrix above, 
+there was 1 example which the rules classified as a mammal, but
+which was really a bird.)  Fractional values may arise if the examples
+include ``Unknown'' or ``Don't Care'' values.
+
+The ``Default accuracy'' is only applicable to unordered
+rule sets; it is the accuracy resulting from classifying
+all examples according to the majority class (which is what
+the default rule does).
+
+\subsubsection{``Individual'' rule evaluation}
+This mode of evaluation is currently available only for unordered
+rule sets, though a similar facility for ordered rule sets may be
+provided in future. 
+
+For each rule, a matrix similar to the above is calculated, but
+in this case, the class values are reduced to ``class predicted by
+rule'' and ``other classes''.  For example:
+
+\begin{tabbing}
+fred \= h \= hoooo \= \kill
+\> --------------- Rule 2 --------------- \\
+\>IF \>\>   7.50 $<$ number\_of\_legs $<$ 25.00   \\
+\>THEN \>\> class = spider  [0.25 2 0 0]
+\end{tabbing}
+
+\begin{tabular}{rr|rr|r} 
+\multicolumn{4}{r}{FIRED?} \\
+\multicolumn{2}{l|}{ACTUAL CLASS} & 
+             Yes  &   No &    Accuracy \\ \cline{2-5}
+\raisebox{1.5ex}{\rule{0mm}{1ex}}    
+&    spider  &  2.00  &  0.00  &  100.0 \% \\
+& Not spider &  0.25  &  7.75  &   96.9 \% \\
+\multicolumn{4}{l}{} \\
+\multicolumn{4}{l}{Overall accuracy: 97.5 \%}
+\end{tabular}
+
+
+
+\subsection{Inducing and testing rules}
+To create and  test a set of rules, you will need to carry out the 
+following operations (the actual commands required are described
+in the next section).
+
+\begin{enumerate}
+ \item Load some attributes and examples
+ \item Induce some rules
+ \item Load some more examples
+ \item Evaluate the rules
+\end{enumerate}
+
+In future releases, I shall probably provide commands for 
+(e.g.)\ partitioning example sets, and selecting sub-sets, within
+the program, thus simplifying the above  sequence.
+
+
+\section{Using CN}
+\subsection{Interactive use}
+\label{interaction}
+
+   Note: in specimens of terminal interaction user input appears
+underlined,  and ``\ret'' represents the use of the `Return' key. For example:
+
+\begin{quotation} \par \noindent \tt
+READ$>$ Both, Atts, or Examples? \underline{B}oth  \\
+READ$>$ Filename?
+\underline{\mbox{\rule[-.1cm]{0cm}{0.2cm}Data/animals}} \ret
+\end{quotation}
+
+In the first line, the user typed the single character `B' (and did
+{\it not} hit the return key), and the 
+program expanded the command to `Both'.  In the second line,
+the user typed the file name `Data/animals', and then hit `Return'.
+
+When you start \CN, you will see this friendly greeting:
+\vspace{-2ex}
+\begin{quotation} \par \noindent 
+\small \tt
+\begin{tabbing}
+foo wumpus \=     ********* \= ******************** \= * \kill
+\>            ******************************** \\
+\>            *  \>                      \>  * \\
+\>            *  \>    Welcome to CN2!   \>  * \\
+\>            *  \>                      \>  * \\
+\>            ******************************** \\
+\end{tabbing}
+\end{quotation}
+\vspace{-2ex}
+followed by the prompt:
+\vspace{-2ex}
+\begin{quotation} \tt
+CN$>$ 
+\end{quotation}
+\vspace{-2ex}
+This is the {\it top-level} prompt.  If you now type `h' or `?' (for help), 
+the program will display a list of the commands that may be entered
+at this point,
+and then re-display the top-level prompt, ready for another command.
+
+Some operations require several commands to perform.  For example,
+if you want \CN\ to read in a file, you have to tell it what
+sort of thing the file contains, and the name of the file.  
+In this case, your initial `read' command will cause \CN\ to
+change from top-level mode to file-reading mode, and it will
+display a different prompt, thus:
+\vspace{-2ex}
+\begin{quotation} \tt
+READ$>$ 
+\end{quotation}
+\vspace{-2ex}
+When the file-reading has been completed, \CN\ redisplays its
+top-level prompt, so the whole sequence might appear as follows:
+
+\begin{quotation} \par \noindent \tt
+CN$>$ \underline{R}ead \\
+READ$>$ Both, Atts, or Examples? \underline{B}oth \\
+READ$>$ Filename? \underline{\mbox{\rule[-.1cm]{0cm}{0.2cm}Data/animals}} \ret \\
+Reading attributes and examples \ldots \\
+10 examples! \\
+Finished reading attribute and example file! \\
+CN$>$ 
+\end{quotation}
+
+\subsubsection{Top-level commands}
+\label{commands}
+Note that this section assumes an understanding of the \CN\ algorithm
+as specified in \cite{mlt:7}, and you should refer
+to this document if you are unsure of the meaning of ``star size'',
+``significance threshold'',  ``ordered rules'', etc.
+
+Each of these commands is invoked by typing its initial letter (upper
+or lower case), except for ``Execute'', which is invoked by ``x''.
+
+\begin{description}
+\item[Read:] Read an attribute, example, attribute-and-example or rule
+file.  When loading several files in succession, you should bear in
+mind that \CN\ can only retain in memory one set of attributes, and 
+one set of examples, at any one time.  Consequently:
+
+  \begin{enumerate}
+   \item Before loading an example or rule file, you must load the appropriate
+         attributes.
+   \item Loading a file of any type overwrites any data of that type
+         which you may have loaded previously (even if the load 
+         fails---for example, because of a syntax error in the new file).
+   \item In addition, loading a set of attributes causes any previously-loaded
+         examples to be lost.  
+  \end{enumerate}
+
+   The entry of file-names is facilitated by the following features:
+  \begin{enumerate}
+    \item As in \emacs, ``$<$\tab$>$'' invokes file-name completion.  If
+         the prefix you have typed
+        is ambiguous, the program will show you a list of
+         the possible completions.
+
+    \item As in \emacs, ``$<$\esc$>$ h'' is bound to
+           ``delete-word-backwards''.
+  
+    \item
+    Each time you type a `/' as part of a UNIX path-name, the
+    program checks that the directory referred to exists and is readable.
+     If not, it will prevent you from typing further (you must delete
+    back and correct the invalid path).
+ \end{enumerate}
+
+\item[Induce:] Run \CN\ on the most recently read set
+of examples.  The behaviour of \CN\ can be modified by changing
+various parameters (see the commands below).  However, all these
+parameters have default values set at start-up, so there is no
+need to set them before processing data.
+
+\item[Write:] Write a set of rules to file.  (You must first
+have read in some examples and run \CN\ on them). File-name entry works
+as for {\bf Read}, above.
+
+\item[Ckrl:] Write data in CKRL format. Either the current set of
+    attributes and examples (together) or the current decision-tree
+    may be written.  Note that the former option allows \CN\ to be used
+    as a translator from \CN\ format to CKRL.
+
+\item[eXecute:] Enter ``evaluation'' mode, in which the performance
+                of the current rules may be assessed with respect to
+                the current examples.  (See \S~\ref{evaluation}).
+                In evaluation mode, valid commands are:
+
+   \begin{description}
+    \item[All:] Evaluate the set as a whole.
+    \item[Individual:] Evaluate rules individually.
+    \item[Help/?:]  Display a menu of commands.
+    \item[$<$RET$>$:]  Return to the {\bf CN$>$} prompt.
+   \end{description}
+
+
+\item[Algorithm:] Specify whether \CN\ is to produce 
+  ordered or unordered sets of rules.
+
+\item[Error estimate:] Specify whether \CN\ is to use the Laplacian
+   or the na\"{\i}ve estimate to assess the accuracy of a rule.
+
+   The formulae for the two estimates are as follows:
+
+\begin{tabular}{ll}
+ {\rm Laplacian:}  &  \#{\rm Correct}$ + 1$ / 
+                                 \#{\rm Examples} $+$ \#{\rm Classes} \\
+ {\rm Na\"{\i}ve:} &  \#{\rm Correct} / \#{\rm Examples}
+\end{tabular}
+
+
+   Preciesly which example sets these formulae are applied to
+depends on whether the rule set being induced is ordered 
+or unordered (see the discussion of ``counts'' in  \S~\ref{distributions}).
+
+\item[Star size:] Query or alter the star size.
+
+\item[Threshold:] Query or alter the significance threshold.
+
+\item[Display:] Provide further information about the search.  
+By default, the program just displays each rule as it finds it, but
+if required it can, for example, indicate whenever a new ``best node''
+is found, or which node is currently being specialised.  
+(Type `h' at the  ``SET TRACE FLAGS$>$'' prompt for a list of options.)
+
+This facility
+can be used to clarify what the algorithm is doing, particularly
+if it is generating unexpected answers.  
+
+\item[Help/?:]  Display a menu of commands.
+
+\item[Quit:]  Quit
+\end{description}
+
+
+\subsection{Non-interactive use}
+It is possible to run \CN\ non-interactively by supplying it
+with a sequence of commands in a file.  In this case, \CN\ will write
+a trace of its activities to the standard output, so if you want 
+to run it in the background, you should redirect its output
+either to a log file or to /dev/null.  For example:
+
+\vspace{-3ex}
+\begin{quotation} \tt
+\%\ cn $<$ cn.commands $>$ cn.log \&
+\end{quotation}
+
+
+Commands should be listed in the command file more or less as they 
+would be typed in answer to \CN's prompt.  In the case of 
+single-character commands, the complete command may be used, to
+make the file more readable (the program will ignore all but the first
+character of the word): each such command should be separated from
+the next item by some form of whitespace, but not necessarily
+a newline.  Filenames must be followed by a newline. 
+
+Characters from `\#' to the next end-of-line will be regarded as
+comments and ignored (c.f. shell scripts).
+
+For example:
+
+\vspace{-6ex}
+\begin{quotation} \small \par \noindent
+\begin{verbatim}
+read atts Data/animals.atts
+read exs Data/animals.exs
+alg unordered 
+star 7
+display none quit
+induce
+write
+Data/animals.rules
+quit
+\end{verbatim}
+\end{quotation}
+\vspace{-2ex}
+
+\bibliography{mltdoc}
+\bibliographystyle{named}
+  
+
+\appendix
+\section{Getting Started}
+\label{getting_started}
+To read the contents of your release tape, load the tape into your
+tape-drive, {\bf cd} to the 
+directory where you want the sources and data to be installed,
+and type:
+
+\begin{quotation}
+\bf     tar xvf {\it tape-device-name}
+\end{quotation}
+
+   This should create a directory {\bf Release}, with
+sub-directories {\bf NewId}, {\bf CN2}, {\bf Simple\_Data}, 
+and {\bf Docs}.
+
+Next, {\bf cd} to {\bf Release/CN2}, where you should find the
+sources for \CN, and a {\bf Makefile}.
+
+  If you are using SunOS 3, then you will need to change
+the definition of ``OS'' in ``mdep.h''. Replace the line:
+
+\vspace{-3ex}
+\begin{quotation}
+\verb+#define OS (4)+
+\end{quotation}
+\vspace{-3ex}
+
+with 
+
+\vspace{-3ex}
+\begin{quotation}
+\verb+#define OS (3)+
+\end{quotation}
+\vspace{-3ex}
+
+Now type:
+
+\vspace{-3ex}
+\begin{quotation}
+\verb+make cn+
+\end{quotation}
+\vspace{-3ex}
+
+This will cause {\bf cn} to be compiled.
+
+You will find some example and attribute files in the directory
+{\bf Release/Simple\_Data}.
+
+
+\section{Example run}
+\label{script}
+
+This section records a terminal session in which \CN\ is applied
+to a small example file called `animals'.  This file has been
+included on your release tape, so that you can experiment with
+it without having to type it in. 
+
+As in \S~\ref{interaction}, user input is underlined, and
+carriage-return denoted by \ret.
+
+\subsection*{Points to Note}
+\begin{itemize}
+ \item You will notice that in response to the first `Induce' command, 
+\CN\ prints out the resulting rule set twice.  This is because,
+at the default level of tracing, the program prints out each
+rule as it finds it, and then prints out the complete set
+of rules when it has finished.   In the case of unordered rules,
+the rules are not accompanied by class distributions when
+first calculated, since it is more convenient to delay calculation
+of these distributions until the rule-set is complete.
+
+\S~\ref{distributions} discusses the precise meaning of the class
+distributions.
+
+ \item Note how raising the significance threshold from 1 to 10
+       for the second ``run''
+       gives smaller but less accurate  rules.
+\end{itemize}
+
+
+\vspace{-2ex}
+\begin{quotation}  \par \noindent
+\small \tt
+\begin{tabbing}
+foo wumpus \=     ********* \= ******************** \= * \kill
+\>            ******************************** \\
+\>            *  \>                      \>  * \\
+\>            *  \>    Welcome to CN2!   \>  * \\
+\>            *  \>                      \>  * \\
+\>            ******************************** \\
+\end{tabbing}
+CN$>$ \underline{R}ead \\
+READ$>$ Both, Atts, or Examples? \underline{B}oth \\
+READ$>$ Filename? \underline{\mbox{\rule[-.1cm]{0cm}{0.2cm}Data/animals}} \ret \\
+Reading attributes and examples \ldots \\
+10 examples! \\
+Finished reading attribute and example file! \\
+CN$>$ \underline{A}lgorithm   \\
+Algorithm is currently set to UN\_ORDERED \\
+ALGORITHM$>$ \underline{O}rdered \\
+  CN will produce an ordered rule set \\
+CN$>$ \underline{I}nduce \\
+Running CN on current example set\ldots \\[-4.5ex]
+\begin{tabbing}
+h \= hoo \= \kill
+Best rule is: \\              
+IF \>\>   milk = yes \\
+THEN \>\>  class = mammal   [4 0 0 0 0] \\
+Best rule is: \\
+IF \>\>    skin\_covering = feathers \\
+THEN \>\>  class = bird   [0 0 0 2 0] \\
+Best rule is: \\
+IF \>\>    skin\_covering = scales \\
+\>  AND \> breathing = lungs \\
+THEN \>\>  class = reptile   [0 0 2 0 0] \\
+Best rule is: \\
+IF \>\>    skin\_covering = none \\
+THEN \>\>  class = amphibian   [0 0 0 0 1] \\
+Best rule is: \\
+ELSE (DEFAULT) class = fish  [0 1 0 0 0 0] \\
+\end{tabbing}
+\begin{tabbing}
+foo wumpus \=     *----- \= -------------------------- \= * \kill
+\>            *--------------------------------* \\
+\>            $\mid$ \>                      \>  $\mid$\\
+\>            $\mid$ \> \raisebox{1.5ex}{ORDERED RULE LIST}  \>  $\mid$\\
+\>            *--------------------------------* \\
+\end{tabbing}
+\begin{tabbing}
+h \= hoo \= \kill
+IF \>\>    milk = yes \\
+THEN \>\>  class = mammal   [4 0 0 0 0] \\
+ELSE \\
+IF \>\>    skin\_covering = feathers \\
+THEN \>\>  class = bird    [0 0 0 2 0] \\
+ELSE \\
+IF \>\>    skin\_covering = scales \\
+\>  AND \> breathing = lungs \\
+THEN \>\>  class = reptile    [0 0 2 0 0] \\
+ELSE \\
+IF \>\>    skin\_covering = none \\
+THEN \>\>  class = amphibian   [0 0 0 0 1] \\
+ELSE \\
+(DEFAULT) class = fish   [0 1 0 0 0] \\
+\end{tabbing}
+\vspace{-5ex}
+CN$>$ \underline{A}lgorithm   \\
+Algorithm is currently set to ORDERED \\
+ALGORITHM$>$ \underline{U}nordered \\
+  CN will produce an unordered rule set \\
+CN$>$ \underline{T}hreshold \\
+Current threshold is 1.00 \\
+New threshold: \underline{\mbox{\rule[-.1cm]{0cm}{0.2cm}7}} \ret \\
+OK! \\
+CN$>$ \underline{D}isplay \\
+SET TRACE FLAGS$>$ \underline{N}one \\
+  All tracing is now turned OFF \\
+SET TRACE FLAGS$>$ \ret \\
+CN$>$ \underline{I}nduce \\
+Running CN on current example set\ldots \\
+\begin{tabbing}
+foo wumpus \=     *----- \= ----------------------------- \= * \kill
+\>         *-----------------------------------* \\
+\>         $\mid$ \>                      \>  $\mid$ \\
+\>         $\mid$ \> \raisebox{1.5ex}{UN-ORDERED RULE LIST}  \> $\mid$ \\
+\>         *-----------------------------------* \\
+\end{tabbing}
+\begin{tabbing}
+h \= hoo \= \kill
+IF \>\>    milk = yes \\
+THEN \>\>  class = mammal  [4 0 0 0 0]  \\[2.5ex]
+IF \>\>    skin\_covering = scales \label{little_rules}  \\ 
+THEN \>\>  class = fish  [0 1 2 0 0] \\[2.5ex]
+IF \>\>    skin\_covering = scales \\
+THEN \>\>  class = reptile  [0 1 2 0 0] \\[2.5ex]
+IF \>\>    homeothermic = no \\
+\>  AND \> breathing = lungs \\
+THEN \>\>  class = amphibian  [0 0 2 0 1] \\[2.5ex]
+ELSE (DEFAULT) class = mammal  [4 1 2 2 1] \\
+\end{tabbing}
+\vspace{-5ex}
+CN$>$ \underline{Q}uit \\
+Have a nice day! \\
+\end{quotation}
+
+\section{Handling of Unknowns and Don't Cares}
+\label{unknown}
+\subsection{Training (Learning) Phase}
+
+During rule generation, a similar policy of handling unknowns and don't
+cares is followed: unknowns are split into fractional examples and
+dontcares are duplicated.
+
+Strictly speaking, the counts attached to rules when writing the ruleset
+should be those encountered during rule generation. However, for unordered
+rules, the counts to attach are generated {\it after} rule generation in
+a second pass, following the execution policy of splitting an example
+with unknown attribute value into {\it equal} fractions for each value
+rather than the Laplace-estimated fractions used during rule generation.
+
+\subsection{Testing (Execution) Phase}
+
+When normally executing unordered CN rules without unknowns, for each
+rule which fires the class distribution (ie. distribution of training 
+examples among classes) attached to the rule is collected. These are then
+summed. Thus a training example satisfying two rules with attached
+class distributions [8,2] and [0,1] thus has an expected distribution [8,3]
+which results in C1 being predicted, or C1:C2 = 8/11:3/11 if probabilistic
+classification is desired. The built-in rule executer follows the first
+strategy (the example is classed simply C1).
+
+With unordered CN rules, an attribute test whose value is unknown in the
+training example causes the example to be `split'. If the attribute has
+three values, 1/3 of the example is deemed to have passed the test and
+thus the final class distribution is weighted by 1/3 when collected. A
+similar rule later will again cause 1/3 of the example to pass the test.
+A don't care value is always deemed to have passed the attribute test in
+full (ie. weight 1). The normalisation of the class counts means that 
+an example with a dontcare can only count as a single example during testing,
+unlike NewID where it may count as representing several examples.
+
+With ordered CN rules a similar policy is followed, except after a rule
+has fired absorbing, say, 1/3 of the testing example, only the remaining
+2/3s are send down the remainder of the rule list. The first rule will
+cause 1/3 $\times$ 
+class distribution to be collected, but a second similar rule will
+cause 2/3 $\times$ 1/3 $\times$ class distribution to be collected. Thus 
+the `fraction'
+of the example gets less and less as it progresses down the rule list.
+A don't care value always passes the attribute test in full, and thus
+no fractional example remains to propagatete further down the rule list.
+
+
+\end{document}
+

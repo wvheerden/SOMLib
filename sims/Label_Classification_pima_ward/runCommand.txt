@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh pima >> label-classification_pima_ward.runOutput 2>> label-classification_pima_ward.runOutput

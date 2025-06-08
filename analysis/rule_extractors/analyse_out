@@ -1,0 +1,30 @@
+WARNING: Means of Training error for
+         ./monks2/monks2_sig_ward_dim_11_lr_9.98046875_lrd_266.601562500822_kw_8.74414062725586_kwd_27.9296875007207_charThr_60.7421875_charL_2.595703125_charH_2.572265625_diffThr_78.7109375_diffL_2.724609375_diffH_2.865234375.error and
+         ./monks2/monks2_hybridsom-cn2_neuron_dim_11_lr_5_lrd_750.000000001_kw_5.5000000055_kwd_50.000000001_naive_star_101_thr_100.000000000.error
+         lack sufficient precision in table.
+
+WARNING: Means of Training error (misclassified) for
+         ./monks2/monks2_sig_ward_dim_11_lr_9.98046875_lrd_266.601562500822_kw_8.74414062725586_kwd_27.9296875007207_charThr_60.7421875_charL_2.595703125_charH_2.572265625_diffThr_78.7109375_diffL_2.724609375_diffH_2.865234375.error and
+         ./monks2/monks2_hybridsom-cn2_neuron_dim_11_lr_5_lrd_750.000000001_kw_5.5000000055_kwd_50.000000001_naive_star_101_thr_100.000000000.error
+         lack sufficient precision in table.
+
+WARNING: Means of Training error for
+         ./monks3/monks3_c4-5_minOut_56_heur_gratio_prunConf_92.96875_fisher_1.5625_redun_3515.625.error and
+         ./monks3/monks3_cn2_laplacian_star_196_thr_160.15625.error
+         lack sufficient precision in table.
+
+WARNING: Means of Training error (misclassified) for
+         ./monks3/monks3_c4-5_minOut_56_heur_gratio_prunConf_92.96875_fisher_1.5625_redun_3515.625.error and
+         ./monks3/monks3_cn2_laplacian_star_196_thr_160.15625.error
+         lack sufficient precision in table.
+
+WARNING: Means of Generalization error for
+         ./monks3/monks3_c4-5_minOut_56_heur_gratio_prunConf_92.96875_fisher_1.5625_redun_3515.625.error and
+         ./monks3/monks3_cn2_laplacian_star_196_thr_160.15625.error
+         lack sufficient precision in table.
+
+WARNING: Means of Generalization error (misclassified) for
+         ./monks3/monks3_c4-5_minOut_56_heur_gratio_prunConf_92.96875_fisher_1.5625_redun_3515.625.error and
+         ./monks3/monks3_cn2_laplacian_star_196_thr_160.15625.error
+         lack sufficient precision in table.
+

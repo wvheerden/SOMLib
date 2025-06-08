@@ -1,0 +1,37 @@
+\begin{table}[p]
+	\caption[Comparison of the percentage of unlabeled neurons for supervised neuron labeling on the monk's problem~1 data set]{Statistical comparison of the percentage of unlabeled neurons for the supervised neuron labeling methods executed on the monk's problem~1 data set.}
+	\textsf{\linespread{1}\scriptsize\makebox[\textwidth][c]{
+		\begin{tabular}[t]{||c|c||cc||cc||cc||}
+			\hhline{~~|t:==:t:==:t:==:t|}
+			\multicolumn{2}{c||}{\rule{0pt}{8pt}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} \\
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{0pt}} & \multicolumn{2}{c||}{\textbf{Neuron}} & \multicolumn{2}{c||}{\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \multicolumn{2}{c||}{\textbf{Cluster (Ward)}} \\
+			\hhline{~~|:==::==::==:|}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$} & ${\cal S}_{U}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$} & ${\cal S}_{U}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$} & ${\cal S}_{U}$ \\
+			\hhline{~~||--||--||--||}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{43.469}}} & \makebox[30px][c]{\raisebox{-0.5pt}{3.065}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{1.607}}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.240}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{7.018}}} & \makebox[30px][c]{\raisebox{-0.5pt}{3.141}} \\
+			\hhline{|t:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & \cellfilllarge & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & & & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$ & ${\cal S}_{U}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{1.607}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.240}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & & & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (Ward)}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.304\times10^{-8}}$\phantom{$\times\mathsf{0^0}$/}} & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$ & ${\cal S}_{U}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{7.018}} & \makebox[30px][c]{\raisebox{-0.5pt}{3.141}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Weight-Centric}} & & & & & & \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Neuron}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{5.960\times10^{-8}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{U}$ & ${\cal S}_{U}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{0.000}} & \makebox[30px][c]{\raisebox{-0.5pt}{0.000}} & & & & & & \\
+			\hhline{|b:==:b:==:b:==:b:==:b|}
+		\end{tabular}
+	}}
+	\label{tab:comparison_labelClassification_monks1_percentageUnlabeled}
+\end{table}

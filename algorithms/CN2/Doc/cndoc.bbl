@@ -1,0 +1,13 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Boswell}{1990}]{mlt:10}
+R.A. Boswell.
+\newblock Manual for {NewID} version 2.0.
+\newblock Technical Report TI/P2154/RAB/4/, Turing Institute, January 1990.
+
+\bibitem[\protect\citeauthoryear{Clark}{1989}]{mlt:7}
+P.E. Clark.
+\newblock Functional specification of {CN} and {AQ}.
+\newblock Technical Report TI/P2154/PC/4/1, Turing Institute, September 1989.
+
+\end{thebibliography}

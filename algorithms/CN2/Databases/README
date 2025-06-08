@@ -1,0 +1,16 @@
+
+This directory contains a set of public domain databases, taken from
+the UCI Machine Learning Database Repository (at
+http://www.ics.uci.edu/~mlearn/MLRepository.html) several years ago and
+converted into the correct syntactic format for use with CN2. In the
+directories:
+	*.att		attribute file
+	*.exs		example file
+	README		information about the datafile
+	README.PEC 	information about the conversion to CN2 format
+
+Peter Clark
+31st March 96
+
+
+

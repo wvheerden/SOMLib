@@ -1,0 +1,20 @@
+Unsupervised labeling algorithms
+
+* Use K-S for continuous valued attributes (all must be continuous) [CHECK]
+* Use Chi-square for binary attributes (all must be binary) [CHECK]
+* Perhaps include variance and standard deviation under variance-based significance measures, as well as that K-S only works if all attributes are continuous, and Chi-square. If this can take up a whole page, rest of formatting doesn't need to change.
+
+Clustering and SIG*
+
+* It is possible for a clustering to generate a Davies-Bouldin index value of infinity, if two of the clusters have the same centroid position. This is probably very unlikely but has been observed once. It makes sense that such a clustering should be undesirable, since there are then two very similar clusters. [NOT NECESSARY TO MENTION]
+* Standard deviation (actually corrected sample standard deviation) cluster significance, than variance-based. This needs to be scaled using min-max normalisation (Eq. 2.1), where v'_(j,max) is 0 and v'_(j,min) is 1. Scaling means that maximum standard deviation gets a significance of 0, and minimum standard deviation gets a significance of 1. [MUST BE CHANGED IN LABELING CHAPTER]
+* Remove t-statistic significance measure. [NOT INCLUDED IN DISSERTATION]
+
+SIG*
+
+* Assuming no default rule
+* Ordering done according to C4.5
+* Strip empty clusters (those with no mapped patterns) from list of clusters used by SIG*, since we can't compute a significance value for these clusters.
+* Use K-S for continuous valued attributes (all must be continuous)
+* Use Chi-square for binary attributes (all must be binary)
+* If only one cluster is used for characterising rule building, then we assume significances of 1.0 for all attributes (it doesn't matter what we choose, actually, since all attributes are marked, and thus selected). This situation only occurs when no patterns map to all clusters but one. In practice, it typically occurs when we get one large cluster, with a singleton cluster (possibly a very small one). This situation seems to occur when a map is poorly trained, with no clustering structure and all patterns effectively map to one cluster (there will always be at least two clusters, since we can't calculate the Davies-Bouldin index for one cluster). This results in a rule that predicts the majority class. It is impossible for no clusters to be used, since some labeling must take place. We use a single cluster, rather than searching for the best clustering with at least two clusters, because we rather choose to go with the best clustering found (which is most optimal).

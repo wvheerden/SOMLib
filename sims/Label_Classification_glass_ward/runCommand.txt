@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh glass >> label-classification_glass_ward.runOutput 2>> label-classification_glass_ward.runOutput

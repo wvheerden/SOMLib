@@ -1,0 +1,41 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_monks2_k-means_vs_ward_percentageUnlabeled_wilcoxon.r
+> 
+> a <- c(8.64197530864197, 7.71604938271605, 0, 7.40740740740741, 8.33333333333333, 7.40740740740741, 0, 0, 4.62962962962963, 0, 12.037037037037, 5.24691358024691, 7.40740740740741, 5.55555555555556, 9.87654320987654, 12.3456790123457, 0, 4.62962962962963, 9.25925925925926, 9.87654320987654, 4.01234567901235, 9.5679012345679, 7.71604938271605, 0, 0, 6.48148148148148, 9.25925925925926, 12.037037037037, 3.7037037037037, 9.87654320987654)
+> b <- c(10.8033241, 4.432132964, 10.24930748, 8.033240997, 4.709141274, 4.986149584, 7.756232687, 3.601108033, 12.46537396, 14.68144044, 4.986149584, 12.46537396, 7.202216066, 9.695290859, 4.709141274, 4.709141274, 5.540166205, 4.155124654, 10.8033241, 4.986149584, 1.385041551, 12.46537396, 5.540166205, 7.479224377, 3.601108033, 5.817174515, 10.52631579, 1.662049861, 6.094182825, 2.770083102)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 199, p-value = 0.4973
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.148   0.020   0.153 

@@ -1,0 +1,16 @@
+set output "monks3_testMisclassifiedError.tex"
+set terminal epslatex standalone size 14.5cm, 9cm header "\\usepackage{sansmath}"
+set tmargin 0
+set bmargin 2.1
+set lmargin 4.3
+set rmargin 0
+unset key
+set format y '\scriptsize\textsf{%g}'
+set grid noxtics ytics
+set ylabel "\\small\\textsf{Generalization error (misclassified)}" offset 3.25
+set xtics ("\\vspace{-11pt}\\parbox{3cm}{\\sansmath\\centering\\scriptsize\\textsf{\\phantom{(}Example-Centric\\phantom{)}\\linebreak\\phantom{(}Neuron\\phantom{)}}\\unsansmath}" 1, "\\vspace{-11pt}\\parbox{3cm}{\\sansmath\\centering\\scriptsize\\textsf{\\phantom{(}Example-Centric\\phantom{)}\\linebreak\\phantom{(}Cluster (\textrm{\emph{k}}-Means)\\phantom{)}}\\unsansmath}" 2, "\\vspace{-11pt}\\parbox{3cm}{\\sansmath\\centering\\scriptsize\\textsf{\\phantom{(}Example-Centric\\phantom{)}\\linebreak\\phantom{(}Cluster (Ward)\\phantom{)}}\\unsansmath}" 3, "\\vspace{-11pt}\\parbox{3cm}{\\sansmath\\centering\\scriptsize\\textsf{\\phantom{(}Weight-Centric\\phantom{)}\\linebreak\\phantom{(}Neuron\\phantom{)}}\\unsansmath}" 4)
+set ytics scale 0
+set bars 2.5
+set xrange [0.5:4+0.5]
+set yrange [12.57745990067267527:41.03031899642731872]
+plot "monks3_testMisclassifiedError.txt" using 1:2:3 ps 2.5 with errorbars

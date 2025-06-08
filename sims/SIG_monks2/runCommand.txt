@@ -1,0 +1,1 @@
+./crossValidateSIG.sh monks2 >> sig_monks2_ward.runOutput 2>> sig_monks2_ward.runOutput

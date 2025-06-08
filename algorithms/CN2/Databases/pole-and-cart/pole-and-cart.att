@@ -1,0 +1,7 @@
+**ATTRIBUTE FILE**
+
+x: (FLOAT)
+xdot: (FLOAT)
+theta: (FLOAT)
+thetadot: (FLOAT)
+classes: left right;

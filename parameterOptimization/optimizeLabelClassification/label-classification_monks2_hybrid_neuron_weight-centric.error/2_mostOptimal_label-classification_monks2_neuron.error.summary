@@ -1,0 +1,2 @@
+dimension	learningRate	learningRateDecay	kernelWidth	kernelWidthDecay	meanTrainingError	standardDeviationTrainingError	meanGeneralizationError	standardDeviationGeneralizationError	meanUnlabeledCount	standardDeviationUnlabeledCount
+15	8.86718750000000	1365.23437500009004	1.34765626365234	31.64062500068360	15.76555023923445	0.65697540422590	20.23809523809524	10.11602871996225	112.06666666666666	4.24209880823757

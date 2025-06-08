@@ -1,0 +1,14 @@
+Minimum dimension:            2.000
+Maximum dimension:            20.000
+
+Minimum kernel width:         0.000
+Maximum kernel width:         20.000
+
+Minimum minimum outcomes:     1.000
+Maximum minimum outcomes:     400.000
+
+Minimum generalization error: 32.857
+Maximum generalization error: 44.762
+
+Minimum rule complexity     : 1.000
+Maximum rule complexity     : 5.633

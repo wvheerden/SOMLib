@@ -1,0 +1,54 @@
+
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_iris_k-means_vs_neuron_percentageUnlabeled_wilcoxon.r
+> 
+> library(coin)
+Loading required package: survival
+Loading required package: splines
+Loading required package: mvtnorm
+Loading required package: modeltools
+Loading required package: stats4
+> 
+> wilcox_test.default <- function(x, y, ...) {
++           data <-
++               data.frame(values = c(x, y),
++                          group = rep(c("x", "y"), c(length(x), length(y))))
++           wilcox_test(values ~ group, data = data, ...)
++      }
+> 
+> a <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+> b <- c(20, 20, 16, 24, 24, 16, 24, 20, 24, 24, 16, 20, 16, 16, 16, 20, 20, 16, 20, 16, 16, 16, 20, 20, 20, 24, 20, 24, 20, 16)
+> 
+> wilcox_test(a, b, distribution = "exact")
+
+	Exact Wilcoxon Mann-Whitney Rank Sum Test
+
+data:  values by group (x, y) 
+Z = -7.1762, p-value < 2.2e-16
+alternative hypothesis: true mu is not equal to 0 
+
+> 
+> ##wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+> 
+> proc.time()
+   user  system elapsed 
+  0.540   0.032   0.596 

@@ -1,0 +1,5 @@
+C4.5           : 5 parameters
+CN2            : 3 parameters
+HybridSOM-C4.5 : 10 parameters
+HybridSOM-CN2  : 8 parameters
+SIG*           : 11 parameters

@@ -1,0 +1,7 @@
+**ATTRIBUTE FILE**
+
+sepal-length: (FLOAT)
+sepal-width: (FLOAT)
+petal-length: (FLOAT)
+petal-width: (FLOAT)
+class: Iris-setosa Iris-versicolor Iris-viginica;

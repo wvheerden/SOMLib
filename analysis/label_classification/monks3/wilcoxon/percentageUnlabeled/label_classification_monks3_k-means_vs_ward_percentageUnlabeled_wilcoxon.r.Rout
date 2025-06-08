@@ -1,0 +1,41 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_monks3_k-means_vs_ward_percentageUnlabeled_wilcoxon.r
+> 
+> a <- c(0, 1.730103806, 4.498269896, 0, 3.460207612, 2.76816609, 0.692041522, 0, 4.498269896, 1.038062284, 3.460207612, 2.422145329, 1.384083045, 0.692041522, 2.076124567, 0.692041522, 0, 1.384083045, 1.730103806, 6.574394464, 5.190311419, 1.038062284, 4.844290657, 0.692041522, 4.152249135, 1.730103806, 0.692041522, 2.422145329, 3.114186851, 1.038062284)
+> b <- c(7.03125, 3.125, 7.03125, 7.03125, 5.078125, 10.9375, 8.984375, 7.8125, 8.203125, 5.859375, 1.171875, 0.78125, 5.078125, 14.0625, 8.203125, 3.125, 7.421875, 8.203125, 4.296875, 10.546875, 5.859375, 12.109375, 3.125, 8.984375, 8.59375, 2.34375, 7.8125, 2.734375, 4.6875, 12.890625)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 24, p-value = 1.882e-05
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.140   0.016   0.147 

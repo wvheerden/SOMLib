@@ -1,0 +1,11 @@
+Minimum dimension:            2.000
+Maximum dimension:            20.000
+
+Minimum kernel width:         0.000
+Maximum kernel width:         20.000
+
+Minimum generalization error: 29.762
+Maximum generalization error: 59.286
+
+Minimum rule complexity     : 1.000
+Maximum rule complexity     : 58.700

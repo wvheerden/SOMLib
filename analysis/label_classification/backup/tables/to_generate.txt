@@ -1,0 +1,5 @@
+Test error
+
+Pima (example of all similar on test error) also: ionosphere, monks 3
+Monks1 (example of neuron better than all the rest) also: monks2, 
+Iris out of the ordinary

@@ -1,0 +1,1 @@
+./crossValidateC4_5.sh monks3 >> c4-5_monks3.runOutput 2>> c4-5_monks3.runOutput

@@ -1,0 +1,130 @@
+% GNUPLOT: LaTeX picture with Postscript
+\begingroup
+  \makeatletter
+  \providecommand\color[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package color not loaded in conjunction with
+      terminal option `colourtext'%
+    }{See the gnuplot documentation for explanation.%
+    }{Either use 'blacktext' in gnuplot or load the package
+      color.sty in LaTeX.}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\includegraphics[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package graphicx or graphics not loaded%
+    }{See the gnuplot documentation for explanation.%
+    }{The gnuplot epslatex terminal needs graphicx.sty or graphics.sty.}%
+    \renewcommand\includegraphics[2][]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \@ifundefined{ifGPcolor}{%
+    \newif\ifGPcolor
+    \GPcolortrue
+  }{}%
+  \@ifundefined{ifGPblacktext}{%
+    \newif\ifGPblacktext
+    \GPblacktexttrue
+  }{}%
+  % define a \g@addto@macro without @ in the name:
+  \let\gplgaddtomacro\g@addto@macro
+  % define empty templates for all commands taking text:
+  \gdef\gplbacktext{}%
+  \gdef\gplfronttext{}%
+  \makeatother
+  \ifGPblacktext
+    % no textcolor at all
+    \def\colorrgb#1{}%
+    \def\colorgray#1{}%
+  \else
+    % gray or color?
+    \ifGPcolor
+      \def\colorrgb#1{\color[rgb]{#1}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color[rgb]{1,0,0}}%
+      \expandafter\def\csname LT1\endcsname{\color[rgb]{0,1,0}}%
+      \expandafter\def\csname LT2\endcsname{\color[rgb]{0,0,1}}%
+      \expandafter\def\csname LT3\endcsname{\color[rgb]{1,0,1}}%
+      \expandafter\def\csname LT4\endcsname{\color[rgb]{0,1,1}}%
+      \expandafter\def\csname LT5\endcsname{\color[rgb]{1,1,0}}%
+      \expandafter\def\csname LT6\endcsname{\color[rgb]{0,0,0}}%
+      \expandafter\def\csname LT7\endcsname{\color[rgb]{1,0.3,0}}%
+      \expandafter\def\csname LT8\endcsname{\color[rgb]{0.5,0.5,0.5}}%
+    \else
+      % gray
+      \def\colorrgb#1{\color{black}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color{black}}%
+      \expandafter\def\csname LT1\endcsname{\color{black}}%
+      \expandafter\def\csname LT2\endcsname{\color{black}}%
+      \expandafter\def\csname LT3\endcsname{\color{black}}%
+      \expandafter\def\csname LT4\endcsname{\color{black}}%
+      \expandafter\def\csname LT5\endcsname{\color{black}}%
+      \expandafter\def\csname LT6\endcsname{\color{black}}%
+      \expandafter\def\csname LT7\endcsname{\color{black}}%
+      \expandafter\def\csname LT8\endcsname{\color{black}}%
+    \fi
+  \fi
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(12960.00,5040.00)%
+    \gplgaddtomacro\gplbacktext{%
+    }%
+    \gplgaddtomacro\gplfronttext{%
+      \csname LTb\endcsname%
+      \put(0,-124){\makebox(0,0){\centering\scriptsize$\mathsf{2}$}}%
+      \put(1440,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.0}$}}%
+      \put(2880,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.0}$}}%
+      \put(4319,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.0}$}}%
+      \put(5759,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.0}$}}%
+      \put(7199,-124){\makebox(0,0){\centering\scriptsize\textsf{Na\"{\i}ve}}}%
+      \put(8639,-124){\makebox(0,0){\centering\scriptsize$\mathsf{1}$}}%
+      \put(10078,-124){\makebox(0,0){\centering\scriptsize$\mathsf{0.0}$}}%
+      \put(11518,-124){\makebox(0,0){\centering\scriptsize$\mathsf{11.212}$}}%
+      \put(12958,-124){\makebox(0,0){\centering\scriptsize$\mathsf{1.000}$}}%
+      \put(0,5165){\makebox(0,0){\centering\scriptsize$\mathsf{12}$}}%
+      \put(1440,5165){\makebox(0,0){\centering\scriptsize$\mathsf{10.0}$}}%
+      \put(2880,5165){\makebox(0,0){\centering\scriptsize$\mathsf{1\;500.0}$}}%
+      \put(4319,5165){\makebox(0,0){\centering\scriptsize$\mathsf{18.0}$}}%
+      \put(5759,5165){\makebox(0,0){\centering\scriptsize$\mathsf{100.0}$}}%
+      \put(7199,5165){\makebox(0,0){\centering\scriptsize\textsf{Laplacian}}}%
+      \put(8639,5165){\makebox(0,0){\centering\scriptsize$\mathsf{200}$}}%
+      \put(10078,5165){\makebox(0,0){\centering\scriptsize$\mathsf{200.0}$}}%
+      \put(11518,5165){\makebox(0,0){\centering\scriptsize$\mathsf{62.424}$}}%
+      \put(12958,5165){\makebox(0,0){\centering\scriptsize$\mathsf{21.333}$}}%
+      \put(0,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}$Y,X$\textsf{\phantom{p}}}}%
+      \put(1440,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}$\eta(0)$\textsf{\phantom{p}}}}%
+      \put(2880,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}$\tau_{1}$\textsf{\phantom{p}}}}%
+      \put(4319,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}$\sigma(0)$\textsf{\phantom{p}}}}%
+      \put(5759,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}$\tau_{2}$\textsf{\phantom{p}}}}%
+      \put(7199,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}$\mathit{cn2}$\textrm{-}$\mathit{err}$\phantom{p}}}}%
+      \put(8639,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}\textrm{\textit{cn2-star}}\phantom{p}}}}%
+      \put(10078,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}\textrm{\textit{cn2-sig}}\phantom{p}}}}%
+      \put(11518,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}${\cal E}_{G}$\textsf{\phantom{p}}}}%
+      \put(12958,5442){\makebox(0,0){\centering\small\textsf{\phantom{p}}${\cal E}_{FT}$\textsf{\phantom{p}}}}%
+      \put(1068,4107){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;00}8.301}$}}%
+      \put(2508,2075){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;}635.742}$}}%
+      \put(3948,1877){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;00}4.711}$}}%
+      \put(5388,855){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;0}18.164}$}}%
+      \put(8267,3135){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;000.}123}$}}%
+      \put(9707,1269){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;0}51.953}$}}%
+      \put(11147,2134){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;0}34.000}$}}%
+      \put(12587,318){\makebox(0,0){\scriptsize $\mathsf{\phantom{0\;00}2.000}$}}%
+    }%
+    \gplbacktext
+    \put(0,0){\includegraphics{hybridSOM-cn2_iris_gnuplot_conditions}}%
+    \gplfronttext
+  \end{picture}%
+\endgroup

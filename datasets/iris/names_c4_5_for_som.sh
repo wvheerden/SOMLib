@@ -1,0 +1,6 @@
+echo "Iris-setosa, Iris-versicolor, Iris-virginica."
+echo ""
+echo "SepalLength: continuous."
+echo "SepalWidth: continuous."
+echo "PetalLength: continuous."
+echo "PetalWidth: continuous."

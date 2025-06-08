@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh iris >> label-classification_iris_kmeans.runOutput 2>> label-classification_iris_kmeans.runOutput

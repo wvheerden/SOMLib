@@ -1,0 +1,9 @@
+
+This database comes with four different sets of data, only two which 
+were in a form suitable for ID/CN. The conversion to Turing's CN/ID format
+was straightforward.
+
+The original problem had five class values (0,1,2,3,4), but as recommended
+in the README file I've converted this to a two-class problem:
+	0 = absence of heart-disease
+	1-4 = presence

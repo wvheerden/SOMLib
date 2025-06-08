@@ -1,0 +1,14 @@
+
+PEC: My own notes on the conversion:
+- Example p166 has the attribute speech(normal) declared twice and also a 
+  clash air(moderate) and air(mild). This example has been deleted for the
+  mlt database construction.
+- Atts with arity 0 are considered boolean 'y' if present, 'n' if absent
+- Atts with arity 1 have the argument as att value if present, '?' if absent
+- The history/1 attribute can take multiple values. This has been treated
+  as several boolean values ('y' or 'n'), eg. history(old) means old=y.
+- By this method there are 62 attributes, most of which are boolean
+- There are some attributes with only one attribute value.
+
+--------------------
+

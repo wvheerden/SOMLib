@@ -1,0 +1,10 @@
+**ATTRIBUTE FILE**
+
+age-at-heart-attack: (FLOAT)
+pericardial-effusion: (FLOAT)
+fractional-shortening: (FLOAT)
+epss: (FLOAT)
+lvdd: (FLOAT)
+wall-motion-score: (FLOAT)
+wall-motion-index: (FLOAT)
+class: will-survive wont-survive;

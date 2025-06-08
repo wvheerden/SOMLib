@@ -1,0 +1,41 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## install.packages(c("exactRankTests"))
+> ## R CMD BATCH --no-restore --no-save label_classification_monks3_neuron_vs_weight-centric_trainingError_wilcoxon.r
+> 
+> a <- c(22.48803828, 25.83732057, 24.64114833, 23.92344498, 22.72727273, 22.00956938, 21.77033493, 24.40191388, 22.48803828, 23.68421053, 23.44497608, 26.07655502, 23.44497608, 20.81339713, 23.20574163, 27.75119617, 23.92344498, 22.48803828, 27.27272727, 24.88038278, 23.68421053, 22.96650718, 22.72727273, 24.40191388, 21.77033493, 26.07655502, 22.48803828, 27.75119617, 22.72727273, 22.96650718)
+> b <- c(18.89952153, 22.00956938, 19.61722488, 19.37799043, 17.22488038, 18.66028708, 20.09569378, 21.53110048, 20.33492823, 18.66028708, 19.85645933, 20.57416268, 19.13875598, 21.53110048, 22.00956938, 17.70334928, 15.55023923, 22.24880383, 18.89952153, 18.66028708, 20.81339713, 18.89952153, 18.66028708, 20.57416268, 17.46411483, 18.66028708, 23.20574163, 19.85645933, 18.18181818, 24.16267943)
+> 
+> wilcox.test (a, b, alternative="two.sided", paired=TRUE, conf.level=0.95)
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  a and b 
+V = 455.5, p-value = 4.713e-06
+alternative hypothesis: true location shift is not equal to 0 
+
+Warning message:
+In wilcox.test.default(a, b, alternative = "two.sided", paired = TRUE,  :
+  cannot compute exact p-value with ties
+> 
+> proc.time()
+   user  system elapsed 
+  0.152   0.016   0.157 

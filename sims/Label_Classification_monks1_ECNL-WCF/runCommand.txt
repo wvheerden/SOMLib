@@ -1,0 +1,1 @@
+./crossValidateLabelClassification.sh monks1 >> label-classification_monks1_hybridneuroncentricweightcentric.runOutput 2>> label-classification_monks1_hybridneuroncentricweightcentric.runOutput

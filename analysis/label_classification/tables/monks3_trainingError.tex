@@ -1,0 +1,37 @@
+\begin{table}[p]
+	\caption[Comparison of the overall training set error for supervised neuron labeling on the monk's problem~3 data set]{Statistical comparison of the overall training set error for the supervised neuron labeling methods executed on the monk's problem~3 data set.}
+	\textsf{\linespread{1}\scriptsize\makebox[\textwidth][c]{
+		\begin{tabular}[t]{||c|c||cc||cc||cc||}
+			\hhline{~~|t:==:t:==:t:==:t|}
+			\multicolumn{2}{c||}{\rule{0pt}{8pt}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} & \multicolumn{2}{c||}{\textbf{Example-Centric}} \\
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{0pt}} & \multicolumn{2}{c||}{\textbf{Neuron}} & \multicolumn{2}{c||}{\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \multicolumn{2}{c||}{\textbf{Cluster (Ward)}} \\
+			\hhline{~~|:==::==::==:|}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$} & ${\cal S}_{T}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$} & ${\cal S}_{T}$ & \multicolumn{1}{c|}{\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$} & ${\cal S}_{T}$ \\
+			\hhline{~~||--||--||--||}
+			\multicolumn{2}{c||}{\rule[-4pt]{0pt}{12pt}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{23.828}}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.792}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{26.619}}} & \makebox[30px][c]{\raisebox{-0.5pt}{2.278}} & \multicolumn{1}{c|}{\makebox[30px][c]{\raisebox{-0.5pt}{25.000}}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.460}} \\
+			\hhline{|t:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & \cellfilllarge & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (\textrm{\emph{k}}-Means)}} & \sigdata{8pt}{-5pt}{$\uparrow$}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.007\times10^{-5}}$\phantom{$\times\mathsf{0^0}$/}} & & & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$ & ${\cal S}_{T}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{26.619}} & \makebox[30px][c]{\raisebox{-0.5pt}{2.278}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Example-Centric}} & & & & & \cellfilllarge \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Cluster (Ward)}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\square$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{0.019}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{6.108\times10^{-3}}$\phantom{$\times\mathsf{0^0}$/}} & & \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$ & ${\cal S}_{T}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{25.000}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.460}} & & & & & & \\
+			\hhline{|:==::==::==::==:|}
+			\multicolumn{2}{||c||}{\rule{0pt}{8pt}\textbf{Weight-Centric}} & & & & & & \\
+			\multicolumn{2}{||c||}{\rule[-4pt]{0pt}{0pt}\textbf{Neuron}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{7.637\times10^{-8}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{5.588\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} & \sigdata{8pt}{-5pt}{\phantom{$\uparrow$}$\leftarrow$\phantom{$\uparrow$}}{\phantom{/$\times\mathsf{0^0}$}$\mathsf{1.863\times10^{-9}}$\phantom{$\times\mathsf{0^0}$/}} \\
+			\hhline{|:==:|~~||~~||~~||}
+			\rule[-4pt]{0pt}{12pt}${\cal E}_{T}$ & ${\cal S}_{T}$ & & & & & & \\
+			\hhline{||--||~~||~~||~~||}
+			\makebox[30px][c]{\rule[-4pt]{0pt}{12pt}\raisebox{-0.5pt}{19.769}} & \makebox[30px][c]{\raisebox{-0.5pt}{1.873}} & & & & & & \\
+			\hhline{|b:==:b:==:b:==:b:==:b|}
+		\end{tabular}
+	}}
+	\label{tab:comparison_labelClassification_monks3_trainingError}
+\end{table}

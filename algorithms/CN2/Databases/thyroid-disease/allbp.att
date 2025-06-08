@@ -1,0 +1,32 @@
+**ATTRIBUTE FILE**
+
+age:				(FLOAT)
+sex:				M  F;
+on-thyroxine:			f  t;
+query-on-thyroxine:		f  t;
+on-antithyroid-medication:	f  t;
+sick:				f  t;
+pregnant:			f  t;
+thyroid-surgery:		f  t;
+I131-treatment:			f  t;
+query-hypothyroid:		f  t;
+query-hyperthyroid:		f  t;
+lithium:			f  t;
+goitre:				f  t;
+tumor:				f  t;
+hypopituitary:			f  t;
+psych:				f  t;
+TSH-measured:			f  t;
+TSH:				(FLOAT)
+T3-measured:			f  t;
+T3:				(FLOAT)
+TT4-measured:			f  t;
+TT4:				(FLOAT)
+T4U-measured:			f  t;
+T4U:				(FLOAT)
+FTI-measured:			f  t;
+FTI:				(FLOAT)
+TBG-measured:			f  t;
+TBG:				(FLOAT)
+referral-source:		WEST  STMW  SVHC  SVI  SVHD  other;
+class: increased-binding-protein decreased-binding-protein negative;

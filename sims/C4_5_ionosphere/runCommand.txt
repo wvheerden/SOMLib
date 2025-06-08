@@ -1,0 +1,1 @@
+./crossValidateC4_5.sh ionosphere >> c4-5_ionosphere.runOutput 2>> c4-5_ionosphere.runOutput

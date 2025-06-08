@@ -1,0 +1,17 @@
+
+Straightforward data conversion to our format.
+
+The original directory contained several databases:
+
+README			allhypo.data		dis.test
+README.PEC		allhypo.names		hypothyroid.data
+allbp.data		allhypo.test		hypothyroid.names
+allbp.names		allrep.data		sick-euthyroid.data
+allbp.test		allrep.names		sick-euthyroid.names
+allhyper.data		allrep.test		sick.data
+allhyper.names		dis.data		sick.names
+allhyper.test		dis.names		sick.test
+
+I've only converted the first of these (allbp.{data,names}) to Turing's
+ID/CN format.
+

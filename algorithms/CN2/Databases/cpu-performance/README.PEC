@@ -1,0 +1,8 @@
+
+The 10th attribute (the linear regression's guess, see README file) I've
+removed. The 9th attribute is in fact the class to predict.
+
+Also, the 2nd attribute with almost a unique value for each example has
+been removed.
+
+
